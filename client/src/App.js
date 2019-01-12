@@ -4,35 +4,54 @@ import './App.css';
 
 const UPDATE_SLIDER = 'UPDATE_SLIDER';
 
-let store = [10, 20, 30];
+const resource = (n, mu) => {
+  return { name: n, units: 3, max_units: mu };
+}
+
+let store = {
+  total_units: 15,
+  resources: [
+    resource('research and development', 4),
+    resource('hacking', 6),
+    resource('firewalling', 5)
+  ]
+}
 
 const dispatch = action => {
-  store = appReducer(store, action);
+  store = app_reducer(store, action);
   render();
 }
 
-const appReducer = (store, action) => {
-  let newStore = store.slice();
+const app_reducer = (store, action) => {
+  let new_resources = store.resources.slice();
+  console.log(action);
   if (action.type === UPDATE_SLIDER) {
-    console.log(action);
-    newStore[action.sliderIndex] = action.value;
+    let resource = new_resources[action.sliderIndex];
+    new_resources[action.sliderIndex] = slider_reducer(resource, action);
   }
-  return newStore;
+  return {
+    total_units: store.total_units,
+    resources: new_resources
+  };
+};
+
+const slider_reducer = (slider, action) => {
+  return {
+    name: slider.name,
+    units: Math.max(0, Math.min(Math.floor(action.value + 0.5), slider.max_units)),
+    max_units: slider.max_units
+  }
 };
 
 const get_event_offset_x = event => {
-  return event.offsetX || event.pageX - event.currentTarget.offsetLeft - 10;//event.layerX - event.target.offsetLeft;
+  return event.offsetX || event.pageX - event.currentTarget.offsetLeft - 10;
 };
 
 const updateSliderAction = (sliderIndex, event) => {
-  console.log(event);
-  console.log(event.relatedTarget);
-  console.log(event.target);
+  let resource = store.resources[sliderIndex];
   let width = event.currentTarget.clientWidth - 20;
   let click_x = get_event_offset_x(event);
-  let new_value = Math.min(click_x / width * 100.0, 100);
-  console.log(event.type, width, click_x, new_value);
-  console.log(event.layerX, event.currentTarget, event.originalEvent);
+  let new_value = Math.min(click_x / width * resource.max_units, 100);
   return {
     type: UPDATE_SLIDER,
     sliderIndex: sliderIndex,
@@ -47,33 +66,33 @@ const sliderMouseMoved = (sliderIndex, event) => {
   }
 };
 
-const resourceSliderReducer = (state, index) => {
-  console.log('clicked ' + index);
-  store[index] += 30;
-};
-
 const App = () => {
   console.log(store);
   return (
     <div className="app">
       <header className="app-header">
-        {store.map((_, i) => ResourceSlider(i))}
+        <div className="resource-container">
+          {store.resources.map(ResourceSlider)}
+        </div>
       </header>
     </div>
   );
 };
 
-const ResourceSlider = i => {
-  console.log(i);
+const ResourceSlider = (resource, i) => {
+  let percentage = resource.units / resource.max_units * 100.0;
   return (
-    <div key={i} 
-         className="resource-slider" 
-         onClick={(e) => dispatch(updateSliderAction(i, e))} 
-         onMouseMove={(e) => sliderMouseMoved(i, e)}
-         flex-direction="row">
-      <div className="resource-slider-bar" style={{width: store[i] + '%'}}></div>
-    </div>
-  );
+    <div key={i} className="resource">
+            <div><b>{resource.name}:</b> {resource.units} / {resource.max_units}</div>
+      <div className="resource-slider"
+            onClick={(e) => dispatch(updateSliderAction(i, e))}
+            onTouch={(e) => dispatch(updateSliderAction(i, e))}
+            onMouseMove={(e) => sliderMouseMoved(i, e)}
+            onTouchMove={(e) => sliderMouseMoved(i, e)}
+            flex-direction="row">
+        <div className="resource-slider-bar" style={{width: percentage + '%'}}></div>
+      </div>
+    </div>);
 };
 
 export const render = () => ReactDOM.render(<App />, document.getElementById('root'));
