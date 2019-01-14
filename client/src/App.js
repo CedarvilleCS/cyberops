@@ -1,20 +1,126 @@
+// @flow
+import Graph from 'react-graph-vis';
+import Sidebar from 'react-sidebar';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
 
 const UPDATE_SLIDER = 'UPDATE_SLIDER';
 
-const resource = (n, mu) => {
+type Event = InitGame | Message | WaitForAction
+
+type InitGame = {| 
+	event_type: 'init_game',
+	player_network: Network,
+	force_units: number,
+	resources: Array<ResourceType>,
+	player_network: Network
+|};
+
+type ResourceType = {| name: string |};
+
+type Message = {|
+	event_type: 'message',
+	text: string,
+|};
+
+type WaitForAction = {|
+	event_type: 'wait_for_action',
+	time_allowed: number
+|};
+
+type Game = {|
+	prompts: Array<string>,
+	force_units: number,
+	resources: Array<ResourceType>,
+	player_network: Network,
+	opponent_network: Network
+|};
+
+let game_tree_index = 0;
+const game_tree: Array<Event> = [
+	{ event_type: 'message',
+		text: "Hello! You are the master administrator for your countries Cyber Warfare department. You have been tasked with completing a mission which will be described shortly." },
+	{ event_type: 'message',
+		text: "Throughout your campaign, you will receive status updates and notifications in this panel." }
+];
+
+const poll_server = (): Event => {
+	if (game_tree_index < game_tree.length) {
+		let result = game_tree[game_tree_index];
+		game_tree_index++;
+		return result;
+	} else {
+		return { event_type: 'message', text: "The game is over" };
+	}
+};
+
+type Edge = {
+	from: number,
+	to: number
+};
+
+type Node = {
+	id: number,
+	label: string
+}
+
+type Network = {
+	edges: Array<Edge>,
+	nodes: Array<Node>
+};
+
+type ResearchFunding = {|
+	node: Node,
+	is_defense: bool
+|};
+
+type Resource = {
+	name: string,
+	units: number,
+	max_units: number
+};
+
+type ResourceGroup = {
+	total_units: number,
+	resources: Array<Resource>,
+	graph: Network
+};
+
+const resource = (n, mu): Resource => {
   return { name: n, units: 3, max_units: mu };
 }
 
-let store = {
-  total_units: 15,
-  resources: [
-    resource('research and development', 4),
-    resource('hacking', 6),
-    resource('firewalling', 5)
-  ]
+const sample_graph = {
+	edges: [
+		{ from: 1, to: 2 },
+		{ from: 2, to: 3 },
+		{ from: 2, to: 4 },
+		{ from: 4, to: 5 },
+		{ from: 5, to: 1 },
+		{ from: 5, to: 3 }
+	],
+	nodes: [
+		{ id: 1, label: 'A'},
+		{ id: 2, label: 'B'},
+		{ id: 3, label: 'C'},
+		{ id: 4, label: 'D'},
+		{ id: 5, label: 'E'}
+	]
+};
+
+type Store = {
+	game: Game,
+};
+
+let store: Store = {
+	game: {
+		prompts: [],
+		force_units: 0,
+		resources: [],
+		player_network: sample_graph,//{ edges: [], nodes: [] },
+		opponent_network: { edges: [], nodes: [] }
+	}
 }
 
 const dispatch = action => {
@@ -22,79 +128,79 @@ const dispatch = action => {
   render();
 }
 
-const app_reducer = (store, action) => {
-  let new_resources = store.resources.slice();
-  console.log(action);
-  if (action.type === UPDATE_SLIDER) {
-    let resource = new_resources[action.sliderIndex];
-    new_resources[action.sliderIndex] = slider_reducer(resource, action);
-  }
-  return {
-    total_units: store.total_units,
-    resources: new_resources
-  };
+type StoreAction = {| action_type: 'update_game_state' |};
+
+const game_reducer = (game: Game, action: Event): Game => {
+	if (action.event_type === 'message') {
+		return { ...game, prompts: [action.text, ...game.prompts] };
+	} else {
+		return game;
+	}
 };
 
-const slider_reducer = (slider, action) => {
-  return {
-    name: slider.name,
-    units: Math.max(0, Math.min(Math.floor(action.value + 0.5), slider.max_units)),
-    max_units: slider.max_units
-  }
+const app_reducer = (store: Store, action: StoreAction): Store => {
+	if (action.action_type === 'update_game_state') {
+		let event = poll_server();
+		return { ...store, game: game_reducer(store.game, event) };
+	}
+	else {
+		return store;
+	}
 };
 
-const get_event_offset_x = event => {
-  return event.offsetX || event.pageX - event.currentTarget.offsetLeft - 10;
+const MessageBar = props => {
+	let messages = props.messages;
+	return (
+		<div className="message-bar">
+			<div className="message-header">Messages</div>
+			{messages.map((message, i) => <div className="message-container" key={i}>{message}</div>)}
+		</div>
+	);
 };
 
-const updateSliderAction = (sliderIndex, event) => {
-  let resource = store.resources[sliderIndex];
-  let width = event.currentTarget.clientWidth - 20;
-  let click_x = get_event_offset_x(event);
-  let new_value = Math.min(click_x / width * resource.max_units, 100);
-  return {
-    type: UPDATE_SLIDER,
-    sliderIndex: sliderIndex,
-    value: new_value
-  };
+const network_options = {
+	autoResize: true
 };
 
-const sliderMouseMoved = (sliderIndex, event) => {
-  console.log(event.buttons);
-  if (event.buttons > 0) {
-    dispatch(updateSliderAction(sliderIndex, event));
-  }
+const GraphPanel = props => {
+	return (
+		<div className="graph">
+			<div className="graph-title">{props.network_name}</div>
+			<div className="graph-container">
+				<Graph graph={store.game.player_network} options={network_options}/>
+			</div>
+		</div>
+	);
 };
 
 const App = () => {
   console.log(store);
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="resource-container">
-          {store.resources.map(ResourceSlider)}
-        </div>
-      </header>
-    </div>
+		<div className="app">
+			<div className="message-bar-container">
+				<div className="message-bar">
+					<div className="message-header">Messages</div>
+					{store.game.prompts.map((message, i) => <div className="message-container" key={i}>{message}</div>)}
+				</div>
+			</div>
+			<div className="dashboard-container">
+				<div className="dashboard">
+					<div className="player-graphs">
+						<GraphPanel network_name="Your Network" />
+						<GraphPanel network_name="Opponent Network" />
+					</div>
+				</div>
+			</div>
+			<a className="continue-button" onClick={() => dispatch({action_type: 'update_game_state'})}>Continue</a>
+		</div>
   );
 };
 
-const ResourceSlider = (resource, i) => {
-  let percentage = resource.units / resource.max_units * 100.0;
-  return (
-    <div key={i} className="resource">
-            <div><b>{resource.name}:</b> {resource.units} / {resource.max_units}</div>
-      <div className="resource-slider"
-            onClick={(e) => dispatch(updateSliderAction(i, e))}
-            onTouch={(e) => dispatch(updateSliderAction(i, e))}
-            onMouseMove={(e) => sliderMouseMoved(i, e)}
-            onTouchMove={(e) => sliderMouseMoved(i, e)}
-            flex-direction="row">
-        <div className="resource-slider-bar" style={{width: percentage + '%'}}></div>
-      </div>
-    </div>);
+export const render = (): void => {
+	let root = document.getElementById('root');
+	if (root) {
+		ReactDOM.render(<App />, root);
+	}
 };
-
-export const render = () => ReactDOM.render(<App />, document.getElementById('root'));
 
 export default App;
