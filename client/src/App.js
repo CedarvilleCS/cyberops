@@ -1,13 +1,57 @@
 // @flow
 import Graph from 'react-graph-vis';
-import Sidebar from 'react-sidebar';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
 
-const UPDATE_SLIDER = 'UPDATE_SLIDER';
+type ResourceType = {| name: string |};
 
-type Event = InitGame | Message | WaitForAction
+type Edge = {
+	from: number,
+	to: number
+};
+
+type Service = {|
+	service_type: 'remote_login' | 'database' | 'web_server';
+	name: string,
+	version: string
+|};
+
+type Vulnerability = {|
+	can_sabotage: bool,
+	can_surveil: bool,
+	can_dos: bool,
+	can_execute: bool,
+	name: string
+|};
+
+type ComputerNode = {|
+	id: number,
+	label: string,
+	node_type: 'computer',
+	services: Array<Service>
+|};
+
+type LanNode = {|
+	id: number,
+	label: string,
+	node_type: 'lan'
+|};
+
+type Node = ComputerNode | LanNode;
+
+type Actions =
+	{| action_type: 'administration', target_nodes: Array<Node> |} |
+	{| action_type: 'update_software', target_nodes: Array<Node> |} |
+	{| action_type: 'research', target_nodes: Array<Node> |} |
+	{| action_type: 'audit', target_nodes: Array<Node> |};
+
+type Malware = Array<Vulnerability>;
+
+type Network = {
+	edges: Array<Edge>,
+	nodes: Array<Node>
+};
 
 type InitGame = {| 
 	event_type: 'init_game',
@@ -17,11 +61,9 @@ type InitGame = {|
 	player_network: Network
 |};
 
-type ResourceType = {| name: string |};
-
 type Message = {|
 	event_type: 'message',
-	text: string,
+	text: string
 |};
 
 type WaitForAction = {|
@@ -29,10 +71,11 @@ type WaitForAction = {|
 	time_allowed: number
 |};
 
+type Event = InitGame | Message | WaitForAction
+
 type Game = {|
 	prompts: Array<string>,
 	force_units: number,
-	resources: Array<ResourceType>,
 	player_network: Network,
 	opponent_network: Network
 |};
@@ -55,57 +98,52 @@ const poll_server = (): Event => {
 	}
 };
 
-type Edge = {
-	from: number,
-	to: number
-};
-
-type Node = {
-	id: number,
-	label: string
-}
-
-type Network = {
-	edges: Array<Edge>,
-	nodes: Array<Node>
-};
-
-type ResearchFunding = {|
-	node: Node,
-	is_defense: bool
-|};
-
-type Resource = {
-	name: string,
-	units: number,
-	max_units: number
-};
-
-type ResourceGroup = {
-	total_units: number,
-	resources: Array<Resource>,
-	graph: Network
-};
-
-const resource = (n, mu): Resource => {
-  return { name: n, units: 3, max_units: mu };
-}
-
 const sample_graph = {
 	edges: [
-		{ from: 1, to: 2 },
-		{ from: 2, to: 3 },
-		{ from: 2, to: 4 },
-		{ from: 4, to: 5 },
-		{ from: 5, to: 1 },
-		{ from: 5, to: 3 }
+		{ from: 1, to: 3 },
+		{ from: 1, to: 4 },
+		{ from: 1, to: 5 },
+		{ from: 1, to: 6 },
+		{ from: 1, to: 7 },
+		{ from: 1, to: 8 },
+		{ from: 2, to: 7 },
+		{ from: 2, to: 8 },
+		{ from: 2, to: 9 },
+		{ from: 2, to: 10 }
 	],
 	nodes: [
-		{ id: 1, label: 'A'},
-		{ id: 2, label: 'B'},
-		{ id: 3, label: 'C'},
-		{ id: 4, label: 'D'},
-		{ id: 5, label: 'E'}
+		{ id: 1, label: 'Internal Network', node_type: 'lan'},
+		{ id: 2, label: 'External Network', node_type: 'lan'},
+		{ id: 3, label: 'Windows 2003 SQL', node_type: 'computer', services: [] },
+		{ id: 4, label: 'Windows 2008 Server', node_type: 'computer', services: [] },
+		{ id: 5, label: 'BackTrack 5', node_type: 'computer', services: [] },
+		{ id: 6, label: 'Windows XP Pro', node_type: 'computer', services: [] },
+		{ id: 7, label: 'Windows 2003 Server [Firewall]', node_type: 'computer', services: [] },
+		{ id: 8, label: 'Linux Sniffer', node_type: 'computer', services: [] },
+		{ id: 9, label: 'BackTrack 5', node_type: 'computer', services: [] },
+		{ id: 10, label: 'Windows 7', node_type: 'computer', services: [] },
+	]
+};
+
+const sample_opp_graph = {
+	edges: [
+		{ from: 1, to: 2 },
+		{ from: 1, to: 3 },
+		{ from: 1, to: 4 },
+		{ from: 1, to: 5 },
+		{ from: 2, to: 3 },
+		{ from: 2, to: 4 },
+		{ from: 2, to: 5 },
+		{ from: 3, to: 4 },
+		{ from: 3, to: 5 },
+		{ from: 4, to: 5 },
+	],
+	nodes: [
+		{ id: 1, label: 'Hello', node_type: 'computer', services: [] },
+		{ id: 2, label: 'There', node_type: 'computer', services: [] },
+		{ id: 3, label: 'How', node_type: 'computer', services: [] },
+		{ id: 4, label: 'Are', node_type: 'computer', services: [] },
+		{ id: 5, label: 'You', node_type: 'lan' }
 	]
 };
 
@@ -117,18 +155,15 @@ let store: Store = {
 	game: {
 		prompts: [],
 		force_units: 0,
-		resources: [],
 		player_network: sample_graph,//{ edges: [], nodes: [] },
-		opponent_network: { edges: [], nodes: [] }
+		opponent_network: sample_opp_graph, //{ edges: [], nodes: [] }
 	}
 }
 
 const dispatch = action => {
-  store = app_reducer(store, action);
+  store = action(store);
   render();
 }
-
-type StoreAction = {| action_type: 'update_game_state' |};
 
 const game_reducer = (game: Game, action: Event): Game => {
 	if (action.event_type === 'message') {
@@ -138,37 +173,109 @@ const game_reducer = (game: Game, action: Event): Game => {
 	}
 };
 
-const app_reducer = (store: Store, action: StoreAction): Store => {
-	if (action.action_type === 'update_game_state') {
-		let event = poll_server();
-		return { ...store, game: game_reducer(store.game, event) };
-	}
-	else {
-		return store;
-	}
+const update_game_state = store => {
+	let event = poll_server();
+	return { ...store, game: game_reducer(store.game, event) };
 };
 
-const MessageBar = props => {
-	let messages = props.messages;
+const select_node = (node_id, is_friendly) => store => {
+		if (is_friendly) {
+			return {...store, selected_player_node: node_id };
+		} else {
+			return {...store, selected_opponent_node: node_id };
+		}
+};
+
+const NetworkPanel = props => {
+
+	// Change edge color and network title based on who owns the network.
+	let edge_color = {
+		color: '#3333ff',
+		highlight: '#aaaaff',
+		hover: '#6666ff',
+		inherit: 'from'
+	};
+	let network_name = "Your Network";
+	if (!props.friendly) {
+		edge_color = {
+			color: '#ff3333',
+			highlight: '#ffaaaa',
+			hover: '#ff6666'
+		}
+		network_name = "Opponent Network";
+	}
+
+	let network_options = {
+		autoResize: true,
+		edges: {
+			color: edge_color,
+			width: 2,
+			arrows: {
+				to: {
+					enabled: false
+				},
+				from: {
+					enabled: false
+				}
+			}
+		},
+		interaction: {
+			hover: true
+		}
+	};
+
+	let network = {
+		...props.network,
+		nodes: props.network.nodes.map(node => {
+			let node_shape = 'ellipse';
+			let node_color = 'lightgreen';
+			if (node.node_type === 'computer') {
+				node_shape = 'box';
+				node_color = 'lightblue';
+			}
+			return {
+				...node,
+				shape: node_shape,
+				color: node_color
+			}
+		})
+	};
+	console.log('making network');
+	console.log(network);
+
 	return (
-		<div className="message-bar">
-			<div className="message-header">Messages</div>
-			{messages.map((message, i) => <div className="message-container" key={i}>{message}</div>)}
+		<div className="graph">
+			<div className="graph-title">{network_name}</div>
+			<div className="graph-container">
+				<Graph graph={network} options={network_options}/>
+			</div>
+			<NetworkInspector network={network} friendly={props.friendly} />
 		</div>
 	);
 };
 
-const network_options = {
-	autoResize: true
+const NodeProperty = props => (
+	<div className="flex-row">
+		<div className="node-prop-key">{props.prop_key}</div>
+		<div className="node-prop-value">{props.value}</div>
+	</div>
+);
+
+
+const NodeInspector = props => {
+	return (
+		<div className="node-inspector">
+			<NodeProperty prop_key={"Name"} value={props.node.label}/>
+			<NodeProperty prop_key={"Type"} value={props.node.node_type}/>
+		</div>
+	);
 };
 
-const GraphPanel = props => {
+const NetworkInspector = props => {
 	return (
-		<div className="graph">
-			<div className="graph-title">{props.network_name}</div>
-			<div className="graph-container">
-				<Graph graph={store.game.player_network} options={network_options}/>
-			</div>
+		<div className="graph-inspector">
+			{props.network.nodes.map((node, i) => 
+				<NodeInspector key={i} node={node}/>)}
 		</div>
 	);
 };
@@ -177,21 +284,30 @@ const App = () => {
   console.log(store);
   return (
 		<div className="app">
-			<div className="message-bar-container">
-				<div className="message-bar">
-					<div className="message-header">Messages</div>
-					{store.game.prompts.map((message, i) => <div className="message-container" key={i}>{message}</div>)}
-				</div>
-			</div>
-			<div className="dashboard-container">
-				<div className="dashboard">
-					<div className="player-graphs">
-						<GraphPanel network_name="Your Network" />
-						<GraphPanel network_name="Opponent Network" />
+			<div className="app-content flex-col">
+				<div className="main-content flex-row">
+					<div className="message-bar-container panel-container">
+						<div className="panel-content">
+							<div className="panel-header">Messages</div>
+							{store.game.prompts.map((message, i) => <div className="message-container" key={i}>{message}</div>)}
+						</div>
+					</div>
+					<div className="dashboard-container">
+						<div className="dashboard flex-col">
+							<div className="player-graphs flex-row">
+								<NetworkPanel network={store.game.player_network} friendly={true} />
+								<NetworkPanel network={store.game.opponent_network} friendly={false} />
+							</div>
+						</div>
+					</div>
+					<div className="action-panel-container panel-container">
+						<div className="panel-content">
+							<div className="panel-header">Actions</div>
+						</div>
 					</div>
 				</div>
+				<div className="continue-button" onClick={() => dispatch(update_game_state)}>Continue</div>
 			</div>
-			<a className="continue-button" onClick={() => dispatch({action_type: 'update_game_state'})}>Continue</a>
 		</div>
   );
 };
