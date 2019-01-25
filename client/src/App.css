@@ -20,6 +20,7 @@ html, body {
 .main-content {
 	width: 100%;
 	flex: 1 1 50%;
+	overflow: scroll;
 }
 
 .panel-container {
@@ -50,6 +51,11 @@ html, body {
 	flex-wrap: wrap;
 }
 
+.services-header {
+	background-color: #555555;
+	padding: 5px;
+}
+
 .graph {
 	background-color: #444444;
 	margin: 10px;
@@ -59,25 +65,10 @@ html, body {
 	height: auto;
 }
 
-.node-prop-key {
-	background-color: #444444;
-	color: white;
-	flex: 1 1 50%;
-	margin: 5px;
-	padding: 5px;
-}
-
 .node-inspector {
-	background-color: #555555;
-	margin: 5px;
-}
-
-.node-prop-value {
-	background-color: #888888;
+	background-color: #666666;
 	color: white;
-	flex: 1 1 50%;
 	margin: 5px;
-	padding: 5px;
 }
 
 .flex-col {
@@ -91,8 +82,9 @@ html, body {
 }
 
 .graph-inspector {
-	background-color: #ffffff;
+	background-color: #444444;
 	color: black;
+	width: 100%;
 }
 
 .graph-container {
@@ -118,7 +110,7 @@ html, body {
 	line-height: 50px;
 }
 
-.panel-content{
+.panel-content {
 	width: 250px;
 }
 
@@ -133,4 +125,16 @@ html, body {
 	background-color: #aaaaaa;
 	padding: 10px;
 	margin: 5px;
+}
+
+.node-label {
+	flex: 1 1 80%;
+	color: white;
+	padding: 5px;
+}
+
+.node-type {
+	padding: 5px;
+	flex: 1 1 20%;
+	color: white;
 }

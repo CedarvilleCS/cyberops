@@ -265,8 +265,11 @@ const NodeProperty = props => (
 const NodeInspector = props => {
 	return (
 		<div className="node-inspector">
-			<NodeProperty prop_key={"Name"} value={props.node.label}/>
-			<NodeProperty prop_key={"Type"} value={props.node.node_type}/>
+			<div className="flex-row">
+				<div className="node-label">{props.node.label}</div>
+				<div className="node-type">{props.node.node_type}</div>
+			</div>
+			<div className="services-header">Services</div>
 		</div>
 	);
 };
