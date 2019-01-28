@@ -51,9 +51,50 @@ html, body {
 	flex-wrap: wrap;
 }
 
-.services-header {
+.action-box {
+	background-color: #777777;
+  color: white;
+  margin: 5px;
+}
+
+.action-title {
+  padding: 5px;
+  background-color: #888888;
+}
+
+.service-update-row > :nth-child(1) {
+  flex: 1 1 20%;
+  margin: auto;
+}
+
+.service-update-row > :nth-child(2) {
+  flex: 1 1 80%;
+}
+
+.flex-80 {
+  flex: 1 1 80%;
+}
+
+.action-title:hover {
+  background-color: #999999;
+}
+
+.service {
+  color: white;
 	background-color: #555555;
 	padding: 5px;
+	display: flex;
+	flex-direction: row;
+}
+
+.service-name {
+  font-style: italic;
+	flex: 1 1 80%;
+}
+
+.service-version {
+  font-weight: bold;
+	flex: 1 1 20%;
 }
 
 .graph {

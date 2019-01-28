@@ -12,7 +12,6 @@ type Edge = {
 };
 
 type Service = {|
-	service_type: 'remote_login' | 'database' | 'web_server';
 	name: string,
 	version: string
 |};
@@ -40,11 +39,11 @@ type LanNode = {|
 
 type Node = ComputerNode | LanNode;
 
-type Actions =
-	{| action_type: 'administration', target_nodes: Array<Node> |} |
-	{| action_type: 'update_software', target_nodes: Array<Node> |} |
-	{| action_type: 'research', target_nodes: Array<Node> |} |
-	{| action_type: 'audit', target_nodes: Array<Node> |};
+//type Actions =
+//	{| action_type: 'administration', target_nodes: Array<Node> |} |
+//	{| action_type: 'update_software', target_nodes: Array<Node> |} |
+//	{| action_type: 'research', target_nodes: Array<Node> |} |
+//	{| action_type: 'audit', target_nodes: Array<Node> |};
 
 type Malware = Array<Vulnerability>;
 
@@ -53,49 +52,26 @@ type Network = {
 	nodes: Array<Node>
 };
 
-type InitGame = {| 
-	event_type: 'init_game',
-	player_network: Network,
-	force_units: number,
-	resources: Array<ResourceType>,
-	player_network: Network
-|};
-
-type Message = {|
-	event_type: 'message',
-	text: string
-|};
-
 type WaitForAction = {|
 	event_type: 'wait_for_action',
 	time_allowed: number
 |};
 
-type Event = InitGame | Message | WaitForAction
-
-type Game = {|
-	prompts: Array<string>,
-	force_units: number,
-	player_network: Network,
-	opponent_network: Network
+type Action = {|
+  action_type: 'update_service', 
+  old_service: Service,
+  new_service: Service
 |};
 
-let game_tree_index = 0;
-const game_tree: Array<Event> = [
-	{ event_type: 'message',
-		text: "Hello! You are the master administrator for your countries Cyber Warfare department. You have been tasked with completing a mission which will be described shortly." },
-	{ event_type: 'message',
-		text: "Throughout your campaign, you will receive status updates and notifications in this panel." }
-];
+type Game = {
+	prompts: Array<string>,
+	player_network: Network,
+	opponent_network: Network,
+  actions: Array<Action>
+};
 
-const poll_server = (): Event => {
-	if (game_tree_index < game_tree.length) {
-		let result = game_tree[game_tree_index];
-		game_tree_index++;
-		return result;
-	} else {
-		return { event_type: 'message', text: "The game is over" };
-	}
+const new_prompt = s => {
+  return { prompts: [s] }
 };
 
 const sample_graph = {
@@ -112,16 +88,53 @@ const sample_graph = {
 		{ from: 2, to: 10 }
 	],
 	nodes: [
-		{ id: 1, label: 'Internal Network', node_type: 'lan'},
-		{ id: 2, label: 'External Network', node_type: 'lan'},
-		{ id: 3, label: 'Windows 2003 SQL', node_type: 'computer', services: [] },
-		{ id: 4, label: 'Windows 2008 Server', node_type: 'computer', services: [] },
-		{ id: 5, label: 'BackTrack 5', node_type: 'computer', services: [] },
-		{ id: 6, label: 'Windows XP Pro', node_type: 'computer', services: [] },
-		{ id: 7, label: 'Windows 2003 Server [Firewall]', node_type: 'computer', services: [] },
-		{ id: 8, label: 'Linux Sniffer', node_type: 'computer', services: [] },
-		{ id: 9, label: 'BackTrack 5', node_type: 'computer', services: [] },
-		{ id: 10, label: 'Windows 7', node_type: 'computer', services: [] },
+    { id: 1, 
+      label: 'Internal Network', 
+      node_type: 'lan' },
+    { id: 2,
+      label: 'External Network',
+      node_type: 'lan' },
+    { id: 3,
+      label: 'Windows 2003 SQL',
+      node_type: 'computer',
+      services: [
+        { name: 'SQL Server', version: '2.03' },
+        { name: 'SSH Server', version: '3.65' },
+      ] },
+    { id: 4,
+      label: 'Windows 2008 Server',
+      node_type: 'computer', 
+      services: [
+        { name: 'Apache', version: '3.45' },
+        { name: 'Remote Desktop Server', version: '4.25' },
+      ] },
+    { id: 5,
+      label: 'BackTrack 5',
+      node_type: 'computer', services: [
+        { name: 'SSH Server', version: '3.02' },
+      ] },
+    { id: 6,
+      label: 'Windows XP Pro',
+      node_type: 'computer', services: [
+        { name: 'Microsoft Office', version: '2.13' },
+        { name: 'Google Chrome', version: '1.0' }
+      ] },
+    { id: 7,
+      label: 'Windows 2003 Server [Firewall]',
+      node_type: 'computer', services: [
+        { name: 'OpenFirewall', version: '31.45' }
+      ] },
+    { id: 8,
+      label: 'Linux Sniffer',
+      node_type: 'computer', services: [
+        { name: 'Wireshark', version: '13.0' }
+      ] },
+    { id: 9,
+      label: 'BackTrack 5',
+      node_type: 'computer', services: [] },
+    { id: 10,
+      label: 'Windows 7',
+      node_type: 'computer', services: [] },
 	]
 };
 
@@ -147,16 +160,51 @@ const sample_opp_graph = {
 	]
 };
 
+let game_tree_index = 0;
+const game_tree: Array<Event> = [
+	new_prompt("Hello Seth! You have just been hired as the head of Cyber Operations in underwater kingdom of Atlantis."),
+  { prompts: ["On your first day at work, your technical assistant takes you on a tour of the Atlantis IT facility and gives you an in-depth briefing about the current state of the kingdom's computer network. In addition, you also learn about the intelligence that has been gathered about the enemy City of Avalon" ],
+    player_network: sample_graph, opponent_network: sample_opp_graph },
+  new_prompt("The two kingdoms have been at war for 6 months. You've been instructed by your government to execute a DOS attack on the enemy's employment record database."),
+  { actions: [
+    { action_type: 'update_service', 
+      old_service: { name: 'Google Chrome', version: '1.0'},
+      new_service: { name: 'Google Chrome', version: '71.0'} },
+    { action_type: 'update_service',
+      old_service: { name: 'SQL Server', version: '2.03'},
+      new_service: { name: 'SQL Server', version: '3.45'} }
+  ] }
+];
+
+const poll_server = (): Game => {
+	if (game_tree_index < game_tree.length) {
+		let result = game_tree[game_tree_index];
+		game_tree_index++;
+		return result;
+	} else {
+		return { prompts: ["The game is over"] };
+	}
+};
+
 type Store = {
 	game: Game,
 };
 
+let empty_network = { nodes: [], edges: [] };
+
 let store: Store = {
 	game: {
 		prompts: [],
-		force_units: 0,
-		player_network: sample_graph,//{ edges: [], nodes: [] },
-		opponent_network: sample_opp_graph, //{ edges: [], nodes: [] }
+		player_network: empty_network,//{ edges: [], nodes: [] },
+		opponent_network: empty_network, //{ edges: [], nodes: [] }
+    actions: [
+      //      { action_type: 'update_service', 
+      //        old_service: { name: 'Google Chrome', version: '1.0'},
+      //        new_service: { name: 'Google Chrome', version: '71.0'} },
+      //      { action_type: 'update_service',
+      //        old_service: { name: 'SQL Server', version: '2.03'},
+      //        new_service: { name: 'SQL Server', version: '3.45'} }
+    ]
 	}
 }
 
@@ -165,25 +213,47 @@ const dispatch = action => {
   render();
 }
 
-const game_reducer = (game: Game, action: Event): Game => {
-	if (action.event_type === 'message') {
-		return { ...game, prompts: [action.text, ...game.prompts] };
-	} else {
-		return game;
-	}
+const update_network = (old_net: Network, new_stuff): Network => {
+  let new_nodes = [...old_net.nodes];
+  let new_edges = [...old_net.edges];
+  new_stuff.nodes.forEach(new_node => new_nodes[new_node.id] = new_node);
+  new_edges = new_edges.concat(new_stuff.edges);
+  if (new_stuff.removed_edges) {
+    new_stuff.removed_edges.forEach(n => delete new_edges[n]);
+  }
+  if (new_stuff.removed_nodes) {
+    new_stuff.removed_nodes.forEach(n => delete new_nodes[n]);
+  }
+  return { nodes: new_nodes, edges: new_edges };
 };
+
+const game_reducer = (game: Game, action: Event): Game => {
+  let new_game = {...game};
+  if (action.prompts) {
+    new_game.prompts = [...action.prompts, ...game.prompts];
+  }
+  if (action.player_network) {
+    new_game.player_network = update_network(game.player_network, action.player_network);
+  }
+  if (action.opponent_network) {
+    new_game.opponent_network = update_network(game.opponent_network, action.opponent_network);
+  }
+  if (action.actions) {
+    new_game.actions = [...game.actions, ...action.actions];
+  }
+  console.log('constructed new game', new_game);
+  return new_game;
+};
+
+const compress_array = arr => {
+  let new_arr = [];
+  arr.forEach(x => new_arr.push(x));
+  return new_arr;
+}
 
 const update_game_state = store => {
 	let event = poll_server();
 	return { ...store, game: game_reducer(store.game, event) };
-};
-
-const select_node = (node_id, is_friendly) => store => {
-		if (is_friendly) {
-			return {...store, selected_player_node: node_id };
-		} else {
-			return {...store, selected_opponent_node: node_id };
-		}
 };
 
 const NetworkPanel = props => {
@@ -226,7 +296,7 @@ const NetworkPanel = props => {
 
 	let network = {
 		...props.network,
-		nodes: props.network.nodes.map(node => {
+		nodes: compress_array(props.network.nodes.map(node => {
 			let node_shape = 'ellipse';
 			let node_color = 'lightgreen';
 			if (node.node_type === 'computer') {
@@ -238,11 +308,8 @@ const NetworkPanel = props => {
 				shape: node_shape,
 				color: node_color
 			}
-		})
+		}))
 	};
-	console.log('making network');
-	console.log(network);
-
 	return (
 		<div className="graph">
 			<div className="graph-title">{network_name}</div>
@@ -261,15 +328,27 @@ const NodeProperty = props => (
 	</div>
 );
 
+const Service = props => {
+  return (
+    <div className="service">
+      <div className="service-name">{props.service.name}</div>
+      <div className="service-version">{props.service.version}</div>
+    </div>
+  );
+};
 
 const NodeInspector = props => {
+  let services = [];
+  if (props.node.node_type === 'computer') {
+    services = props.node.services;
+  }
 	return (
 		<div className="node-inspector">
 			<div className="flex-row">
 				<div className="node-label">{props.node.label}</div>
 				<div className="node-type">{props.node.node_type}</div>
 			</div>
-			<div className="services-header">Services</div>
+      {services.map((service, i) => <Service key={i} service={service}/>)}
 		</div>
 	);
 };
@@ -281,6 +360,22 @@ const NetworkInspector = props => {
 				<NodeInspector key={i} node={node}/>)}
 		</div>
 	);
+};
+
+const Action = props => {
+  return (
+    <div className="flex-col action-box">
+      <div className="action-title">Update</div>
+      <div className="flex-row service-update-row">
+        <div>Old</div>
+        <Service service={props.action.old_service}/>
+      </div>
+      <div className="flex-row service-update-row">
+        <div>New</div>
+        <Service service={props.action.new_service}/>
+      </div>
+    </div>
+  );
 };
 
 const App = () => {
@@ -306,6 +401,7 @@ const App = () => {
 					<div className="action-panel-container panel-container">
 						<div className="panel-content">
 							<div className="panel-header">Actions</div>
+              {store.game.actions.map((action, i) => <Action key={i} action={action} />)}
 						</div>
 					</div>
 				</div>
