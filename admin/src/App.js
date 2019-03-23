@@ -12,8 +12,6 @@ import command_control from './svg/command_control.svg';
 import actions_on_objectives from './svg/actions_on_objectives.svg';
 import * as L from 'partial.lenses'
 
-const log_action = action_name => console.log('action:', action_name);
-
 let store = {
   stages: {},
   expanded_stages: {}
@@ -26,45 +24,16 @@ const store_action = action => {
 }
 
 const default_stage_type_id = uuidv4();
-let stage_types = {};
-stage_types[default_stage_type_id] = { label: 'Reconnaissance', image: reconnaissance }
-stage_types[uuidv4()] = { label: 'Weaponization', image: weaponization };
-stage_types[uuidv4()] = { label: 'Delivery', image: delivery };
-stage_types[uuidv4()] = { label: 'Exploitation', image: exploitation };
-stage_types[uuidv4()] = { label: 'Installation', image: installation };
-stage_types[uuidv4()] = { label: 'Command and Control', image: command_control };
-stage_types[uuidv4()] = { label: 'Actions On Objectives', image: actions_on_objectives };
 
-const make_stage = (stage_name) => {
-  return {
-    type: default_stage_type_id, 
-    name: stage_name,
-    messages: {},
-    actions: {},
-    diff_items: {}
-  };
+const default_stage = {
+  type: default_stage_type_id,
+  messages: {},
+  actions: {},
+  diff_items: {}
 };
 
-const add_new_stage = () => store_action(store => {
-  log_action('add_new_stage');
-  let new_stages = {...store.stages};
-  let stage_id = uuidv4()
-  new_stages[stage_id] = make_stage('Stage - ' + stage_id);
-  return {
-    ...store,
-    stages: new_stages
-  };
-});
-
-const toggle_stage_expansion = stage_id => store_action(store => {
-  log_action('toggle_stage_expansion');
-  let new_expansions = {...store.expanded_stages};
-  new_expansions[stage_id] = !new_expansions[stage_id];
-  return {
-    ...store,
-    expanded_stages: new_expansions
-  }
-});
+const add_new_stage = () => store_action(store =>
+  L.set(['stages', uuidv4()], default_stage, store));
 
 const update_stage = f => stage_id => store_action(store => {
   let stage = store.stages[stage_id];
@@ -79,55 +48,22 @@ const update_stage = f => stage_id => store_action(store => {
 
 const stage_with_id = stage_id => L.compose(L.prop('stages'), L.prop(stage_id))
 
+const action_with_id = (stage_id, action_id) => [stage_with_id(stage_id), 'actions', action_id];
 
-const select_stage_type = (stage_id, stage_type_id) => store_action(store => {
-  let stage_type = L.compose(stage_with_id(stage_id), L.prop('type'))
-  return L.set(stage_type, stage_type_id, store)
-});
-
-const update_message = (stage_id, message_id, text) => store_action(store => {
-  let message = L.compose(stage_with_id(stage_id), L.prop('messages'), L.prop(message_id));
-  return L.set(message, text, store);
-});
-
-const action_with_id = (stage_id, action_id) =>
-  L.compose(stage_with_id(stage_id), L.prop('actions'), L.prop(action_id));
-
-const update_action_type = (stage_id, action_id, type) => store_action(store => {
-  let action_type = L.compose(action_with_id(stage_id, action_id), L.prop('type'));
-  return L.set(action_type, type, store);
-});
-
-const update_action_text = (stage_id, action_id, text) => store_action(stage => {
-  let action_text = L.compose(action_with_id(stage_id, action_id), L.prop('text'));
-  return L.set(action_text, text, store);
-});
-
-const add_item = (prop_name, default_item) => update_stage(stage => {
-  let new_items = {...stage[prop_name]};
-  new_items[uuidv4()] = default_item;
-  let new_stage = {...stage};
-  new_stage[prop_name] = new_items;
-  return new_stage;
-});
-
-const remove_item = (prop_name, i) => update_stage(stage => {
-  let new_items = {...stage[prop_name]};
-  delete new_items[i];
-  let new_stage = {...stage};
-  new_stage[prop_name] = new_items;
-  return new_stage;
-})
-
-const default_diff_item = { type: 'new_computer', computer_name: '' };
-const default_action = { text: "", type: default_stage_type_id };
-const default_message = "";
+let stage_types = {};
+stage_types[default_stage_type_id] = { label: 'Reconnaissance', image: reconnaissance }
+stage_types[uuidv4()] = { label: 'Weaponization', image: weaponization };
+stage_types[uuidv4()] = { label: 'Delivery', image: delivery };
+stage_types[uuidv4()] = { label: 'Exploitation', image: exploitation };
+stage_types[uuidv4()] = { label: 'Installation', image: installation };
+stage_types[uuidv4()] = { label: 'Command and Control', image: command_control };
+stage_types[uuidv4()] = { label: 'Actions On Objectives', image: actions_on_objectives };
 
 const StageTypeSelector = props => {
   return (
     <div className="stage-type-selector">
       {Object.entries(stage_types).map(([stage_type_id, stage_type], i) => {
-        let classes = 'stage-type-item';
+        let classes = 'stage-type-item clickable';
         if (stage_type_id === props.selected_type) {
           classes += ' selected-stage-type-item';
         }
@@ -144,98 +80,110 @@ const StageTypeSelector = props => {
   );
 };
 
+const default_diff_item = { type: 'new_computer', computer_name: '' };
+const default_action = { text: "", type: default_stage_type_id };
+const default_message = { text: "" };
+
 const ListMaker = props => {
+
+  const add_item = () => store_action(store =>
+    L.set([props.items, uuidv4()], L.set('is_expanded', true, props.default_item), store));
+
+  const remove_item = i => store_action(store => L.remove([props.items, i], store));
+
+  let items = L.get(props.items, store);
+
   return (
     <div className="list-maker-group">
-      {Object.entries(props.items).map(([item_id, item], i) => {
+      {Object.keys(items).map((item_id, i) => {
+        let item = [props.items, item_id];
+
+        const toggle_expansion = () => store_action(store =>
+          L.modify([item, 'is_expanded'], x => !x, store));
+
+        let panel = (<></>);
+        if (L.get([item, 'is_expanded'], store)) {
+          panel = (<>
+            {props.template(item)}
+            <div onClick={() => remove_item(item_id)} className="clickable remove-button">-</div>
+          </>);
+        }
         return (
           <div key={i} className="list-maker-item">
-            <div onClick={() => remove_item(props.prop_name, item_id)(props.stage_id)} 
-                 className="button-div">-</div>
-            {props.template(item_id, item, props.stage_id)}
+            <div onClick={toggle_expansion} className="clickable collapse-button">{props.kind} {i}</div>
+            {panel}
           </div>
         );
       })}
-      <div className="button-div" 
-           onClick={() => add_item(props.prop_name, props.default_item)(props.stage_id)}>New {props.kind}</div>
+      <div className="clickable add-button" onClick={add_item}>New {props.kind}</div>
     </div>
   );
 };
 
-const message_item = (message_id, message, stage_id) => {
+const message_item = message => {
+  let message_text = L.get([message, 'text'], store);
+  const update = text => store_action(store => L.set([message, 'text'], text, store));
   return (
-    <textarea rows="4" value={message}
-              onChange={ev => update_message(stage_id, message_id, ev.target.value)} />
+    <textarea rows="4" value={message_text} onChange={ev => update(ev.target.value)} />
   );
 };
 
-const action_item = (action_id, action, stage_id) => {
+const action_item = action => {
+  let action_text = L.get([action, 'text'], store);
+  let action_type = L.get([action, 'type'], store);
+  let update_text = text => store_action(store => L.set([action, 'text'], text, store));
+  let update_type = type => store_action(store => L.set([action, 'type'], type, store));
   return (
     <div>
-      <input type="text" value={action.text} onChange={ev => 
-          update_action_text(stage_id, action_id, ev.target.value)} />
-      <StageTypeSelector selected_type={action.type}
-                         on_change={t => update_action_type(stage_id, action_id, t)}/>
+      <input type="text" value={action_text} onChange={ev => update_text(ev.target.value)} />
+      <StageTypeSelector selected_type={action_type} on_change={update_type}/>
     </div>
   );
 };
 
-const diff_item = (diff_item_id, diff_item, stage_id) => {
+const diff_item = diff_item => {
   return (
-    <div>Hello world</div>
+    <div>
+    </div>
   );
 };
 
-const Stage = (props) => {
+const stage = stage => {
   let panel = (<></>);
-  let stage = store.stages[props.stage_id];
-  if (store.expanded_stages[props.stage_id]) {
-    panel = (
-      <div>
-        <StageTypeSelector
-          selected_type={stage.type}
-          on_change={t => select_stage_type(props.stage_id, t)} />
-        <div className="diff-groups">
-          <ListMaker
-            items={stage.messages}
-            stage_id={props.stage_id}
-            kind="Message"
-            prop_name="messages"
-            default_item={default_message}
-            template={message_item} />
-          <ListMaker
-            items={stage.actions}
-            stage_id={props.stage_id}
-            kind="Action"
-            prop_name="actions"
-            default_item={default_action}
-            template={action_item} />
-          <ListMaker
-            items={stage.diff_items}
-            stage_id={props.stage_id}
-            kind="Diff"
-            prop_name="diff_items"
-            default_item={default_diff_item}
-            template={diff_item} />
-        </div>
-      </div>
-    );
-  }
+  let stage_type = [stage, 'type'];
+  let select_stage_type = t => store_action(store => L.set(stage_type, t, store));
   return (
-    <div className="stage-list-item">
-      <div onClick={() => toggle_stage_expansion(props.stage_id)}
-           className="stage-list-item-title">Stage {props.index}</div>
-      {panel}
-    </div>
-  );
+    <div >
+      <StageTypeSelector selected_type={L.get(stage_type, store)}
+        on_change={select_stage_type} />
+      <div className="diff-groups">
+        <ListMaker
+          items={[stage, 'messages']}
+          kind="Message"
+          default_item={default_message}
+          template={message_item} />
+        <ListMaker
+          items={[stage, 'actions']}
+          kind="Action"
+          default_item={default_action}
+          template={action_item} />
+        <ListMaker
+          items={[stage, 'diff_items']}
+          kind="Diff"
+          default_item={default_diff_item}
+          template={diff_item} />
+      </div>
+    </div>);
 }
 
 const App = () => {
   return (
     <div className="App">
-      {Object.keys(store.stages).map((stage_id, i) => <Stage key={i} index={i} stage_id={stage_id} />)}
-      <div onClick={add_new_stage}
-           className="add-stage-button stage-list-item stage-list-item-title">Add Stage</div>
+      <ListMaker
+        items={'stages'}
+        kind="Stage"
+        default_item={default_stage}
+        template={stage} />
     </div>
   );
 };
