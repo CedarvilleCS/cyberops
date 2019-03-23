@@ -10,6 +10,7 @@ import exploitation from './svg/exploitation.svg';
 import installation from './svg/installation.svg';
 import command_control from './svg/command_control.svg';
 import actions_on_objectives from './svg/actions_on_objectives.svg';
+import * as L from 'partial.lenses'
 
 const log_action = action_name => console.log('action:', action_name);
 
@@ -17,6 +18,12 @@ let store = {
   stages: {},
   expanded_stages: {}
 };
+
+const store_action = action => {
+  store = action(store);
+  console.log('current store:', store);
+  render();
+}
 
 const default_stage_type_id = uuidv4();
 let stage_types = {};
@@ -34,11 +41,11 @@ const make_stage = (stage_name) => {
     name: stage_name,
     messages: {},
     actions: {},
-    network_changes: {}
+    diff_items: {}
   };
 };
 
-const add_new_stage = store => {
+const add_new_stage = () => store_action(store => {
   log_action('add_new_stage');
   let new_stages = {...store.stages};
   let stage_id = uuidv4()
@@ -47,9 +54,9 @@ const add_new_stage = store => {
     ...store,
     stages: new_stages
   };
-}
+});
 
-const toggle_stage_expansion = stage_id => store => {
+const toggle_stage_expansion = stage_id => store_action(store => {
   log_action('toggle_stage_expansion');
   let new_expansions = {...store.expanded_stages};
   new_expansions[stage_id] = !new_expansions[stage_id];
@@ -57,9 +64,9 @@ const toggle_stage_expansion = stage_id => store => {
     ...store,
     expanded_stages: new_expansions
   }
-};
+});
 
-const update_stage = f => stage_id => store => {
+const update_stage = f => stage_id => store_action(store => {
   let stage = store.stages[stage_id];
   let new_stage = f(stage);
   let new_stages = {...store.stages};
@@ -68,80 +75,53 @@ const update_stage = f => stage_id => store => {
     ...store,
     stages: new_stages
   };
-};
+});
 
-const select_stage_type = stage_type_id => update_stage(stage => {
-  log_action('select_stage_type');
-  let new_stage = {...stage, type: stage_type_id };
-  new_stage.type = stage_type_id;
+const stage_with_id = stage_id => L.compose(L.prop('stages'), L.prop(stage_id))
+
+
+const select_stage_type = (stage_id, stage_type_id) => store_action(store => {
+  let stage_type = L.compose(stage_with_id(stage_id), L.prop('type'))
+  return L.set(stage_type, stage_type_id, store)
+});
+
+const update_message = (stage_id, message_id, text) => store_action(store => {
+  let message = L.compose(stage_with_id(stage_id), L.prop('messages'), L.prop(message_id));
+  return L.set(message, text, store);
+});
+
+const action_with_id = (stage_id, action_id) =>
+  L.compose(stage_with_id(stage_id), L.prop('actions'), L.prop(action_id));
+
+const update_action_type = (stage_id, action_id, type) => store_action(store => {
+  let action_type = L.compose(action_with_id(stage_id, action_id), L.prop('type'));
+  return L.set(action_type, type, store);
+});
+
+const update_action_text = (stage_id, action_id, text) => store_action(stage => {
+  let action_text = L.compose(action_with_id(stage_id, action_id), L.prop('text'));
+  return L.set(action_text, text, store);
+});
+
+const add_item = (prop_name, default_item) => update_stage(stage => {
+  let new_items = {...stage[prop_name]};
+  new_items[uuidv4()] = default_item;
+  let new_stage = {...stage};
+  new_stage[prop_name] = new_items;
   return new_stage;
 });
 
-const update_message = (message_id, message) => update_stage(stage => {
-  let new_messages = {...stage.messages};
-  new_messages[message_id] = message;
-  return {
-    ...stage,
-    messages: new_messages
-  };
-});
+const remove_item = (prop_name, i) => update_stage(stage => {
+  let new_items = {...stage[prop_name]};
+  delete new_items[i];
+  let new_stage = {...stage};
+  new_stage[prop_name] = new_items;
+  return new_stage;
+})
 
-const new_message = x => update_message(uuidv4(), "")(x);
-
-const remove_message = message_id => update_stage(stage => {
-  let new_messages = {...stage.messages};
-  delete new_messages[message_id];
-  return {
-    ...stage,
-    messages: new_messages
-  };
-});
-
-const update_action_type = (action_id, type) => update_stage(stage => {
-  let new_actions = {...stage.actions};
-  let new_action = stage.actions[action_id];
-  new_action.type = type;
-  new_actions[action_id] = new_action;
-  return {
-    ...stage,
-    actions: new_actions
-  };
-});
-
-const update_action_text = (action_id, text) => update_stage(stage => {
-  let new_actions = {...stage.actions};
-  let new_action = stage.actions[action_id];
-  new_action.text = text;
-  new_actions[action_id] = new_action;
-  return {
-    ...stage,
-    actions: new_actions
-  };
-});
-
-const new_action = update_stage(stage => {
-  let new_actions = {...stage.actions};
-  new_actions[uuidv4()] = { text: "", type: default_stage_type_id };
-  return {
-    ...stage,
-    actions: new_actions
-  };
-});
-
-const remove_action = action_id => update_stage(stage => {
-  let new_actions = {...stage.actions};
-  delete new_actions[action_id];
-  return {
-    ...stage,
-    actions: new_actions
-  };
-});
-
-const dispatch = action => {
-  store = action(store);
-  console.log('current store:', store);
-  render();
-}
+const default_diff_item = { type: 'new_computer', computer_name: '' };
+const default_action = { text: "", type: default_stage_type_id };
+const default_message = "";
 
 const StageTypeSelector = props => {
   return (
@@ -170,14 +150,14 @@ const ListMaker = props => {
       {Object.entries(props.items).map(([item_id, item], i) => {
         return (
           <div key={i} className="list-maker-item">
-            <div onClick={() => dispatch(props.on_remove(item_id)(props.stage_id))} 
+            <div onClick={() => remove_item(props.prop_name, item_id)(props.stage_id)} 
                  className="button-div">-</div>
             {props.template(item_id, item, props.stage_id)}
           </div>
         );
       })}
       <div className="button-div" 
-           onClick={() => dispatch(props.on_add(props.stage_id))}>New {props.kind}</div>
+           onClick={() => add_item(props.prop_name, props.default_item)(props.stage_id)}>New {props.kind}</div>
     </div>
   );
 };
@@ -185,20 +165,24 @@ const ListMaker = props => {
 const message_item = (message_id, message, stage_id) => {
   return (
     <textarea rows="4" value={message}
-              onChange={ev => dispatch(
-              update_message(message_id, ev.target.value)(stage_id))} />
+              onChange={ev => update_message(stage_id, message_id, ev.target.value)} />
   );
 };
 
 const action_item = (action_id, action, stage_id) => {
   return (
-    <>
-      <input type="text" value={action.text}
-                onChange={ev => dispatch(
-                update_action_text(action_id, ev.target.value)(stage_id))} />
+    <div>
+      <input type="text" value={action.text} onChange={ev => 
+          update_action_text(stage_id, action_id, ev.target.value)} />
       <StageTypeSelector selected_type={action.type}
-                         on_change={t => dispatch(update_action_type(action_id, t)(stage_id))}/>
-    </>
+                         on_change={t => update_action_type(stage_id, action_id, t)}/>
+    </div>
+  );
+};
+
+const diff_item = (diff_item_id, diff_item, stage_id) => {
+  return (
+    <div>Hello world</div>
   );
 };
 
@@ -210,29 +194,36 @@ const Stage = (props) => {
       <div>
         <StageTypeSelector
           selected_type={stage.type}
-          on_change={t => dispatch(select_stage_type(t)(props.stage_id))} />
+          on_change={t => select_stage_type(props.stage_id, t)} />
         <div className="diff-groups">
           <ListMaker
-            on_remove={remove_message}
-            on_add={new_message}
             items={stage.messages}
             stage_id={props.stage_id}
             kind="Message"
+            prop_name="messages"
+            default_item={default_message}
             template={message_item} />
           <ListMaker
-            on_remove={remove_action}
-            on_add={new_action}
             items={stage.actions}
             stage_id={props.stage_id}
-            kind="Actions"
+            kind="Action"
+            prop_name="actions"
+            default_item={default_action}
             template={action_item} />
+          <ListMaker
+            items={stage.diff_items}
+            stage_id={props.stage_id}
+            kind="Diff"
+            prop_name="diff_items"
+            default_item={default_diff_item}
+            template={diff_item} />
         </div>
       </div>
     );
   }
   return (
     <div className="stage-list-item">
-      <div onClick={() => dispatch(toggle_stage_expansion(props.stage_id))}
+      <div onClick={() => toggle_stage_expansion(props.stage_id)}
            className="stage-list-item-title">Stage {props.index}</div>
       {panel}
     </div>
@@ -243,7 +234,7 @@ const App = () => {
   return (
     <div className="App">
       {Object.keys(store.stages).map((stage_id, i) => <Stage key={i} index={i} stage_id={stage_id} />)}
-      <div onClick={() => dispatch(add_new_stage)}
+      <div onClick={add_new_stage}
            className="add-stage-button stage-list-item stage-list-item-title">Add Stage</div>
     </div>
   );
