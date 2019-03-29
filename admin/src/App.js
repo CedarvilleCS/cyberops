@@ -2,20 +2,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
-import uuidv4 from 'uuid/v4';
-import reconnaissance from './svg/reconnaissance.svg';
-import weaponization from './svg/weaponization.svg';
-import delivery from './svg/delivery.svg';
-import exploitation from './svg/exploitation.svg';
-import installation from './svg/installation.svg';
-import command_control from './svg/command_control.svg';
-import actions_on_objectives from './svg/actions_on_objectives.svg';
 import * as L from 'partial.lenses'
 
 let store = {
-  stages: {},
-  expanded_stages: {}
+  games: []
 };
+
 
 const store_action = action => {
   store = action(store);
@@ -23,80 +15,85 @@ const store_action = action => {
   render();
 }
 
-const default_stage_type_id = uuidv4();
+const default_stage_type_id = 'reconnaissance';
 
-const default_stage = {
-  type: default_stage_type_id,
-  messages: {},
-  actions: {},
-  diff_items: {}
-};
-
-const add_new_stage = () => store_action(store =>
-  L.set(['stages', uuidv4()], default_stage, store));
-
-const update_stage = f => stage_id => store_action(store => {
-  let stage = store.stages[stage_id];
-  let new_stage = f(stage);
-  let new_stages = {...store.stages};
-  new_stages[stage_id] = new_stage;
-  return {
-    ...store,
-    stages: new_stages
-  };
-});
-
-const stage_with_id = stage_id => L.compose(L.prop('stages'), L.prop(stage_id))
-
-const action_with_id = (stage_id, action_id) => [stage_with_id(stage_id), 'actions', action_id];
-
-let stage_types = {};
-stage_types[default_stage_type_id] = { label: 'Reconnaissance', image: reconnaissance }
-stage_types[uuidv4()] = { label: 'Weaponization', image: weaponization };
-stage_types[uuidv4()] = { label: 'Delivery', image: delivery };
-stage_types[uuidv4()] = { label: 'Exploitation', image: exploitation };
-stage_types[uuidv4()] = { label: 'Installation', image: installation };
-stage_types[uuidv4()] = { label: 'Command and Control', image: command_control };
-stage_types[uuidv4()] = { label: 'Actions On Objectives', image: actions_on_objectives };
-
-const StageTypeSelector = props => {
+const tagged_union = item_types => item => {
+  const item_type = [item, 'type'];
+  const current_template = item_types[L.get(item_type, store)] || nothing;
   return (
-    <div className="stage-type-selector">
-      {Object.entries(stage_types).map(([stage_type_id, stage_type], i) => {
-        let classes = 'stage-type-item clickable';
-        if (stage_type_id === props.selected_type) {
-          classes += ' selected-stage-type-item';
-        }
-        return (
-          <div key={i}
-              className={classes}
-              title={stage_type.label}
-              onClick={() => props.on_change(stage_type_id)}>
-            <img alt="" src={stage_type.image}/>
-          </div>
-        );
-      })}
+    <div>
+      <div className="union-type-selector">
+        {Object.keys(item_types).map((i_type, i) => {
+          const update_type = () => {
+            return store_action(store => L.set(item_type, i_type, store));
+          };
+          let classes = 'union-item-header clickable';
+          if (L.get(item_type, store) === i_type) {
+            classes += ' selected-union-item';
+          }
+          return (
+            <div key={i} onClick={update_type} className={classes}>{i_type}</div>
+          );
+        })}
+      </div>
+      {current_template(item)}
     </div>
   );
 };
 
-const default_diff_item = { type: 'new_computer', computer_name: '' };
-const default_action = { text: "", type: default_stage_type_id };
-const default_message = { text: "" };
+const big_struct = (field_types, is_col) => lens => {
+  let classes = "big-struct-container";
+  if (is_col) {
+    classes += " big-struct-col";
+  }
+  return (<div className={classes}>
+    {Object.keys(field_types).map((field, i) => 
+      titled(field, field_types[field])([lens, field])
+    )}
+  </div>);
+};
 
-const ListMaker = props => {
+const struct = field_types => lens => {
+  return (<div className="struct-container">
+    {Object.keys(field_types).map((field, i) => {
+      return (
+        <div className="field-label">
+          <div>{field}</div>
+          {field_types[field]([lens, field])}
+        </div>
+      );
+    })}
+  </div>);
+};
 
+const nothing = lens => (<></>);
+
+const stage_type_selector = tagged_union({
+  'reconnaissance': nothing,
+  'weaponization': nothing,
+  'delivery': nothing,
+  'exploitation': nothing,
+  'installation': nothing,
+  'command_and_control': nothing,
+  'actions_on_objectives': nothing
+});
+
+const titled = (title, element) => lens => {
+  return (<div className="titled-group">
+    <h4>{title}</h4>
+    {element(lens)}
+  </div>);
+};
+
+const list = (default_item, template, title) => lens => {
   const add_item = () => store_action(store =>
-    L.set([props.items, uuidv4()], L.set('is_expanded', true, props.default_item), store));
-
-  const remove_item = i => store_action(store => L.remove([props.items, i], store));
-
-  let items = L.get(props.items, store);
-
+    L.set([lens, L.appendTo], L.set('is_expanded', true, default_item), store));
+  const remove_item = i => store_action(store => L.remove([lens, i], store));
+  const actual_items = L.get(lens, store);
   return (
     <div className="list-maker-group">
-      {Object.keys(items).map((item_id, i) => {
-        let item = [props.items, item_id];
+      {actual_items.map((actual_item, i) => {
+        let item = [lens, i];
 
         const toggle_expansion = () => store_action(store =>
           L.modify([item, 'is_expanded'], x => !x, store));
@@ -104,18 +101,24 @@ const ListMaker = props => {
         let panel = (<></>);
         if (L.get([item, 'is_expanded'], store)) {
           panel = (<>
-            {props.template(item)}
-            <div onClick={() => remove_item(item_id)} className="clickable remove-button">-</div>
+            <div className="item-template-container">
+            {template(item)}
+              </div>
+            <div onClick={() => remove_item(i)} className="clickable remove-button">remove</div>
           </>);
         }
         return (
           <div key={i} className="list-maker-item">
-            <div onClick={toggle_expansion} className="clickable collapse-button">{props.kind} {i}</div>
+            <div className="list-maker-item-title-bar">
+              <div onClick={toggle_expansion} className="clickable collapse-button">
+                {title(item, i)}
+              </div>
+            </div>
             {panel}
           </div>
         );
       })}
-      <div className="clickable add-button" onClick={add_item}>New {props.kind}</div>
+      <div className="clickable add-button" onClick={add_item}>new</div>
     </div>
   );
 };
@@ -128,65 +131,62 @@ const message_item = message => {
   );
 };
 
-const action_item = action => {
-  let action_text = L.get([action, 'text'], store);
-  let action_type = L.get([action, 'type'], store);
-  let update_text = text => store_action(store => L.set([action, 'text'], text, store));
-  let update_type = type => store_action(store => L.set([action, 'type'], type, store));
+const action_item = lens => {
   return (
     <div>
-      <input type="text" value={action_text} onChange={ev => update_text(ev.target.value)} />
-      <StageTypeSelector selected_type={action_type} on_change={update_type}/>
+      {stage_type_selector(lens)}
+      {struct({ 'text': input })(lens)}
     </div>
   );
 };
 
-const diff_item = diff_item => {
-  return (
-    <div>
-    </div>
-  );
+const input = lens => {
+  let actual = L.get(lens, store);
+  let update = new_value => store_action(store => L.set(lens, new_value, store));
+  return (<input type="text" value={actual} onChange={ev => update(ev.target.value)} />);
 };
 
-const stage = stage => {
-  let panel = (<></>);
-  let stage_type = [stage, 'type'];
-  let select_stage_type = t => store_action(store => L.set(stage_type, t, store));
+const diff_item = tagged_union({
+  'computer': struct({ 'name': input, 'os': input, 'subnets': input }),
+  'subnet': struct({ 'name': input }),
+  'connect': struct({ 'from': input, 'to': input }),
+  'disconnect': struct({ 'from': input, 'to': input })
+});
+
+const stage = lens => {
+  const default_diff_item = { type: 'computer', computer_name: '' };
+  const default_action = { text: "", type: default_stage_type_id };
+  const default_message = { text: "" };
   return (
-    <div >
-      <StageTypeSelector selected_type={L.get(stage_type, store)}
-        on_change={select_stage_type} />
-      <div className="diff-groups">
-        <ListMaker
-          items={[stage, 'messages']}
-          kind="Message"
-          default_item={default_message}
-          template={message_item} />
-        <ListMaker
-          items={[stage, 'actions']}
-          kind="Action"
-          default_item={default_action}
-          template={action_item} />
-        <ListMaker
-          items={[stage, 'diff_items']}
-          kind="Diff"
-          default_item={default_diff_item}
-          template={diff_item} />
-      </div>
+    <div>
+      {stage_type_selector(lens)}
+      {big_struct({
+        'messages': list(default_message, message_item, (m, i) => "Message " + i),
+        'actions': list(default_action, action_item, (m, i) => "Action " + i),
+        'home_diff_items': list(default_diff_item, diff_item, (m, i) => "Diff " + i),
+        'enemy_diff_items': list(default_diff_item, diff_item, (m, i) => "Diff " + i),
+      })(lens)}
     </div>);
 }
 
-const App = () => {
-  return (
-    <div className="App">
-      <ListMaker
-        items={'stages'}
-        kind="Stage"
-        default_item={default_stage}
-        template={stage} />
-    </div>
-  );
+const default_stage = {
+  type: default_stage_type_id,
+  messages: [],
+  actions: [],
+  enemy_diff_items: [],
+  home_diff_items: []
 };
+
+const game = big_struct({
+  'name': input,
+  'stages': list(default_stage, stage, (_, i) => "stage " + i)
+}, true)
+
+const default_game = { name: '', stages: [] };
+
+const App = () => big_struct({
+  'games': list(default_game, game, (game, i) => L.get([game, 'name'], store) || 'Unnamed')
+})([])
 
 const render = () => {
 	let root = document.getElementById('root');

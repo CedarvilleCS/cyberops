@@ -1,8 +1,31 @@
-.stage-type-selector {
+.union-type-selector {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   background-color: #eeeeee;
+}
+
+.union-item-header {
+  margin: 1px;
+  padding: 2px;
+  border: 1px;
+  border-color: #aaffaa;
+  border-style: solid;
+  background-color: #eeeeee;
+}
+
+.selected-union-item, .selected-union-item:hover {
+  background-color: #999999;
+}
+
+.labeled-input {
+  display: flex;
+  flex-direction: row;
+}
+
+.labeled-input > * {
+  margin: 1px;
 }
 
 .stage-type-item > img {
@@ -15,16 +38,36 @@
   background-color: #eeeeee;
 }
 
+.big-struct-container {
+  display: flex;
+  flex-direction: row;
+}
+.big-struct-container > * {
+  flex: 1 1 10%;
+  margin: 10px;
+}
+
+.big-struct-col {
+  flex-direction: column;
+}
+
 .add-button {
+  margin: 4px 0;
   background-color: #99ee99;
 }
 
+.zoom-button {
+  background-color: #eeee99;
+}
+
 .remove-button {
+  margin: 4px 0;
   background-color: #ee9999;
 }
 
 .collapse-button {
   background-color: #9999ee;
+  flex: 1 1 10%;
 }
 
 .clickable {
@@ -37,7 +80,6 @@
 
 .clickable:active {
   filter: brightness(70%);
-  border-style: none;
 }
 
 .selected-stage-type-item, .selected-stage-type-item:hover {
@@ -51,7 +93,6 @@
 
 .list-maker-group {
   flex: 1 1 10%;
-  margin: 2px;
 }
 
 textarea, input {
@@ -66,4 +107,26 @@ textarea, input {
 
 .list-maker-item {
   margin: 4px 0;
+}
+
+.list-maker-item-title-bar {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.edit-game-button {
+  background-color: #eeee99;
+}
+
+.edit-game-button {
+  background-color: #eeee99;
+}
+
+.item-template-container {
+  margin: 5px;
+}
+
+h4 {
+  margin: 0px;
 }
