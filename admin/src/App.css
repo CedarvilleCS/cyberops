@@ -38,16 +38,17 @@
   background-color: #eeeeee;
 }
 
-.big-struct-container {
+.struct-container {
   display: flex;
   flex-direction: row;
 }
-.big-struct-container > * {
+.struct-container > * {
   flex: 1 1 10%;
-  margin: 10px;
+  margin: 5px;
 }
 
-.big-struct-col {
+.struct-container-col {
+  display: flex;
   flex-direction: column;
 }
 
@@ -105,15 +106,11 @@ textarea, input {
   border-color: black;
 }
 
-.list-maker-item {
-  margin: 4px 0;
-}
-
-.list-maker-item-title-bar {
+/*.collapsible-container {
   display: flex;
   flex-direction: row;
   width: 100%;
-}
+}*/
 
 .edit-game-button {
   background-color: #eeee99;
@@ -121,6 +118,10 @@ textarea, input {
 
 .edit-game-button {
   background-color: #eeee99;
+}
+
+.list-item {
+  margin: 4px 0;
 }
 
 .item-template-container {

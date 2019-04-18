@@ -31,9 +31,7 @@ const tagged_union = item_types => item => {
           if (L.get(item_type, store) === i_type) {
             classes += ' selected-union-item';
           }
-          return (
-            <div key={i} onClick={update_type} className={classes}>{i_type}</div>
-          );
+          return (<div key={i} onClick={update_type} className={classes}>{i_type}</div>);
         })}
       </div>
       {current_template(item)}
@@ -42,9 +40,9 @@ const tagged_union = item_types => item => {
 };
 
 const big_struct = (field_types, is_col) => lens => {
-  let classes = "big-struct-container";
+  let classes = "struct-container";
   if (is_col) {
-    classes += " big-struct-col";
+    classes += " struct-container-col";
   }
   return (<div className={classes}>
     {Object.keys(field_types).map((field, i) => 
@@ -53,8 +51,12 @@ const big_struct = (field_types, is_col) => lens => {
   </div>);
 };
 
-const struct = field_types => lens => {
-  return (<div className="struct-container">
+const struct = (field_types, is_row) => lens => {
+  let classes = "struct-container";
+  if (!is_row) {
+    classes += " struct-container-col";
+  }
+  return (<div className={classes}>
     {Object.keys(field_types).map((field, i) => {
       return (
         <div className="field-label">
@@ -85,39 +87,33 @@ const titled = (title, element) => lens => {
   </div>);
 };
 
-const list = (default_item, template, title) => lens => {
+const collapsible = (title_maker, element) => lens => {
+  const toggle_expansion = () => store_action(store =>
+    L.modify([lens, 'is_expanded'], x => !x, store));
+
+  let panel = (<></>);
+
+  if (L.get([lens, 'is_expanded'], store)) {
+    panel = element(lens);
+  }
+  return (<div className="collapsible-container">
+    <div onClick={toggle_expansion} className="clickable collapse-button">
+      {title_maker(lens) || 'unnamed'}
+    </div>
+    {panel}
+  </div>);
+}
+
+const list = (default_item, template) => lens => {
   const add_item = () => store_action(store =>
-    L.set([lens, L.appendTo], L.set('is_expanded', true, default_item), store));
+    L.set([lens, L.appendTo], default_item, store));
   const remove_item = i => store_action(store => L.remove([lens, i], store));
+  console.log(lens);
   const actual_items = L.get(lens, store);
   return (
     <div className="list-maker-group">
-      {actual_items.map((actual_item, i) => {
-        let item = [lens, i];
-
-        const toggle_expansion = () => store_action(store =>
-          L.modify([item, 'is_expanded'], x => !x, store));
-
-        let panel = (<></>);
-        if (L.get([item, 'is_expanded'], store)) {
-          panel = (<>
-            <div className="item-template-container">
-            {template(item)}
-              </div>
-            <div onClick={() => remove_item(i)} className="clickable remove-button">remove</div>
-          </>);
-        }
-        return (
-          <div key={i} className="list-maker-item">
-            <div className="list-maker-item-title-bar">
-              <div onClick={toggle_expansion} className="clickable collapse-button">
-                {title(item, i)}
-              </div>
-            </div>
-            {panel}
-          </div>
-        );
-      })}
+      {actual_items.map((actual_item, i) => 
+        (<div className="list-item">{template([lens, i])}</div>))}
       <div className="clickable add-button" onClick={add_item}>new</div>
     </div>
   );
@@ -153,12 +149,12 @@ const diff_item = tagged_union({
   'disconnect': struct({ 'from': input, 'to': input })
 });
 
-const stage = lens => {
-  const default_diff_item = { type: 'computer', computer_name: '' };
+const default_diff_item = { type: 'computer', computer_name: '' };
+
+const stage = collapsible(() => 'stage', lens => {
   const default_action = { text: "", type: default_stage_type_id };
   const default_message = { text: "" };
-  return (
-    <div>
+  return (<div>
       {stage_type_selector(lens)}
       {big_struct({
         'messages': list(default_message, message_item, (m, i) => "Message " + i),
@@ -167,7 +163,7 @@ const stage = lens => {
         'enemy_diff_items': list(default_diff_item, diff_item, (m, i) => "Diff " + i),
       })(lens)}
     </div>);
-}
+});
 
 const default_stage = {
   type: default_stage_type_id,
@@ -177,15 +173,36 @@ const default_stage = {
   home_diff_items: []
 };
 
-const game = big_struct({
+const game = collapsible(game => L.get([game, 'name'], store), big_struct({
   'name': input,
+  'home_network': big_struct({
+    'computers': list('', input),
+    'lans': list('', input),
+    'connections': list({from: '', to: ''}, struct({ 'from': input, 'to': input }, true)),
+  }),
+  'enemy_network': big_struct({
+    'computers': list(default_diff_item, diff_item, (_, i) => "home " + i),
+    'lans': list(default_diff_item, diff_item, (_, i) => "home " + i),
+    'connections': list(default_diff_item, diff_item, (_, i) => "enemy " + i),
+  }),
   'stages': list(default_stage, stage, (_, i) => "stage " + i)
-}, true)
+}, true));
 
-const default_game = { name: '', stages: [] };
+const empty_network = {
+  computers: [],
+  lans: [],
+  connections: []
+}
+
+const default_game = { 
+  name: '', 
+  stages: [],
+  home_network: empty_network,
+  enemy_network: empty_network
+};
 
 const App = () => big_struct({
-  'games': list(default_game, game, (game, i) => L.get([game, 'name'], store) || 'Unnamed')
+  'games': list(default_game, game)
 })([])
 
 const render = () => {
