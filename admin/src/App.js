@@ -3,10 +3,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
 import * as L from 'partial.lenses'
+const electron = window.require('electron');
+const fs = window.require('fs');
+const ipcRenderer = electron.ipcRenderer;
 
-let store = {
-  games: []
-};
+let store = null;
 
 const store_action = action => {
   store = action(store);
@@ -182,22 +183,18 @@ const network_portion = net => column([
     checklist(net.connections.map(x => x.computer + ':' + x.network)))
 ])
 
-const stage = parent_game => {
-  const default_action = { text: "", type: default_stage_type_id };
-  const default_message = { text: "" };
-  const home_net = L.get([parent_game, 'home_network'], store);
-  const enemy_net = L.get([parent_game, 'enemy_network'], store);
-  return collapsible('stage',
-    column([
-      stage_type_selector,
-      row([
-        titled_prop('messages', list(default_message, message_item)),
-        titled_prop('actions', list(default_action, action_item)),
-        titled_prop('home_network', network_portion(home_net)),
-        titled_prop('enemy_network', network_portion(enemy_net))
-      ])
-    ]));
-};
+const default_action = { text: "", type: default_stage_type_id };
+const default_message = { text: "" };
+const stage = lens => collapsible('stage',
+  column([
+    stage_type_selector,
+    row([
+      titled_prop('messages', list(default_message, message_item)),
+      titled_prop('actions', list(default_action, action_item)),
+      titled_prop('home_network', network_portion(store.home_network)),
+      titled_prop('enemy_network', network_portion(store.enemy_network))
+    ])
+  ]))(lens);
 
 const empty_network = {
   computers: [],
@@ -221,27 +218,25 @@ const network = row([
     prop('network', input)]))),
 ]);
 
-const game = lens => collapsible(L.get([lens, 'name'], store), column([
+const game = column([
   row([
-    titled_prop('name', input), 
-    titled_prop('filename', input)
+    titled_prop('name', input)
   ]),
   titled_prop('home_network', network),
   titled_prop('enemy_network', network),
-  titled_prop('stages', list(default_stage, stage(lens), (_, i) => "stage " + i))
-], true))(lens);
+  titled_prop('stages', list(default_stage, stage, (_, i) => "stage " + i))
+], true);
 
 const default_game = {
-  is_dirty: false,
-  name: '', 
+  name: 'unnamed', 
   stages: [],
   home_network: empty_network,
   enemy_network: empty_network
 };
 
-const App = () => big_struct({
-  'games': list(default_game, game)
-})([])
+store = default_game;
+
+const App = () => game([])
 
 const render = () => {
 	let root = document.getElementById('root');
@@ -249,5 +244,32 @@ const render = () => {
 		ReactDOM.render(<App />, root);
 	}
 };
+
+let filename = null;
+
+ipcRenderer.on('save_as', () => {
+  console.log('saving!!!!!!!!!!!!!!!!');
+  filename = electron.remote.dialog.showSaveDialog();
+  if (filename) {
+    fs.writeFileSync(filename, JSON.stringify(store));
+  }
+});
+
+ipcRenderer.on('save', () => {
+  console.log('saving!!!!!!!!!!!!!!!!');
+  if (!filename) {
+    filename = electron.remote.dialog.showSaveDialog();
+  }
+  if (filename) {
+    fs.writeFileSync(filename, JSON.stringify(store));
+  }
+});
+
+ipcRenderer.on('open', (event, fn) => store_action(() => {
+  console.log('opening');
+  console.log(fn);
+  filename = fn;
+  return JSON.parse(fs.readFileSync(fn));
+}));
 
 export default render;
