@@ -6,15 +6,17 @@
     "partial.lenses": "^14.17.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "react-scripts": "2.1.5",
+    "react-scripts": "^2.1.8",
     "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start",
+    "go": "electron .",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "homepage":"./",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -23,5 +25,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "electron": "^4.1.4"
+  }
 }

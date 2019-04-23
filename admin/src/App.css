@@ -1,3 +1,18 @@
+.flex-row > * {
+  flex: 1 1 10%;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.flex-col > * {
+  margin: 2px;
+
+}
+
 .union-type-selector {
   display: flex;
   flex-direction: row;
@@ -57,12 +72,27 @@
   background-color: #99ee99;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
 .zoom-button {
   background-color: #eeee99;
 }
 
+input[type="checkbox"] {
+  margin: 0;
+  padding: 0;
+  height: 16px;
+  width: 16px;
+  vertical-align: bottom;
+  position: relative;
+  top: -1px;
+  overflow: hidden;
+}
+
 .remove-button {
-  margin: 4px 0;
+  padding: 0px 10px;
   background-color: #ee9999;
 }
 
@@ -96,21 +126,21 @@
   flex: 1 1 10%;
 }
 
-textarea, input {
+textarea, input[type="text"] {
   resize: none;
-  width: calc(100% - 4px);
-  margin: 0;
-  padding: 1;
+  width: calc(100% - 6px) !important;
+  padding: 1px;
+  margin: 1px;
   border-width: 1px;
   border-style: solid;
   border-color: black;
 }
 
-/*.collapsible-container {
+.collapsible-titlebar {
   display: flex;
   flex-direction: row;
   width: 100%;
-}*/
+}
 
 .edit-game-button {
   background-color: #eeee99;
