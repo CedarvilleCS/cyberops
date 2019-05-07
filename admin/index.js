@@ -10,26 +10,34 @@ const createWindow = () => {
 
   const menu = Menu.buildFromTemplate([{ 
     label: 'File',
-    submenu: [
-      { label: 'Save', click: () => win.webContents.send('save') },
-      { label: 'Save As', click: () => win.webContents.send('save_as') },
-      {
-        label: 'Open', 
-        click: () => {
-          win.webContents.send('open', dialog.showOpenDialog()[0])
-        }
+    submenu: [{
+      label: 'Save',
+      click: () => win.webContents.send('save'),
+      accelerator: 'CmdOrCtrl+S'
+    }, {
+      label: 'Save As',
+      click: () => win.webContents.send('save_as'),
+      accelerator: 'CmdOrCtrl+Shift+S'
+    }, {
+      label: 'Open',
+      click: () => {
+        win.webContents.send('open', dialog.showOpenDialog()[0])
       },
-      { label: 'Quit', role: 'quit' }
-    ]}, {
-      label: 'Window',
-      role: 'windowMenu',
-      submenu: [
-        { label: 'Reload', role: 'reload'},
-        { label: 'Force Reload', role: 'forceReload'},
-        { label: 'DevTools', role: 'toggleDevTools'}
-      ]
+      accelerator: 'CmdOrCtrl+O'
+    }, {
+      label: 'Quit',
+      role: 'quit'
     }
-  ]);
+    ]
+  }, {
+    label: 'Window',
+    role: 'windowMenu',
+    submenu: [
+      { label: 'Reload', role: 'reload'},
+      { label: 'Force Reload', role: 'forceReload'},
+      { label: 'DevTools', role: 'toggleDevTools'}
+    ]
+  }]);
   Menu.setApplicationMenu(menu);
 }
 app.on('ready', createWindow);

@@ -158,8 +158,8 @@ const checklist = prop_list => column(prop_list.map(property => prop(property, c
 
 const message_item = lens => {
   console.log(lens.flat(100));
-  let message_text = L.get([lens, 'text'], store);
-  const update = text => store_action(store => L.set([lens, 'text'], text, store));
+  let message_text = L.get(lens, store);
+  const update = text => store_action(store => L.set(lens, text, store));
   return column([
     remove_button,
     () => (<textarea rows="4" value={message_text} onChange={ev => update(ev.target.value)} />)
@@ -184,7 +184,7 @@ const network_portion = net => column([
 ])
 
 const default_action = { text: "", type: default_stage_type_id };
-const default_message = { text: "" };
+const default_message = "";
 const stage = lens => collapsible('stage',
   column([
     stage_type_selector,
