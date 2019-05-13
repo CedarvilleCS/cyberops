@@ -1,4 +1,4 @@
-const { dialog, app, Menu, BrowserWindow } = require('electron');
+const { dialog, app, Menu, BrowserWindow, ipcMain } = require('electron');
 
 const new_window = () => {
 	return new BrowserWindow({width: 800, height: 800, webPreferences: {
@@ -6,20 +6,37 @@ const new_window = () => {
 	}});
 };
 
+let open_file_windows = {};
+
+const open_file = filename => {
+  if (open_file_windows[filename]) {
+    open_file_windows[filename].show();
+  } else {
+    let win = create_editor_window();
+    console.log('trying to open file', filename);
+    win.webContents.once('dom-ready', () => {
+      win.webContents.send('open', `../games/${filename}`);
+    });
+    open_file_windows[filename] = win;
+  }
+};
+
 const create_server_window = () => {
 	let win = new_window();
-	win.loadURL('http://localhost:3002');
+  //win.loadURL('http://localhost:3002');
+  win.loadURL(`file://${__dirname}/server.html`);
 
   Menu.setApplicationMenu(menu(win));
 };
 
-const create_editor_window = () => {
+const create_editor_window = filename => {
 
   let win = new_window();
-	//win.loadURL('http://localhost:3001');
-	win.loadURL(`file://${__dirname}/build/index.html`);
+	win.loadURL('http://localhost:3001');
+  //win.loadURL(`file://${__dirname}/build/index.html`);
 
   Menu.setApplicationMenu(menu(win));
+  return win;
 }
 
 const menu = win => Menu.buildFromTemplate([{ 
@@ -38,9 +55,7 @@ const menu = win => Menu.buildFromTemplate([{
 		accelerator: 'CmdOrCtrl+Shift+S'
 	}, {
 		label: 'Open',
-		click: () => {
-			win.webContents.send('open', dialog.showOpenDialog()[0])
-		},
+		click: () => open_file(dialog.showOpenDialog()[0]),
 		accelerator: 'CmdOrCtrl+O'
 	}, {
 		label: 'Quit',
@@ -62,5 +77,9 @@ const menu = win => Menu.buildFromTemplate([{
 		{ label: 'DevTools', role: 'toggleDevTools'}
 	]
 }]);
+
+ipcMain.on('open-game-file', (event, filename) => {
+  open_file(filename);
+});
 
 app.on('ready', create_editor_window);

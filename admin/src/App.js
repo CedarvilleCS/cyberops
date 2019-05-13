@@ -40,29 +40,6 @@ const titled = (title, element) => {
 
 const titled_prop = (p, element) => titled(p, prop(p, element));
 
-const big_struct = (field_types, is_col) => {
-  let container = is_col ? column : row;
-  return container(Object.keys(field_types).map(field => 
-    titled_prop(field, field_types[field])));
-};
-
-const struct = (field_types, is_row) => lens => {
-  let classes = "struct-container";
-  if (!is_row) {
-    classes += " struct-container-col";
-  }
-  return (<div className={classes}>
-    {Object.keys(field_types).map((field, i) => {
-      return (
-        <div className="field-label">
-          <div>{field}</div>
-          {field_types[field]([lens, field])}
-        </div>
-      );
-    })}
-  </div>);
-};
-
 const nothing = lens => (<></>);
 
 const tagged_union = item_types => item => {
@@ -134,15 +111,6 @@ const list = (default_item, template) => lens => {
     ...actual_items.map((actual_item, i) => prop(i, template)),
     add_button(default_item)
   ])(lens);
-  return (
-    <div className="list-maker-group">
-      {actual_items.map((actual_item, i) => (
-        <div className="list-item" key={i}>
-          {template([lens, i])}
-        </div>)
-      )}
-    </div>
-  );
 };
 
 const checkbox = property => lens => {

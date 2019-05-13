@@ -1,0 +1,41 @@
+html {
+  width: 30%;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+#games-list div {
+  text-align: center;
+  margin: 5px;
+  padding: 5px;
+  background-color: #cccccc;
+}
+
+#games-list div:hover {
+  background-color: #555555;
+  color: white;
+  cursor: pointer;
+}
+
+.button {
+  text-align: center;
+  margin: 5px;
+  padding: 7px;
+  background-color: #555555;
+  color: white;
+}
+
+.button:hover {
+  background-color: #cccccc;
+  color: black;
+  cursor: pointer;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
