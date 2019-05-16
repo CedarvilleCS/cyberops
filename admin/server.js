@@ -7,16 +7,25 @@ const ipcRenderer = electron.ipcRenderer;
 const app = express();
 const port = 3003;
 
-let store = ['hello', 'world'];
+let store = [];
 
-app.get('/', (req,res) => res.send(JSON.stringify(store)));
+app.use(express.static('client'));
+
+app.get('/api/:filename', (req, res) => {
+  if (req.params.filename && store.includes(req.params.filename)) {
+    let contents = fs.readFileSync(`../games/${req.params.filename}`);
+    res.setHeader('Content-Type', 'application/json');
+    res.end(contents);
+  }
+});
+
+app.get('/api', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(store));
+});
 
 const update_files = () => {
 	store = fs.readdirSync('../games');
-};
-
-const start_server = () => {
-  server_started
 };
 
 const clear_children = node => {

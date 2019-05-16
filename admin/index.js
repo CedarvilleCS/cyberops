@@ -9,9 +9,7 @@ const new_window = () => {
 let open_file_windows = {};
 
 const open_file = filename => {
-  if (open_file_windows[filename]) {
-    open_file_windows[filename].show();
-  } else {
+  if (!open_file_windows[filename] || open_file_windows[filename].isDestroyed()) {
     let win = create_editor_window();
     console.log('trying to open file', filename);
     win.webContents.once('dom-ready', () => {
@@ -32,8 +30,7 @@ const create_server_window = () => {
 const create_editor_window = filename => {
 
   let win = new_window();
-	win.loadURL('http://localhost:3001');
-  //win.loadURL(`file://${__dirname}/build/index.html`);
+  win.loadURL(`file://${__dirname}/admin/index.html`);
 
   Menu.setApplicationMenu(menu(win));
   return win;
@@ -66,6 +63,7 @@ const menu = win => Menu.buildFromTemplate([{
 	label: 'Server',
 	submenu: [{
 		label: 'New Server',
+		accelerator: 'CmdOrCtrl+J',
 		click: () => create_server_window()
 	}]
 }, {
