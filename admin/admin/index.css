@@ -105,12 +105,13 @@ input[type="checkbox"] {
   flex-direction: row;
 }
 
-.removeable:nth-child(0) {
+.removeable > :first-child {
   flex: 1 1 10%;
 }
 
 .clickable {
   text-align: center;
+  cursor: pointer;
 }
 
 .clickable:hover {
@@ -139,15 +140,19 @@ textarea, input[type="text"] {
   width: calc(100% - 6px) !important;
   padding: 1px;
   margin: 1px;
-  border-width: 1px;
+  /*border-width: 1px;
   border-style: solid;
-  border-color: black;
+  border-color: black;*/
 }
 
 .collapsible-titlebar {
   display: flex;
   flex-direction: row;
   width: 100%;
+}
+
+.collapsible-titlebar >* {
+  padding: 5px;
 }
 
 .edit-game-button {

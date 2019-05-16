@@ -151,11 +151,14 @@ const column = items => lens => {
 
 const prop = (prop_name, view) => lens => view([lens, prop_name]);
 
-const titled = (title, element) => {
-  return column([() => c('h4', '', title), element]);
-};
+const titled = (title, element) => column([() => c('h4', '', title), element]);
+const labeled = (title, element) => column([() => div('', title), element]);
 
-const titled_prop = (p, element) => titled(p, prop(p, element));
+const capitalize_first_letter = s => s.charAt(0).toUpperCase() + s.slice(1);
+const snake_to_words = s => s.split('_').map(capitalize_first_letter).join(' ');
+
+const titled_prop = (p, element) => titled(snake_to_words(p), prop(p, element));
+const labeled_prop = (p, element) => labeled(snake_to_words(p), prop(p, element));
 
 const nothing = lens => div('');
 
@@ -170,7 +173,7 @@ const options = item_types => lens => {
         if (L.get(lens, store) === i_type) {
           classes += ' selected-union-item';
         }
-        return with_click(div(classes, i_type), update_type);
+        return with_click(div(classes, snake_to_words(i_type)), update_type);
       })));
 };
 
@@ -196,7 +199,7 @@ const removeable = ui => lens => {
   return div('removeable', ui(lens), remove_button(lens));
 };
 
-const collapsible = (title, element) => lens => {
+const collapsible = (title, element, permanent) => lens => {
   const toggle_expansion = () => store_action(store =>
     L.modify([lens, 'is_expanded'], x => !x, store));
 
@@ -208,7 +211,7 @@ const collapsible = (title, element) => lens => {
   return div('collapsible-container',
     div('collapsible-titlebar',
       with_click(div('clickable collapse-button', title || 'unnamed'), toggle_expansion),
-      remove_button(lens)),
+      permanent ? div('') : remove_button(lens)),
     panel);
 }
 
@@ -277,14 +280,15 @@ const message_item = lens => {
   ])(lens);
 };
 
-const input = type => lens => {
+const input = (type, hint) => lens => {
   let actual = L.get(lens, store);
   let update = new_value => store_action(store => L.set(lens, new_value, store));
   return {
     type: 'input',
     props: {
       type: type || 'text',
-      value: actual
+      value: actual,
+      placeholder: hint || ''
     },
     children: [],
     handlers: {
@@ -316,22 +320,26 @@ const network_portion = net => column([
 
 const default_action = { text: "", type: default_stage_type_id };
 const default_message = "";
-const stage = lens => collapsible('stage',
-  column([
-    row([
-      titled_prop('type', stage_type_selector),
-      column([
-        titled_prop('time_limit', input('number')),
-        titled_prop('credit_limit', input('number'))
+const stage = lens => {
+  const x = L.get(lens, store);
+  let title = `Type: ${snake_to_words(x.type)}, Duration: ${x.time_limit}, Credits: ${x.credit_limit}, Messages: ${x.messages.length}, Actions: ${x.actions.length}`;
+  return collapsible(title,
+    column([
+      row([
+        titled_prop('type', stage_type_selector),
+        column([
+          titled_prop('time_limit', input('number')),
+          titled_prop('credit_limit', input('number'))
+        ])
+      ]),
+      row([
+        titled_prop('messages', list(default_message, message_item)),
+        titled_prop('actions', list(default_action, action_item)),
+        titled_prop('home_network', network_portion(store.home_network)),
+        titled_prop('enemy_network', network_portion(store.enemy_network))
       ])
-    ]),
-    row([
-      titled_prop('messages', list(default_message, message_item)),
-      titled_prop('actions', list(default_action, action_item)),
-      titled_prop('home_network', network_portion(store.home_network)),
-      titled_prop('enemy_network', network_portion(store.enemy_network))
-    ])
-  ]))(lens);
+    ]))(lens);
+};
 
 const empty_network = {
   computers: [],
@@ -341,28 +349,31 @@ const empty_network = {
 
 const default_stage = {
   type: default_stage_type_id,
+  time_limit: 0,
+  credit_limit: 0,
   messages: [],
   actions: [],
   home_network: empty_network,
   enemy_network: empty_network
 };
 
-const r_input = removeable(input());
-
 const network = row([
-  titled_prop('computers', list('', r_input)),
-  titled_prop('networks', list('', r_input)),
-  titled_prop('connections', list({computer: '', network: ''}, row([
-    prop('computer', input()),
-    prop('network', input())]))),
+  titled_prop('computers', list('', removeable(input('text', 'computers')))),
+  titled_prop('networks', list('', removeable(input('text', 'networks')))),
+  titled('Connections', column([
+    prop('connections', list({computer: '', network: ''},
+      removeable(row([
+        prop('computer', input('text', 'computer')),
+        prop('network', input('text', 'network'))]))))
+  ]))
 ]);
 
 const game = column([
   row([
     titled_prop('name', input())
   ]),
-  titled_prop('home_network', network),
-  titled_prop('enemy_network', network),
+  prop('home_network', collapsible('Home Network', network, true)),
+  prop('enemy_network', collapsible('Enemy Network', network, true)),
   titled_prop('stages', list(default_stage, stage, (_, i) => "stage " + i))
 ], true);
 
