@@ -22,7 +22,7 @@ const open_file = filename => {
 const create_server_window = () => {
 	let win = new_window();
   //win.loadURL('http://localhost:3002');
-  win.loadURL(`file://${__dirname}/server.html`);
+  win.loadURL(`file://${__dirname}/server/server.html`);
 
   Menu.setApplicationMenu(menu(win));
 };

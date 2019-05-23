@@ -158,9 +158,8 @@ html, body {
 
 .graph-container {
 	background-color: #353535;
-	margin: 5px;
+	padding: 5px;
 	color: white;
-	height: 400px;
 }
 
 .graph-title {
@@ -238,4 +237,39 @@ html, body {
 .game-selection-option:hover {
   background-color: #aaaaaa;
   cursor: pointer;
+}
+
+.stage-type-panel {
+  justify-content: center;
+}
+
+.action-content > img {
+  max-width: 100px;
+  width: 50px;
+}
+
+.invert {
+  filter: invert(100%);
+}
+
+.stage-type-panel img {
+  max-width: 100px;
+  width: 50px;
+  margin: 5px;
+}
+
+.game-result {
+  position: absolute;
+  margin: auto auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 80%;
+  height: 300px;
+  background-color: #cccccc;
+  text-align: center;
+  font-size: 30px;
+  line-height: 300px;
+  z-index: 1;
 }

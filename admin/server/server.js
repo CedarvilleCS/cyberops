@@ -1,6 +1,7 @@
 const electron = window.require('electron');
 const express = window.require('express');
 const fs = window.require('fs');
+const body_parser = window.require('body-parser');
 const remote = electron.remote;
 const ipcRenderer = electron.ipcRenderer;
 
@@ -10,6 +11,8 @@ const port = 3003;
 let store = [];
 
 app.use(express.static('client'));
+app.use(express.static('common'));
+app.use(express.json());
 
 app.get('/api/:filename', (req, res) => {
   if (req.params.filename && store.includes(req.params.filename)) {
@@ -20,8 +23,18 @@ app.get('/api/:filename', (req, res) => {
 });
 
 app.get('/api', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(store));
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(store));
+});
+
+app.post('/api', (req, res) => {
+  // This is insecure, but we are just writing to the file that is specified by
+  // the request parameters. This could be injected to overwrite any file on
+  // the user's system. There is certainly a better way.
+  let timestamp = Math.floor(new Date().getTime() / 1000);
+  console.log(req.body);
+  fs.writeFileSync(`../results/${req.body.filename}-${req.body.email}-${timestamp}`);
+  res.send('ok');
 });
 
 const update_files = () => {

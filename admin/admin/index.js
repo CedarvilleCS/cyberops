@@ -1,131 +1,3 @@
-// ================================================================================
-// The following code delimited by comments was adapted very closely from the
-// following two blog posts by the medium user 'deathmood':
-//
-// https://medium.com/@deathmood/how-to-write-your-own-virtual-dom-ee74acc13060
-// https://medium.com/@deathmood/write-your-virtual-dom-2-props-events-a957608f5c76
-//
-// Refer to these posts for troubleshooting and perhaps to more fully implement
-// the approach (not every feature was added to this codebase because a
-// conservative, add-features-as-you-need-them approach is being taken for this
-// adaptation).
-// ================================================================================
-
-const h = (type, props, ...children) => {
-  return {
-    type: type,
-    children: children,
-    props: props || {},
-    handlers: {},
-    force_update: false
-  };
-};
-const c = (type, classes, ...children) => h(type, { className: classes}, ...children);
-const div = (classes, ...children) => c('div', classes, ...children);
-const img = src => h('img', { src });
-const with_click = (node, f) => {
-  node.handlers.click = f;
-  return node;
-};
-
-const setProp = (node, k, v) => {
-  if (k === 'className') {
-    node.setAttribute('class', v)
-  } else if (k === 'value') {
-    node.value = v;
-  } else {
-    node.setAttribute(k, v);
-  }
-};
-
-const removeProp = (node, k) => {
-  if (k === 'className') {
-    node.removeAttribute('class')
-  } else {
-    node.removeAttribute(k);
-  }
-};
-
-const createElement = node => {
-  if (typeof node === 'string') {
-    return document.createTextNode(node);
-  } else {
-    let e = document.createElement(node.type);
-    for (let key in node.props) {
-      setProp(e, key, node.props[key]);
-    }
-    for (let evt in node.handlers) {
-      e.addEventListener(evt, node.handlers[evt]);
-    }
-    for (let child of node.children.map(createElement)) {
-      e.appendChild(child);
-    }
-    return e;
-  }
-};
-
-const changed = (l, r) => {
-  //if (l.type === 'input' && r.type === 'input') console.log(t_vdom(l), t_vdom(r))
-  return typeof l !== typeof r ||
-    typeof l === 'string' && l !== r ||
-    l.type !== r.type ||
-    l.force_update;
-};
-
-const updateProps = (target, newProps, oldProps) => {
-  const props = Object.assign({}, newProps, oldProps);
-  for (let key in props) {
-    let newVal = newProps[key];
-    let oldVal = oldProps[key];
-    if (!newProps.hasOwnProperty(key)) {
-      removeProp(target, key);
-    } else if (!oldProps.hasOwnProperty(key) || newVal !== oldVal) {
-      setProp(target, key, newVal);
-    }
-  }
-};
-
-const updateHandlers = (target, newHandlers, oldHandlers) => {
-  for (let key in oldHandlers) {
-    target.removeEventListener(key, oldHandlers[key]);
-  }
-  for (let key in newHandlers) {
-    target.addEventListener(key, newHandlers[key]);
-  }
-};
-
-const updateElement = (parent, newNode, oldNode, currentChild) => {
-  if (!oldNode) {
-    parent.appendChild(createElement(newNode));
-  } else if (!newNode) {
-    parent.removeChild(currentChild);
-  } else if (changed(newNode, oldNode)) {
-    parent.replaceChild(createElement(newNode), currentChild);
-  } else if (newNode.type) {
-    updateProps(currentChild, newNode.props, oldNode.props);
-    updateHandlers(currentChild, newNode.handlers, oldNode.handlers);
-    const loopIters = Math.max(newNode.children.length, oldNode.children.length);
-    const childNodes = Array.from(currentChild.childNodes);
-    for (let i = 0; i < loopIters; i++) {
-      updateElement(currentChild, newNode.children[i], oldNode.children[i], childNodes[i]);
-    }
-  }
-};
-
-// Function only useful for debugging
-const trace_vdom = node => {
-  if (typeof node === 'string') {
-    return node;
-  } else {
-    return [node.type, node.children.map(trace_vdom)];
-  }
-};
-
-const t_vdom = node => JSON.stringify(trace_vdom(node));
-
-// ================================================================================
-// ================================================================================
-
 const L = window.require('partial.lenses');
 const electron = window.require('electron');
 const fs = window.require('fs');
@@ -231,12 +103,12 @@ const list = (default_item, template) => lens => {
   ])(lens);
 };
 
-const checkbox = property => lens => {
+const checkbox = label => lens => {
   let update = new_value => store_action(store => {
     console.log('checked happened');
-    return L.set([lens, property], new_value, store);
+    return L.set(lens, new_value, store);
   });
-  let is_checked = L.get([lens, property], store);
+  let is_checked = L.get(lens, store);
   let checked_obj = {};
   if (is_checked) {
     checked_obj.checked = true;
@@ -254,7 +126,7 @@ const checkbox = property => lens => {
         change: ev => update(ev.target.checked)
       }
     },
-    c('label', '', property));
+    c('label', '', label));
 };
 
 const checklist = prop_list => column(prop_list.map(property => prop(property, checkbox(property))));
@@ -369,9 +241,8 @@ const network = row([
 ]);
 
 const game = column([
-  row([
-    titled_prop('name', input())
-  ]),
+  titled_prop('name', input()),
+  prop('is_win', checkbox('Does the player win?')),
   prop('home_network', collapsible('Home Network', network, true)),
   prop('enemy_network', collapsible('Enemy Network', network, true)),
   titled_prop('stages', list(default_stage, stage, (_, i) => "stage " + i))
