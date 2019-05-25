@@ -1,0 +1,15 @@
+email,filename,stage_index,stage_type,did_escalate
+philipwhite@cedarville.edu,dardania.game,0,reconnaissance,false
+philipwhite@cedarville.edu,dardania.game,1,weaponization,false
+philipwhite@cedarville.edu,dardania.game,2,delivery,false
+philipwhite@cedarville.edu,dardania.game,3,exploitation,false
+philipwhite@cedarville.edu,dardania.game,4,installation,false
+philipwhite@cedarville.edu,dardania.game,5,command_and_control,false
+philipwhite@cedarville.edu,dardania.game,6,actions_on_objectives,false
+shamman@cedarville.edu,dardania.game,0,reconnaissance,false
+shamman@cedarville.edu,dardania.game,1,weaponization,true
+shamman@cedarville.edu,dardania.game,2,delivery,false
+shamman@cedarville.edu,dardania.game,3,exploitation,false
+shamman@cedarville.edu,dardania.game,4,installation,false
+shamman@cedarville.edu,dardania.game,5,command_and_control,false
+shamman@cedarville.edu,dardania.game,6,actions_on_objectives,false

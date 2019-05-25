@@ -179,6 +179,7 @@ const action_item = column([
   remove_button,
   prop('type', stage_type_selector),
   prop('credits', input('number')),
+  prop('is_escalatory', checkbox('Escalatory')),
   prop('text', input())]);
 
 const text = text => lens => div('', text);

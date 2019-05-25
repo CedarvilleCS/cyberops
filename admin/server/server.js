@@ -33,7 +33,7 @@ app.post('/api', (req, res) => {
   // the user's system. There is certainly a better way.
   let timestamp = Math.floor(new Date().getTime() / 1000);
   console.log(req.body);
-  fs.writeFileSync(`../results/${req.body.filename}-${req.body.email}-${timestamp}`);
+  fs.writeFileSync(`../results/${req.body.filename}-${req.body.email}-${timestamp}`, JSON.stringify(req.body));
   res.send('ok');
 });
 
@@ -50,6 +50,45 @@ const clear_children = node => {
 };
 
 update_files();
+
+document.getElementById('export-csv-button').addEventListener('click', () => {
+  let results_filenames = fs.readdirSync('../results/');
+  let game_rows = [['email', 'filename', 'did_escalate']];
+  let stage_rows = [['email', 'filename', 'stage_index', 'stage_type', 'did_escalate']];
+  for (let file of results_filenames) {
+    let obj = JSON.parse(fs.readFileSync(`../results/${file}`));
+    let game_escalated = false;
+    obj.game.stages.forEach((stage, i) => {
+      let did_escalate = false;
+      for (let action of stage.actions) {
+        if (action.is_escalatory && action.is_selected) {
+          did_escalate = true;
+          game_escalated = true;
+        }
+      }
+      stage_rows.push([
+        obj.email,
+        obj.filename,
+        i,
+        stage.type,
+        did_escalate
+      ]);
+    });
+    game_rows.push([
+      obj.email,
+      obj.filename,
+      game_escalated
+    ]);
+    console.log(game_rows)
+    let game_rows_str = game_rows.map(row => {
+      console.log(row);
+      return row.join()
+    }).join('\n');
+    let stage_rows_str = stage_rows.map(row => row.join()).join('\n');
+    fs.writeFileSync('../stages.csv', stage_rows_str);
+    fs.writeFileSync('../games.csv', game_rows_str);
+  }
+});
 
 document.getElementById('refresh-files-button').addEventListener('click', () => {
   update_files();
