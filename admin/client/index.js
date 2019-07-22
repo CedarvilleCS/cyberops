@@ -16,7 +16,7 @@ const post_request = (url, data) => {
 let stage_index = 0;
 let user_email = null;
 let game = null;
-let game_filename = null;
+let game_name = null;
 let game_listing = null;
 let game_over = false;
 
@@ -47,8 +47,9 @@ const toggle_action_selection = (action, credit_limit) => {
 
 const graph = in_network => {
   let max_net_comps = Math.max(in_network.networks.length, in_network.computers.length);
+  //Don't know how to fix the svg error, if removed, sizes get messed up
   return svg(300, '400px',//40*(max_net_comps - 1) + 36,
-    ...in_network.networks.map((network, i) => 
+    ...in_network.networks.map((network, i) =>
       g(rect(3, 40*i + 3, 100, 30),
         h('text', {x: 8, y: 40*i + 23, fill: 'black'}, network))),
     ...in_network.computers.map((computer, i) =>
@@ -206,12 +207,14 @@ const user_email_input =  {
   type: 'input',
   props: {
     type: 'text',
+    style: 'font-size: 20px',
     value: user_email,
-    placeholder: 'Email'
+    placeholder: 'Email',
+    autofocus: true
   },
   children: [],
   handlers: {
-    change: ev => {
+    keypress: ev => {
       user_email = ev.target.value;
       render();
     }
@@ -235,7 +238,7 @@ const app = () => {
     if (game_over) {
       post_request('/api/', {
         email: user_email,
-        filename: game_filename,
+        name: game_name,
         game: game
       });
       continue_button = div('continue-button-disabled', 'Continue');
@@ -268,16 +271,21 @@ const app = () => {
                 action_box(action, credit_limit))))),
         continue_button));
   } else {
-    let games = get_request('/api/');
-    return div('game-selector', 
-      user_email_input,
-      ...games.map(game_name => 
-      with_click(div('game-selection-option', game_name),
+    let games = get_request(`/api/`);
+    return div('start-screen',
+      div('start-header', 'Enter your email to get started'),
+      with_enter(user_email_input,
         dispatch(() => {
-          game_filename = game_name;
-          game = get_request(`/api/${game_name}`);
+          game = get_request(`/api/request`);
+          game_name = game.name;
         })
-      )));
+      ),
+      /*with_click(div('email-input-continue', 'Continue'),
+        dispatch(() => {
+          game = get_request(`/api/request`);
+          game_name = game.name;
+        })
+      )*/);
   }
 };
 

@@ -222,19 +222,26 @@ html, body {
 	color: white;
 }
 
-.game-selector {
+.start-screen {
   text-align: center;
-  margin: 100px 30px;
+  margin: 40px 40px;
 }
 
-.game-selection-option {
-  padding: 50px 0;
-  margin: 20px 0;
+.email-input-continue {
+  padding: 20px 0;
+  margin: 40px 0;
   width: 100%;
   background-color: #dddddd;
 }
 
-.game-selection-option:hover {
+.start-header {
+	width: 100%;
+	text-align: center;
+	font-size: 20pt;
+	padding: 20px 0;
+}
+
+.email-input-continue:hover {
   background-color: #aaaaaa;
   cursor: pointer;
 }

@@ -36,7 +36,7 @@ const create_editor_window = filename => {
   return win;
 }
 
-const menu = win => Menu.buildFromTemplate([{ 
+const menu = win => Menu.buildFromTemplate([{
 	label: 'File',
 	submenu: [{
 		label: 'New',

@@ -154,3 +154,8 @@ const with_click = (node, f) => {
   node.handlers.click = f;
   return node;
 };
+
+const with_enter = (node, f) => {
+  node.handlers.change = f;
+  return node;
+};

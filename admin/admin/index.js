@@ -250,7 +250,7 @@ const game = column([
 ], true);
 
 const default_game = {
-  name: 'unnamed', 
+  name: 'unnamed',
   stages: [],
   home_network: empty_network,
   enemy_network: empty_network

@@ -9,18 +9,18 @@ const app = express();
 const port = 3003;
 
 let store = [];
+let gameIndex = 0;
 
 app.use(express.static('client'));
 app.use(express.static('common'));
 app.use(express.json());
 
-app.get('/api/:filename', (req, res) => {
-  if (req.params.filename && store.includes(req.params.filename)) {
-    let contents = fs.readFileSync(`../games/${req.params.filename}`);
+app.get('/api/request', (req, res) => {
+    let contents = fs.readFileSync(`../games/${store[0/*gameIndex++ % store.length*/]}`);
     res.setHeader('Content-Type', 'application/json');
     res.end(contents);
-  }
 });
+
 
 app.get('/api', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
@@ -33,7 +33,7 @@ app.post('/api', (req, res) => {
   // the user's system. There is certainly a better way.
   let timestamp = Math.floor(new Date().getTime() / 1000);
   console.log(req.body);
-  fs.writeFileSync(`../results/${req.body.filename}-${req.body.email}-${timestamp}`, JSON.stringify(req.body));
+  fs.writeFileSync(`../results/${req.body.name}-${req.body.email}-${timestamp}`, JSON.stringify(req.body));
   res.send('ok');
 });
 
@@ -68,7 +68,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
       }
       stage_rows.push([
         obj.email,
-        obj.filename,
+        obj.name,
         i,
         stage.type,
         did_escalate
@@ -76,7 +76,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
     });
     game_rows.push([
       obj.email,
-      obj.filename,
+      obj.name,
       game_escalated
     ]);
     console.log(game_rows)
