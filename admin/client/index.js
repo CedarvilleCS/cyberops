@@ -271,7 +271,6 @@ const app = () => {
                 action_box(action, credit_limit))))),
         continue_button));
   } else {
-    let games = get_request(`/api/`);
     return div('start-screen',
       div('start-header', 'Enter your email to get started'),
       with_enter(user_email_input,
@@ -279,13 +278,7 @@ const app = () => {
           game = get_request(`/api/request`);
           game_name = game.name;
         })
-      ),
-      /*with_click(div('email-input-continue', 'Continue'),
-        dispatch(() => {
-          game = get_request(`/api/request`);
-          game_name = game.name;
-        })
-      )*/);
+      ))
   }
 };
 

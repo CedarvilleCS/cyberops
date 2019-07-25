@@ -7,7 +7,7 @@ h1 {
   text-align: center;
 }
 
-#games-list div {
+#games-list div{
   text-align: center;
   margin: 5px;
   padding: 5px;
@@ -38,4 +38,23 @@ h1 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.games {
+  display: grid;
+}
+
+.check-box {
+  text-align: center;
+  margin: auto;
+  padding: auto;
+}
+
+.check-box:hover {
+  cursor: pointer;
+}
+
+.game-name {
+  grid-column-start: 2;
+  grid-column-end: 15;
 }

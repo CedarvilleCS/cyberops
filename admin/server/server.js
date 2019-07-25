@@ -8,7 +8,9 @@ const ipcRenderer = electron.ipcRenderer;
 const app = express();
 const port = 3003;
 
-let store = [];
+let all_games = [];
+let valid_games = [];
+let game_checks = [];
 let gameIndex = 0;
 
 app.use(express.static('client'));
@@ -16,15 +18,9 @@ app.use(express.static('common'));
 app.use(express.json());
 
 app.get('/api/request', (req, res) => {
-    let contents = fs.readFileSync(`../games/${store[0/*gameIndex++ % store.length*/]}`);
+    let contents = fs.readFileSync(`../games/${valid_games[gameIndex++ % valid_games.length]}`);
     res.setHeader('Content-Type', 'application/json');
     res.end(contents);
-});
-
-
-app.get('/api', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify(store));
 });
 
 app.post('/api', (req, res) => {
@@ -38,8 +34,9 @@ app.post('/api', (req, res) => {
 });
 
 const update_files = () => {
-	store = fs.readdirSync('../games');
+	all_games = fs.readdirSync('../games');
 };
+
 
 const clear_children = node => {
   let first = node.firstElementChild;
@@ -49,7 +46,40 @@ const clear_children = node => {
   }
 };
 
-update_files();
+const load_files = () => {
+  update_files();
+  let list = document.getElementById('games-list');
+  clear_children(list);
+  for (let filename of all_games) {
+    let list_node = document.createElement('div');
+    list_node.classList.add('game-name')
+    let checkbox = document.createElement('input');
+    checkbox.classList.add('check-box');
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.checked = true;
+    list_node.innerHTML = filename;
+    list_node.addEventListener('click', () => {
+      ipcRenderer.send('open-game-file', filename);
+    });
+    checkbox.addEventListener('change', () => {
+      if(!checkbox.checked){
+        all_selected = false;
+        document.getElementById('toggle-select-button').innerHTML = "Select All Games";
+        return;
+      }
+      for(let c of game_checks) {
+        if (!c.checked) return;
+      }
+      all_selected = true;
+      document.getElementById('toggle-select-button').innerHTML = "Clear Selection";
+    });
+    list.appendChild(checkbox);
+    list.appendChild(list_node);
+    game_checks.push(checkbox);
+  }
+};
+
+load_files();
 
 document.getElementById('export-csv-button').addEventListener('click', () => {
   let results_filenames = fs.readdirSync('../results/');
@@ -91,17 +121,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
 });
 
 document.getElementById('refresh-files-button').addEventListener('click', () => {
-  update_files();
-  let list = document.getElementById('games-list');
-  clear_children(list);
-  for (let filename of store) {
-    let list_node = document.createElement('div');
-    list_node.innerHTML = filename;
-    list_node.addEventListener('click', () => {
-      ipcRenderer.send('open-game-file', filename);
-    });
-    list.appendChild(list_node);
-  }
+  load_files();
 });
 
 let server = null;
@@ -109,6 +129,14 @@ let server_running = false;
 document.getElementById('toggle-server-button').addEventListener('click', () => {
   let button = document.getElementById('toggle-server-button');
   if (!server_running) {
+    for (var i = 0; i < all_games.length; i++) {
+      if(game_checks[i].checked == true){
+        valid_games.push(all_games[i]);
+      }
+    }
+    if(valid_games.length == 0){
+      return;
+    }
     server_running = true;
     server = app.listen(port, () => console.log(`app listening on port ${port}`));
     button.innerHTML = 'Stop Server';
@@ -117,6 +145,27 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
     if (server) {
       server.close();
     }
+    valid_games = [];
     button.innerHTML = 'Start Server';
+  }
+});
+
+let all_selected = false;
+document.getElementById('toggle-select-button').addEventListener('click', () => {
+  let button = document.getElementById('toggle-select-button');
+  if (!all_selected) {
+    console.log('all selected')
+    for(let check of game_checks){
+      check.checked = true;
+    }
+    all_selected = true;
+    button.innerHTML = 'Clear Selection';
+  } else {
+    for(let check of game_checks){
+      check.checked = false;
+    }
+    all_selected = false
+    console.log('cleared')
+    button.innerHTML = 'Select All Games';
   }
 });
