@@ -216,7 +216,7 @@ const user_email_input =  {
   handlers: {
     keypress: ev => {
       user_email = ev.target.value;
-      render();
+      //render();
     }
   }
 };
