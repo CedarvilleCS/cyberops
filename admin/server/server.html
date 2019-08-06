@@ -4,15 +4,19 @@
     <link rel="stylesheet" href="server.css">
   </head>
   <body>
-    <div id="tests">
-    <div class="button-container">
-      <div class="button" id="toggle-server-button">Start Server</div>
-      <div class="button" id="refresh-files-button">Refresh Files</div>
-      <div class="button" id="export-csv-button">Export CSV</div>
+    <div class="header">
+      <div class="button-container">
+        <div class="button" id="toggle-server-button">Start Server</div>
+        <div class="button" id="choose-games-button">Choose Games</div>
+        <div class="button" id="export-csv-button">Export CSV</div>
+      </div>
+      <div class="button" id="toggle-select-button">Clear Selection</div>
+      <div class="games" id="games-list"></div>
     </div>
-    <div class="button" id="toggle-select-button">Clear Selection</div>
-    <div class="games" id="games-list"></div>
-  </div>
+    <hr />
+    <div class="server">
+      <textarea id="server-log" disabled></textarea>
+    </div>
   </body>
   <script src="server.js"></script>
 </html>

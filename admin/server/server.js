@@ -46,6 +46,15 @@ const clear_children = node => {
   }
 };
 
+const write_log = message => {
+  let log = document.getElementById('server-log');
+  let atBottom = log.scrollHeight < log.offsetHeight + log.scrollTop;
+  log.value += '> ' + message + '\n';
+  if (atBottom){
+    log.scrollTop = log.scrollHeight;
+  }
+}
+
 const load_files = () => {
   update_files();
   let list = document.getElementById('games-list');
@@ -120,7 +129,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
   }
 });
 
-document.getElementById('refresh-files-button').addEventListener('click', () => {
+document.getElementById('choose-games-button').addEventListener('click', () => {
   load_files();
 });
 
