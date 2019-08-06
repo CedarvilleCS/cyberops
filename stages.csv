@@ -1,15 +1,26 @@
-email,filename,stage_index,stage_type,did_escalate
-philipwhite@cedarville.edu,dardania.game,0,reconnaissance,false
-philipwhite@cedarville.edu,dardania.game,1,weaponization,false
-philipwhite@cedarville.edu,dardania.game,2,delivery,false
-philipwhite@cedarville.edu,dardania.game,3,exploitation,false
-philipwhite@cedarville.edu,dardania.game,4,installation,false
-philipwhite@cedarville.edu,dardania.game,5,command_and_control,false
-philipwhite@cedarville.edu,dardania.game,6,actions_on_objectives,false
-shamman@cedarville.edu,dardania.game,0,reconnaissance,false
-shamman@cedarville.edu,dardania.game,1,weaponization,true
-shamman@cedarville.edu,dardania.game,2,delivery,false
-shamman@cedarville.edu,dardania.game,3,exploitation,false
-shamman@cedarville.edu,dardania.game,4,installation,false
-shamman@cedarville.edu,dardania.game,5,command_and_control,false
-shamman@cedarville.edu,dardania.game,6,actions_on_objectives,false
+email,name,stage_index,stage_type,did_escalate
+t,Dardania,0,reconnaissance,false
+t,Dardania,1,weaponization,false
+t,Dardania,2,delivery,false
+t,Dardania,3,exploitation,false
+t,Dardania,4,installation,false
+t,Dardania,5,command_and_control,false
+t,Dardania,6,actions_on_objectives,false
+philipwhite@cedarville.edu,,0,reconnaissance,false
+philipwhite@cedarville.edu,,1,weaponization,false
+philipwhite@cedarville.edu,,2,delivery,false
+philipwhite@cedarville.edu,,3,exploitation,false
+philipwhite@cedarville.edu,,4,installation,false
+philipwhite@cedarville.edu,,5,command_and_control,false
+philipwhite@cedarville.edu,,6,actions_on_objectives,false
+shamman@cedarville.edu,,0,reconnaissance,false
+shamman@cedarville.edu,,1,weaponization,true
+shamman@cedarville.edu,,2,delivery,false
+shamman@cedarville.edu,,3,exploitation,false
+shamman@cedarville.edu,,4,installation,false
+shamman@cedarville.edu,,5,command_and_control,false
+shamman@cedarville.edu,,6,actions_on_objectives,false
+hi,Fun Land,0,weaponization,false
+i,Fun Land,0,weaponization,false
+j,Fun Land,0,weaponization,false
+k,Ice Castle,0,weaponization,false

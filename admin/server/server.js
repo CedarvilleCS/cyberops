@@ -83,8 +83,8 @@ load_files();
 
 document.getElementById('export-csv-button').addEventListener('click', () => {
   let results_filenames = fs.readdirSync('../results/');
-  let game_rows = [['email', 'filename', 'did_escalate']];
-  let stage_rows = [['email', 'filename', 'stage_index', 'stage_type', 'did_escalate']];
+  let game_rows = [['email', 'game_name', 'did_escalate']];
+  let stage_rows = [['email', 'game_name', 'stage_index', 'stage_type', 'did_escalate']];
   for (let file of results_filenames) {
     let obj = JSON.parse(fs.readFileSync(`../results/${file}`));
     let game_escalated = false;
