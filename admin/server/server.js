@@ -4,23 +4,48 @@ const fs = window.require('fs');
 const body_parser = window.require('body-parser');
 const remote = electron.remote;
 const ipcRenderer = electron.ipcRenderer;
+const os = require('os');
+let networkInterfaces = os.networkInterfaces();
 
 const app = express();
 const port = 3003;
 
 let all_games = [];
 let valid_games = [];
+let all_games_counters = [];
+let valid_games_counters = [];
 let game_checks = [];
 let gameIndex = 0;
+
+let totalConnections = 0;
+let currentConnections = 0;
+let finished = 0;
 
 app.use(express.static('client'));
 app.use(express.static('common'));
 app.use(express.json());
 
-app.get('/api/request', (req, res) => {
-    let contents = fs.readFileSync(`../games/${valid_games[gameIndex++ % valid_games.length]}`);
+const write_log = message => {
+  let log = document.getElementById('server-log');
+  let atBottom = log.scrollHeight < log.offsetHeight + log.scrollTop;
+  log.value += '> ' + message + '\n';
+  if (atBottom){
+    log.scrollTop = log.scrollHeight;
+  }
+}
+
+app.get('/api/request/:user_email', (req, res) => {
+    let contents = fs.readFileSync(`../games/${valid_games[gameIndex % valid_games.length]}`);
+    write_log(req.params.user_email + " connected; receiving " + valid_games[gameIndex % valid_games.length]);
+
     res.setHeader('Content-Type', 'application/json');
     res.end(contents);
+    let counter = valid_games_counters[gameIndex % valid_games.length];
+    counter.innerHTML = Number(counter.innerHTML) + 1;
+    document.getElementById('total-connections').innerHTML = 'Total Connections: ' + ++totalConnections;
+    document.getElementById('current-connections').innerHTML = 'In Progress: ' + ++currentConnections + ' ('+ (currentConnections/totalConnections*100).toFixed(1) + '%)';
+    document.getElementById('completed-connections').innerHTML = 'Finished: ' + finished + ' ('+ (finished/totalConnections*100).toFixed(1) + '%)';
+    gameIndex++;
 });
 
 app.post('/api', (req, res) => {
@@ -30,10 +55,15 @@ app.post('/api', (req, res) => {
   let timestamp = Math.floor(new Date().getTime() / 1000);
   console.log(req.body);
   fs.writeFileSync(`../results/${req.body.name}-${req.body.email}-${timestamp}`, JSON.stringify(req.body));
+  write_log(req.body.email + " finished: " + req.body.name);
   res.send('ok');
+  document.getElementById('current-connections').innerHTML = 'In Progress: ' + --currentConnections + ' ('+ (currentConnections/totalConnections*100).toFixed(1) + '%)';
+  document.getElementById('completed-connections').innerHTML = 'Finished: ' + ++finished + ' ('+ (finished/totalConnections*100).toFixed(1) + '%)';
 });
 
 const update_files = () => {
+  //let input = document.getElementById('gameselect');
+  //input.click();
 	all_games = fs.readdirSync('../games');
 };
 
@@ -46,14 +76,6 @@ const clear_children = node => {
   }
 };
 
-const write_log = message => {
-  let log = document.getElementById('server-log');
-  let atBottom = log.scrollHeight < log.offsetHeight + log.scrollTop;
-  log.value += '> ' + message + '\n';
-  if (atBottom){
-    log.scrollTop = log.scrollHeight;
-  }
-}
 
 const load_files = () => {
   update_files();
@@ -61,15 +83,16 @@ const load_files = () => {
   clear_children(list);
   for (let filename of all_games) {
     let list_node = document.createElement('div');
-    list_node.classList.add('game-name')
-    let checkbox = document.createElement('input');
-    checkbox.classList.add('check-box');
-    checkbox.setAttribute('type', 'checkbox');
-    checkbox.checked = true;
+    list_node.classList.add('game-name');
     list_node.innerHTML = filename;
     list_node.addEventListener('click', () => {
       ipcRenderer.send('open-game-file', filename);
     });
+
+    let checkbox = document.createElement('input');
+    checkbox.classList.add('check-box');
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.checked = true;
     checkbox.addEventListener('change', () => {
       if(!checkbox.checked){
         all_selected = false;
@@ -82,9 +105,17 @@ const load_files = () => {
       all_selected = true;
       document.getElementById('toggle-select-button').innerHTML = "Clear Selection";
     });
+    game_checks.push(checkbox);
+
+    let node_number = document.createElement('text');
+    node_number.classList.add('num-games');
+    node_number.innerHTML = '';
+    all_games_counters.push(node_number);
+
     list.appendChild(checkbox);
     list.appendChild(list_node);
-    game_checks.push(checkbox);
+    list.appendChild(node_number);
+
   }
 };
 
@@ -141,6 +172,7 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
     for (var i = 0; i < all_games.length; i++) {
       if(game_checks[i].checked == true){
         valid_games.push(all_games[i]);
+        valid_games_counters.push(all_games_counters[i]);
       }
     }
     if(valid_games.length == 0){
@@ -148,6 +180,7 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
     }
     server_running = true;
     server = app.listen(port, () => console.log(`app listening on port ${port}`));
+    write_log("server listening on " + networkInterfaces["Wi-Fi"][1]["address"] + ":" + port);
     button.innerHTML = 'Stop Server';
   } else {
     server_running = false;
@@ -156,6 +189,7 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
     }
     valid_games = [];
     button.innerHTML = 'Start Server';
+    write_log("server stopped");
   }
 });
 

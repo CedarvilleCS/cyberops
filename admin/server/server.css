@@ -55,6 +55,19 @@ h1 {
   justify-content: space-between;
 }
 
+.status-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #cccccc;
+  width: 100%;
+  border: 1px solid #000000;
+}
+
+.status {
+  padding: 2%;
+}
+
 .games {
   display: grid;
 }
@@ -74,16 +87,25 @@ h1 {
   grid-column-end: 15;
 }
 
+.num-games {
+  grid-column-start: 15;
+  grid-column-end: 16;
+  text-align: center;
+  padding: auto;
+  margin: auto;
+}
+
 textarea {
     background-color: #cccccc;
     border: 1px solid #000000;
-    padding: 8px;
-    font-family: courier new;
+    font-family: "courier new";
     color: #000000;
+    padding: 0px;
     width: 100%;
     height: 100%;
     margin: auto;
-    margin-top: 5%;
+    margin-top: 2%;
     margin-bottom: 5%;
     resize: none;
+    word-break: break-all;
 }

@@ -15,7 +15,12 @@
     </div>
     <hr />
     <div class="server">
-      <textarea id="server-log" disabled></textarea>
+      <div class="status-container">
+        <div class="status" id="total-connections">Total Connections: 0</div>
+        <div class="status" id="current-connections">In Progress: 0</div>
+        <div class="status" id="completed-connections">Finished: 0</div>
+      </div>
+      <textarea id="server-log" disabled ></textarea>
     </div>
   </body>
   <script src="server.js"></script>

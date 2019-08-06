@@ -19,6 +19,8 @@ let game = null;
 let game_name = null;
 let game_listing = null;
 let game_over = false;
+let patt = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}");
+
 
 const curr_stage = () => game.stages[stage_index] || game.stages[game.stages.length - 1];
 
@@ -41,6 +43,7 @@ const toggle_action_selection = (action, credit_limit) => {
   if (action.is_selected) {
     delete action.is_selected;
   } else if (used_credits() + action.credits <= credit_limit) {
+    action.is_selected = true;
     action.is_selected = true;
   }
 }
@@ -216,6 +219,11 @@ const user_email_input =  {
   handlers: {
     keypress: ev => {
       user_email = ev.target.value;
+      if(ev.code == "Enter" && patt.test(user_email)){
+        game = get_request(`/api/request/${user_email}`);
+        game_name = game.name;
+        render();
+      }
     }
   }
 };
@@ -271,15 +279,8 @@ const app = () => {
         continue_button));
   } else {
     return div('start-screen',
-      div('start-header', 'Enter your email to get started'),
-      with_enter(user_email_input,
-        dispatch(() => {
-          game = get_request(`/api/request`);
-          game_name = game.name;
-        })
-      ))
-  }
-};
+      div('start-header', 'Enter your email to get started'), user_email_input)}
+  };
 
 let current_vdom = null;
 const render = () => {
