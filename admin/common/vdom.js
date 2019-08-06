@@ -155,7 +155,7 @@ const with_click = (node, f) => {
   return node;
 };
 
-const with_enter = (node, f) => {
-  node.handlers.change = f;
+/*const with_keypress = (node, f) => {
+  node.handlers.keypress = f;
   return node;
-};
+};*/
