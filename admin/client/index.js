@@ -44,7 +44,6 @@ const toggle_action_selection = (action, credit_limit) => {
     delete action.is_selected;
   } else if (used_credits() + action.credits <= credit_limit) {
     action.is_selected = true;
-    action.is_selected = true;
   }
 }
 

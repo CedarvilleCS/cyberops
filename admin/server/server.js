@@ -5,15 +5,15 @@ const body_parser = window.require('body-parser');
 const remote = electron.remote;
 const ipcRenderer = electron.ipcRenderer;
 const os = require('os');
-let networkInterfaces = os.networkInterfaces();
 
 const app = express();
 const port = 3003;
 
 let all_games = [];
 let valid_games = [];
-let all_games_counters = [];
-let valid_games_counters = [];
+let all_games_objects = [];
+let valid_games_objects = [];
+let games_counters = [];
 let game_checks = [];
 let gameIndex = 0;
 
@@ -34,17 +34,24 @@ const write_log = message => {
   }
 }
 
+const updateCounters = () => {
+  document.getElementById('total-connections').innerHTML = 'Total Connections: ' + totalConnections;
+  document.getElementById('current-connections').innerHTML = 'In Progress: ' + currentConnections + ' ('+ (currentConnections/totalConnections*100).toFixed(1) + '%)';
+  document.getElementById('completed-connections').innerHTML = 'Finished: ' + finished + ' ('+ (finished/totalConnections*100).toFixed(1) + '%)';
+}
+
 app.get('/api/request/:user_email', (req, res) => {
     let contents = fs.readFileSync(`../games/${valid_games[gameIndex % valid_games.length]}`);
     write_log(req.params.user_email + " connected; receiving " + valid_games[gameIndex % valid_games.length]);
 
     res.setHeader('Content-Type', 'application/json');
     res.end(contents);
-    let counter = valid_games_counters[gameIndex % valid_games.length];
-    counter.innerHTML = Number(counter.innerHTML) + 1;
-    document.getElementById('total-connections').innerHTML = 'Total Connections: ' + ++totalConnections;
-    document.getElementById('current-connections').innerHTML = 'In Progress: ' + ++currentConnections + ' ('+ (currentConnections/totalConnections*100).toFixed(1) + '%)';
-    document.getElementById('completed-connections').innerHTML = 'Finished: ' + finished + ' ('+ (finished/totalConnections*100).toFixed(1) + '%)';
+    let game_object = valid_games_objects[gameIndex % valid_games.length];
+
+    game_object.innerHTML = game_object.innerHTML.replace(/:.+/g, '') + ': ' + ++games_counters[gameIndex % valid_games.length];
+    totalConnections++;
+    currentConnections++;
+    updateCounters();
     gameIndex++;
 });
 
@@ -57,8 +64,8 @@ app.post('/api', (req, res) => {
   fs.writeFileSync(`../results/${req.body.name}-${req.body.email}-${timestamp}`, JSON.stringify(req.body));
   write_log(req.body.email + " finished: " + req.body.name);
   res.send('ok');
-  document.getElementById('current-connections').innerHTML = 'In Progress: ' + --currentConnections + ' ('+ (currentConnections/totalConnections*100).toFixed(1) + '%)';
-  document.getElementById('completed-connections').innerHTML = 'Finished: ' + ++finished + ' ('+ (finished/totalConnections*100).toFixed(1) + '%)';
+  currentConnections--;
+  updateCounters();
 });
 
 const update_files = () => {
@@ -66,7 +73,6 @@ const update_files = () => {
   //input.click();
 	all_games = fs.readdirSync('../games');
 };
-
 
 const clear_children = node => {
   let first = node.firstElementChild;
@@ -76,18 +82,20 @@ const clear_children = node => {
   }
 };
 
-
 const load_files = () => {
   update_files();
   let list = document.getElementById('games-list');
   clear_children(list);
   for (let filename of all_games) {
+    let contents = fs.readFileSync(`../games/${filename}`);
+    let name = JSON.parse(contents).name;
     let list_node = document.createElement('div');
     list_node.classList.add('game-name');
-    list_node.innerHTML = filename;
+    list_node.innerHTML = name;
     list_node.addEventListener('click', () => {
       ipcRenderer.send('open-game-file', filename);
     });
+    all_games_objects.push(list_node);
 
     let checkbox = document.createElement('input');
     checkbox.classList.add('check-box');
@@ -107,15 +115,8 @@ const load_files = () => {
     });
     game_checks.push(checkbox);
 
-    let node_number = document.createElement('text');
-    node_number.classList.add('num-games');
-    node_number.innerHTML = '';
-    all_games_counters.push(node_number);
-
     list.appendChild(checkbox);
     list.appendChild(list_node);
-    list.appendChild(node_number);
-
   }
 };
 
@@ -169,10 +170,17 @@ let server_running = false;
 document.getElementById('toggle-server-button').addEventListener('click', () => {
   let button = document.getElementById('toggle-server-button');
   if (!server_running) {
+    document.getElementById('server-log').value = '';
+    document.getElementById('total-connections').innerHTML = 'Total Connections: 0';
+    document.getElementById('current-connections').innerHTML = 'In Progress: 0';
+    document.getElementById('completed-connections').innerHTML = 'Finished: 0';
+
+    let networkInterfaces = os.networkInterfaces();
     for (var i = 0; i < all_games.length; i++) {
       if(game_checks[i].checked == true){
         valid_games.push(all_games[i]);
-        valid_games_counters.push(all_games_counters[i]);
+        games_counters.push(0);
+        valid_games_objects.push(all_games_objects[i]);
       }
     }
     if(valid_games.length == 0){
@@ -180,14 +188,27 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
     }
     server_running = true;
     server = app.listen(port, () => console.log(`app listening on port ${port}`));
-    write_log("server listening on " + networkInterfaces["Wi-Fi"][1]["address"] + ":" + port);
+    for (let obj of all_games_objects){
+      obj.innerHTML = obj.innerHTML.replace(/:.+/g, '');
+    }
+
+    if (networkInterfaces["Wifi"] == null) {
+      write_log("server listening on localhost:3003")
+    }
+    else {
+      write_log("server listening on " + networkInterfaces["Wi-Fi"][1]["address"] + ":" + port);
+    }
     button.innerHTML = 'Stop Server';
   } else {
-    server_running = false;
+      server_running = false;
     if (server) {
       server.close();
     }
+
     valid_games = [];
+    valid_games_objects = [];
+    games_counters = [];
+
     button.innerHTML = 'Start Server';
     write_log("server stopped");
   }

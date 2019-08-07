@@ -87,14 +87,6 @@ h1 {
   grid-column-end: 15;
 }
 
-.num-games {
-  grid-column-start: 15;
-  grid-column-end: 16;
-  text-align: center;
-  padding: auto;
-  margin: auto;
-}
-
 textarea {
     background-color: #cccccc;
     border: 1px solid #000000;
