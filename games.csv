@@ -1,8 +1,2 @@
-email,name,did_escalate
-t,Dardania,false
-philipwhite@cedarville.edu,,false
-shamman@cedarville.edu,,true
-hi,Fun Land,false
-i,Fun Land,false
-j,Fun Land,false
-k,Ice Castle,false
+email,game_name,did_escalate,Multiple,Select,Select 2,Multiple 2
+fdsa@fd.as,Scenario 3,true,M_Answer 3,S_Answer 1-S_Answer 2,S2_Answer 2-S2_Answer 3,Sample Answer

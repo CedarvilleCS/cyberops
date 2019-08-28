@@ -11,7 +11,7 @@ const store_action = action => {
   render();
 }
 
-const default_stage_type_id = 'reconnaissance';
+const default_stage_type_id = 'introduction';
 
 const row = items => lens => {
   return div('flex-row', ...items.map(item => item(lens)));
@@ -50,6 +50,7 @@ const options = item_types => lens => {
 };
 
 const stage_type_selector = options([
+  'introduction',
   'reconnaissance',
   'weaponization',
   'delivery',
@@ -178,82 +179,79 @@ const input = (type, hint) => lens => {
 const action_item = column([
   remove_button,
   prop('type', stage_type_selector),
-  prop('credits', input('number')),
   prop('is_escalatory', checkbox('Escalatory')),
   prop('text', input())]);
 
 const text = text => lens => div('', text);
 
-const network_portion = net => column([
-  titled_prop('computers', checklist(net.computers)),
-  titled_prop('networks', checklist(net.networks)),
-  titled_prop('connections',
-    checklist(net.connections.map(x => x.computer + ':' + x.network)))
-])
 
 const default_action = { text: "", type: default_stage_type_id };
 const default_message = "";
 const stage = lens => {
   const x = L.get(lens, store);
-  let title = `Type: ${snake_to_words(x.type)}, Duration: ${x.time_limit}, Credits: ${x.credit_limit}, Messages: ${x.messages.length}, Actions: ${x.actions.length}`;
+  let title = `Type: ${snake_to_words(x.type)}, Messages: ${x.messages.length}, Actions: ${x.actions.length}`;
   return collapsible(title,
     column([
-      row([
         titled_prop('type', stage_type_selector),
-        column([
-          titled_prop('time_limit', input('number')),
-          titled_prop('credit_limit', input('number'))
-        ])
-      ]),
       row([
         titled_prop('messages', list(default_message, message_item)),
-        titled_prop('actions', list(default_action, action_item)),
-        titled_prop('home_network', network_portion(store.home_network)),
-        titled_prop('enemy_network', network_portion(store.enemy_network))
+        titled_prop('actions', list(default_action, action_item))
       ])
     ]))(lens);
 };
 
-const empty_network = {
-  computers: [],
-  networks: [],
-  connections: []
-};
-
 const default_stage = {
   type: default_stage_type_id,
-  time_limit: 0,
-  credit_limit: 0,
   messages: [],
-  actions: [],
-  home_network: empty_network,
-  enemy_network: empty_network
+  actions: []
 };
 
-const network = row([
-  titled_prop('computers', list('', removeable(input('text', 'computers')))),
-  titled_prop('networks', list('', removeable(input('text', 'networks')))),
-  titled('Connections', column([
-    prop('connections', list({computer: '', network: ''},
-      removeable(row([
-        prop('computer', input('text', 'computer')),
-        prop('network', input('text', 'network'))]))))
-  ]))
+const default_question_type_id = "multiple_choice";
+
+const default_question = {
+  type: default_question_type_id,
+  question: "Sample Question",
+  answers: []
+};
+
+
+const question_type_selector = options([
+  'multiple_choice',
+  'select_all'/*,
+  'short_answer'*/
 ]);
+
+const default_answer = "Sample Answer";
+const question = lens => {
+  const x = L.get(lens, store);
+  let title = `Type: ${snake_to_words(x.type)}, Answers: ${x.answers.length}`;
+  return collapsible(title,
+    column([
+      row([
+        titled_prop('type', question_type_selector),
+        titled_prop('question', input())
+      ]),
+        titled_prop('answers', list(default_answer, input())),
+    ]))(lens);
+};
+
+const default_survey_question = {
+  type: default_question_type_id,
+  question: "Sample Question",
+  answers: [],
+};
+
 
 const game = column([
   titled_prop('name', input()),
-  prop('is_win', checkbox('Does the player win?')),
-  prop('home_network', collapsible('Home Network', network, true)),
-  prop('enemy_network', collapsible('Enemy Network', network, true)),
-  titled_prop('stages', list(default_stage, stage, (_, i) => "stage " + i))
+  titled_prop('stages', list(default_stage, stage, (_, i) => "stage " + i)),
+  titled_prop('survey', list(default_survey_question, question, (_, i) => "question " + i))
 ], true);
 
 const default_game = {
   name: 'unnamed',
   stages: [],
-  home_network: empty_network,
-  enemy_network: empty_network
+  survey: []
 };
 
 store = default_game;

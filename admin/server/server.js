@@ -42,7 +42,7 @@ const updateCounters = () => {
 
 app.get('/api/request/:user_email', (req, res) => {
     let contents = fs.readFileSync(`../games/${valid_games[gameIndex % valid_games.length]}`);
-    write_log(req.params.user_email + " connected; receiving " + valid_games[gameIndex % valid_games.length]);
+    write_log(req.params.user_email + " connected; receiving " + JSON.parse(contents).name);
 
     res.setHeader('Content-Type', 'application/json');
     res.end(contents);
@@ -61,10 +61,11 @@ app.post('/api', (req, res) => {
   // the user's system. There is certainly a better way.
   let timestamp = Math.floor(new Date().getTime() / 1000);
   console.log(req.body);
-  fs.writeFileSync(`../results/${req.body.name}-${req.body.email}-${timestamp}`, JSON.stringify(req.body));
+  fs.writeFileSync(`../results/${req.body.name}-${req.body.email}-${timestamp}.result`, JSON.stringify(req.body));
   write_log(req.body.email + " finished: " + req.body.name);
   res.send('ok');
   currentConnections--;
+  finished++;
   updateCounters();
 });
 
@@ -81,7 +82,7 @@ const clear_children = node => {
     first = node.firstElementChild;
   }
 };
-
+let all_selected = true;
 const load_files = () => {
   update_files();
   let list = document.getElementById('games-list');
@@ -124,8 +125,9 @@ load_files();
 
 document.getElementById('export-csv-button').addEventListener('click', () => {
   let results_filenames = fs.readdirSync('../results/');
+  if (results_filenames["length"] == 0) return;
   let game_rows = [['email', 'game_name', 'did_escalate']];
-  let stage_rows = [['email', 'game_name', 'stage_index', 'stage_type', 'did_escalate']];
+  let isSetup = false;
   for (let file of results_filenames) {
     let obj = JSON.parse(fs.readFileSync(`../results/${file}`));
     let game_escalated = false;
@@ -133,35 +135,57 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
       let did_escalate = false;
       for (let action of stage.actions) {
         if (action.is_escalatory && action.is_selected) {
-          did_escalate = true;
+          //did_escalate = true;
           game_escalated = true;
         }
       }
-      stage_rows.push([
+      /*stage_rows.push([
         obj.email,
         obj.name,
         i,
         stage.type,
         did_escalate
-      ]);
+      ]);*/
     });
-    game_rows.push([
-      obj.email,
-      obj.name,
-      game_escalated
-    ]);
+    if(!isSetup){
+      for (let question of obj.game.survey){
+        game_rows[0].push(question.question);
+      }
+      isSetup = true;
+    }
+    let game_stats = [obj.email, obj.name, game_escalated];
+    for (let question of obj.game.survey){
+      if(question.type == "short_answer"){
+        game_stats.push(question.answers[0]);
+      }
+      else if (question.type == "multiple_choice") {
+        for (let selection of question.selection){
+            game_stats.push(question.answers[selection]);
+            break;
+        }
+      }
+      else if (question.type == "select_all") {
+        let answer = ""
+        for (let selection of question.selection){
+          answer += question.answers[selection] + '-';
+        }
+        answer = answer.substr(0, answer.length - 1);
+        game_stats.push(answer);
+      }
+    }
+    game_rows.push(game_stats);
     console.log(game_rows)
     let game_rows_str = game_rows.map(row => {
       console.log(row);
       return row.join()
     }).join('\n');
-    let stage_rows_str = stage_rows.map(row => row.join()).join('\n');
-    fs.writeFileSync('../stages.csv', stage_rows_str);
+    //let stage_rows_str = stage_rows.map(row => row.join()).join('\n');
+    //fs.writeFileSync('../stages.csv', stage_rows_str);
     fs.writeFileSync('../games.csv', game_rows_str);
   }
 });
 
-document.getElementById('choose-games-button').addEventListener('click', () => {
+document.getElementById('refresh-games-button').addEventListener('click', () => {
   load_files();
 });
 
@@ -170,6 +194,7 @@ let server_running = false;
 document.getElementById('toggle-server-button').addEventListener('click', () => {
   let button = document.getElementById('toggle-server-button');
   if (!server_running) {
+
     document.getElementById('server-log').value = '';
     document.getElementById('total-connections').innerHTML = 'Total Connections: 0';
     document.getElementById('current-connections').innerHTML = 'In Progress: 0';
@@ -186,14 +211,17 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
     if(valid_games.length == 0){
       return;
     }
+    for(let check of game_checks){
+      check.disabled = true;
+    }
     server_running = true;
     server = app.listen(port, () => console.log(`app listening on port ${port}`));
     for (let obj of all_games_objects){
       obj.innerHTML = obj.innerHTML.replace(/:.+/g, '');
     }
 
-    if (networkInterfaces["Wifi"] == null) {
-      write_log("server listening on localhost:3003")
+    if (networkInterfaces["Wi-Fi"] == null) {
+      write_log("not connected to Wi-Fi; server listening on localhost:3003")
     }
     else {
       write_log("server listening on " + networkInterfaces["Wi-Fi"][1]["address"] + ":" + port);
@@ -201,6 +229,9 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
     button.innerHTML = 'Stop Server';
   } else {
       server_running = false;
+      for(let check of game_checks){
+        check.disabled = false;
+      }
     if (server) {
       server.close();
     }
@@ -214,8 +245,9 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
   }
 });
 
-let all_selected = false;
+
 document.getElementById('toggle-select-button').addEventListener('click', () => {
+  if (server_running) return;
   let button = document.getElementById('toggle-select-button');
   if (!all_selected) {
     console.log('all selected')
