@@ -64,38 +64,32 @@
   "survey": [
     {
       "type": "multiple_choice",
-      "question": "Multiple",
+      "question": "What is your gender?",
       "answers": [
-        "M_Answer 1",
-        "M_Answer 2",
-        "M_Answer 3"
-      ],
-      "is_expanded": true
-    },
-    {
-      "type": "select_all",
-      "question": "Select",
-      "answers": [
-        "S_Answer 1",
-        "S_Answer 2"
-      ],
-      "is_expanded": true
-    },
-    {
-      "type": "select_all",
-      "question": "Select 2",
-      "answers": [
-        "S2_Answer 1",
-        "S2_Answer 2",
-        "S2_Answer 3"
+        "Male",
+        "Female"
       ],
       "is_expanded": true
     },
     {
       "type": "multiple_choice",
-      "question": "Multiple 2",
+      "question": "What year are you in school?",
       "answers": [
-        "Sample Answer"
+        "Freshman",
+        "Sophomore",
+        "Junior",
+        "Senior"
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What is your level of technical aptitude?",
+      "answers": [
+        "Basic proficiency with computers",
+        "I play around with advanced software tools",
+        "I can write my own computer programs",
+        "I make my living developing software"
       ],
       "is_expanded": true
     }
