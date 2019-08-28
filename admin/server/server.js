@@ -170,9 +170,9 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
       else if (question.type == "select_all") {
         let answer = ""
         for (let selection of question.selection){
-          answer += question.answers[selection] + '-';
+          answer += question.answers[selection] + '; ';
         }
-        answer = answer.substr(0, answer.length - 1);
+        answer = answer.substr(0, answer.length - 2);
         game_stats.push(answer);
       }
     }
