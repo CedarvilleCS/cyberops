@@ -1,0 +1,103 @@
+{
+  "name": "Scenario 3",
+  "stages": [
+    {
+      "type": "introduction",
+      "messages": [
+        "Hello Soldier! You have just been hired as the Cyber Operations Officer in the Kingdom of Dardania. ",
+        "On your first day at work, your supervisor briefs you on the inner workings of the Kingdom’s Command and Control Center, including the current state of the Kingdom’s computer network. You also learn about the intelligence that has been gathered about the rival Kingdom of Illyria. \n",
+        "Although the two kingdoms are currently in peace, the Kingdom of Illyria has been a long-term rival. Kingdom of Illyria has approximately 700,000 active-duty troops and 100,000 in reserve, as opposed to Kingdom of Dardania, which has 1.2 million active military, and 300,000 in reserve. Kingdom of Illyria is richer and its economy stands at 1.2 trillion ducats, as opposed to 400 million ducats in Kingdom of Dardania.\n",
+        "During your intelligence briefing, you learn from your supervisor that the Kingdom of \nIllyria cyber soldiers are developing capabilities that could significantly undermine \nthe integrity of Dardania's systems. As part of your mission, you are tasked to infiltrate \nIllyria's Ministry of Defense and gather intelligence about their progress and plans. \nYou are asked to specifically target those enemy cyber soldiers working of offensive \ncapabilities, as well as learn more about their civilian counterparts.\n",
+        "Your supervisor stressed that it is of utmost importance that homeland IT systems \nremain safe and fully functioning.\n",
+        "During your mission, you must not be seen.\n"
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "reconnaissance",
+      "messages": [
+        "Your first assignment is to launch a spear-phishing campaign to gain access into the \nMinistry of Defense of Kingdom of Illyria.\n"
+      ],
+      "actions": [
+        {
+          "text": "Launch Spear-Phishing Campaign",
+          "type": "reconnaissance"
+        }
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "reconnaissance",
+      "messages": [
+        "You’re in! Your target opened your email, and clicked on the attachment.\n",
+        "Soldier, congratulations! You have just gained access into enemy networks. \nIt appears that your target has opened the Excel file you sent and the \ntrojan has been activated, and the backdoor installed. Welcome to the network of the \nMinistry of Defense of the Kingdom of Illyria.\n"
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "delivery",
+      "messages": [
+        "While you are doing this, you receive news.\n",
+        "HIGH ALERT: Dardania Cyber Command has suffered a series of inflitrations. Your server was targeted as a source of the spearphishing campaign you launched earlier. The attackers disrupted the campaign at its source, and the server has been disabled. Additionally, the attackers also shut off a number of servers run by 2nd Cyber Brigade of the Kingdom of Dardania.\n"
+      ],
+      "actions": [
+        {
+          "text": "Continue with the mission you were assigned. Reinitiate the spearphishing campaign from a new server.",
+          "type": "reconnaissance"
+        },
+        {
+          "text": "Execute a retaliatory DDoS attack against the Ministry of Internal Affairs of Kingdom of Illyria.",
+          "type": "command_and_control",
+          "is_escalatory": true
+        },
+        {
+          "text": "Activate prepositioned malware in the critical infrastructure of Kingdom of Illyria.",
+          "type": "command_and_control",
+          "is_escalatory": true
+        }
+      ],
+      "is_expanded": true
+    }
+  ],
+  "survey": [
+    {
+      "type": "multiple_choice",
+      "question": "Multiple",
+      "answers": [
+        "M_Answer 1",
+        "M_Answer 2",
+        "M_Answer 3"
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "select_all",
+      "question": "Select",
+      "answers": [
+        "S_Answer 1",
+        "S_Answer 2"
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "select_all",
+      "question": "Select 2",
+      "answers": [
+        "S2_Answer 1",
+        "S2_Answer 2",
+        "S2_Answer 3"
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Multiple 2",
+      "answers": [
+        "Sample Answer"
+      ],
+      "is_expanded": true
+    }
+  ]
+}
