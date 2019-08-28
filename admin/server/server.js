@@ -125,7 +125,10 @@ load_files();
 
 document.getElementById('export-csv-button').addEventListener('click', () => {
   let results_filenames = fs.readdirSync('../results/');
-  if (results_filenames["length"] == 0) return;
+  if (results_filenames["length"] == 0) {
+    write_log("no results found");
+    return;
+  }
   let game_rows = [['email', 'game_name', 'did_escalate']];
   let isSetup = false;
   for (let file of results_filenames) {
@@ -183,6 +186,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
     //fs.writeFileSync('../stages.csv', stage_rows_str);
     fs.writeFileSync('../games.csv', game_rows_str);
   }
+  write_log("exported csv file successfully");
 });
 
 document.getElementById('refresh-games-button').addEventListener('click', () => {
