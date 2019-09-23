@@ -11,7 +11,7 @@ const store_action = action => {
   render();
 }
 
-const default_stage_type_id = 'introduction';
+const default_stage_type_id = 'pop_up';
 
 const row = items => lens => {
   return div('flex-row', ...items.map(item => item(lens)));
@@ -50,7 +50,7 @@ const options = item_types => lens => {
 };
 
 const stage_type_selector = options([
-  'introduction',
+  'pop_up',
   'reconnaissance',
   'weaponization',
   'delivery',
@@ -132,7 +132,7 @@ const checkbox = label => lens => {
 
 const checklist = prop_list => column(prop_list.map(property => prop(property, checkbox(property))));
 
-const message_item = lens => {
+const message_item1 = lens => {
   console.log(lens.flat(100));
   let message_text = L.get(lens, store);
   const update = text => store_action(store => L.set(lens, text, store));
@@ -176,17 +176,46 @@ const input = (type, hint) => lens => {
   };
 };
 
+const text_input = (type, hint, rows) => lens => {
+  let actual = L.get(lens, store);
+  let update = new_value => store_action(store => L.set(lens, new_value, store));
+  return {
+    type: 'textarea',
+    props: {
+      type: type || 'text',
+      rows: rows,
+      value: actual,
+      placeholder: hint || ''
+    },
+    children: [],
+    handlers: {
+      change: ev => {
+        if (type === 'number') {
+          return update(parseInt(ev.target.value));
+        } else {
+          return update(ev.target.value);
+        }
+      }
+    }
+  };
+};
+
 const action_item = column([
   remove_button,
   prop('type', stage_type_selector),
   prop('is_escalatory', checkbox('Escalatory')),
-  prop('text', input())]);
+  prop('text', input())
+]);
 
 const text = text => lens => div('', text);
 
+const message_item = column([
+  remove_button,
+  prop('text', text_input('text','message', 4)),
+  prop('file', text_input('file','file', 1))]);
 
 const default_action = { text: "", type: default_stage_type_id };
-const default_message = "";
+const default_message = {text: "", file: ""};
 const stage = lens => {
   const x = L.get(lens, store);
   let title = `Type: ${snake_to_words(x.type)}, Messages: ${x.messages.length}, Actions: ${x.actions.length}`;
@@ -208,18 +237,13 @@ const default_stage = {
 
 const default_question_type_id = "multiple_choice";
 
-const default_question = {
-  type: default_question_type_id,
-  question: "Sample Question",
-  answers: []
-};
-
-
 const question_type_selector = options([
+  'message',
   'multiple_choice',
-  'select_all'/*,
-  'short_answer'*/
+  'select_all',
+  'short_answer',
 ]);
+
 
 const default_answer = "Sample Answer";
 const question = lens => {
@@ -229,7 +253,7 @@ const question = lens => {
     column([
       row([
         titled_prop('type', question_type_selector),
-        titled_prop('question', input())
+        titled_prop('question', input('text', 'Sample Question'))
       ]),
         titled_prop('answers', list(default_answer, input())),
     ]))(lens);

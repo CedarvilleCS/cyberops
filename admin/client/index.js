@@ -58,125 +58,7 @@ const toggle_action_selection = (action) => {
   }
 }
 
-const graph = in_network => {
-  let max_net_comps = Math.max(in_network.networks.length, in_network.computers.length);
-  //Don't know how to fix the svg error, if removed, sizes get messed up
-  return svg(300, '400px',//40*(max_net_comps - 1) + 36,
-    ...in_network.networks.map((network, i) =>
-      g(rect(3, 40*i + 3, 100, 30),
-        h('text', {x: 8, y: 40*i + 23, fill: 'black'}, network))),
-    ...in_network.computers.map((computer, i) =>
-      g(rect(200, 40*i + 3, 97, 30),
-        h('text', {x: 208, y: 40*i + 23, fill: 'black'}, computer))),
-    ...in_network.connections.map(conn => {
-      let c_i = in_network.computers.indexOf(conn.computer);
-      let n_i = in_network.networks.indexOf(conn.network);
-      return h('line', {x1: 103, y1: 40*n_i + 15, x2: 200, y2: 40*c_i + 15, style: 'stroke:rgb(255,0,0);stroke-width:2' })
-    }));
-};
 
-const network_panel = (in_network, is_friendly) => {
-
-	// Change edge color and network title based on who owns the network.
-	let edge_color = {
-		color: '#3333ff',
-		highlight: '#aaaaff',
-		hover: '#6666ff',
-		inherit: 'from'
-	};
-	let network_name = "Your Network";
-	if (!is_friendly) {
-		edge_color = {
-			color: '#ff3333',
-			highlight: '#ffaaaa',
-			hover: '#ff6666'
-		}
-		network_name = "Opponent Network";
-	}
-
-	let network_options = {
-		autoResize: true,
-		edges: {
-			color: edge_color,
-			width: 2,
-			arrows: {
-				to: {
-					enabled: false
-				},
-				from: {
-					enabled: false
-				}
-			}
-		},
-		interaction: {
-			hover: true
-		}
-	};
-
-  let transformed_network = {
-    nodes: [
-      ...in_network.computers.map(c => {
-        return {
-          id: c,
-          node_type: 'computer',
-          label: c
-        };
-      }),
-      ...in_network.networks.map(n => {
-        return {
-          id: n,
-          node_type: 'lan',
-          label: n
-        };
-      })
-    ],
-    edges: []
-  };
-
-	let network = {
-		...transformed_network,
-		nodes: transformed_network.nodes.map(node => {
-			let node_shape = 'ellipse';
-			let node_color = 'lightgreen';
-			if (node.node_type === 'computer') {
-				node_shape = 'box';
-				node_color = 'lightblue';
-			}
-			return {
-				...node,
-				shape: node_shape,
-				color: node_color
-			}
-		})
-	};
-	return div('graph',
-      div('graph-title', network_name),
-      div('graph-container',
-        graph(in_network),
-        network_inspector(network, is_friendly)));
-};
-
-const service_box = service => {
-  return div('service',
-      div('service-name', service.name),
-      div('service-version', service.version));
-};
-
-const node_inspector = node => {
-  let services = [];
-  //if (node.node_type === 'computer') {
-  //  services = node.services;
-  //}
-	return div('node-inspector',
-    div('flex-row',
-      div('node-label', node.label),
-      div('node-type', node.node_type)),
-    ...services.map(service => service_box(service)));
-};
-
-const network_inspector = network => {
-	return div('graph-inspector', ...network.nodes.map(node_inspector));
-};
 
 const type_to_title = {
   reconnaissance: 'Reconnaissance',
@@ -234,12 +116,14 @@ const increment_survey = () => {
     console.log('done with survey');
     survey_done = true;
     document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
-  } else if (curr_survey().type != 'short_answer'){
+  } else if (curr_survey().type != 'short_answer' || curr_survey().type != 'message'){
     document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
   }
-  for (var i = 0; i < document.getElementsByClassName('content-container')[0].children.length; i++) {
-    if(document.getElementsByClassName('content-container')[0].children[i].className == 'answer-container-checked'){
-      document.getElementsByClassName('content-container')[0].children[i].className = 'answer-container';
+  if(document.getElementsByClassName('content-container').length != 0){
+    for (var i = 0; i < document.getElementsByClassName('content-container')[0].children.length; i++) {
+      if(document.getElementsByClassName('content-container')[0].children[i].className == 'answer-container-checked'){
+        document.getElementsByClassName('content-container')[0].children[i].className = 'answer-container';
+      }
     }
   }
 };
@@ -333,9 +217,11 @@ const app = () => {
     let game_result_div = h('div', {style: 'display:none'});
     let game_intro_div = h('div', {style: 'display:none'});
     let game_survey_div = h('div', {style: 'display:none'});
+    if(game.stages.length == 0){
+      game_over = true;
+    }
     if (game_over) {
       if(survey_done){
-        game_result_div = div('game-result', "Thank you!");
         continue_button = div('continue-button-disabled', 'Continue');
         post_request('/api/', {
           email: user_email,
@@ -361,9 +247,13 @@ const app = () => {
             continue_button));
       }
       continue_button = with_click(div('continue-button-disabled', 'Continue'), dispatch(increment_survey));
+      if(curr_survey().answers.length == 0){
+        continue_button = with_click(div('continue-button', 'Continue'), dispatch(increment_survey));
+      }
       game_survey_div = div('game-survey',
                           div('question-container', curr_survey().question),
                             div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))));
+
       return div('app',
         game_survey_div,
         div('app-content flex-col',
@@ -382,8 +272,8 @@ const app = () => {
                 div('panel-header', 'Actions')))),
           continue_button));
     }
-    if (curr_stage().type == "introduction"){
-      game_intro_div = div("game-intro", ...curr_stage().messages.map((message, i) => div('message-container', message)));
+    if (curr_stage().type == "pop_up"){
+      game_intro_div = div("game-intro", ...curr_stage().messages.map((message, i) => div('message-container', (message.file != "") ? img(`./${message.file}` , "width", "50px"): "", message.text)));
       return div('app',
         game_intro_div,
         div('app-content flex-col',
@@ -416,7 +306,7 @@ const app = () => {
             div('message-bar-container panel-container',
               div('panel-content',
                 div('panel-header', 'Messages'),
-                ...curr_stage().messages.map((message, i) => div('message-container', message)))),
+                ...curr_stage().messages.map((message, i) => div('message-container', (message.file != "") ? img(`./${message.file}` , "width", "50px"): "", message.text)))),
             div('action-panel-container panel-container',
               div('panel-content',
                 div('panel-header', 'Actions'),

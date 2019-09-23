@@ -84,6 +84,9 @@ const clear_children = node => {
 };
 let all_selected = true;
 const load_files = () => {
+  game_checks = [];
+  all_selected = true;
+  document.getElementById('toggle-select-button').innerHTML = "Clear Selection";
   update_files();
   let list = document.getElementById('games-list');
   clear_children(list);
@@ -158,6 +161,9 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
     }
     let game_stats = [obj.email, obj.name, game_escalated];
     for (let question of obj.game.survey){
+      if(question.type == "introduction" || question.type == "ending_message"){
+        game_stats.push("");
+      }
       if(question.type == "short_answer"){
         game_stats.push(question.answers[0]);
       }
@@ -190,7 +196,17 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
 });
 
 document.getElementById('refresh-games-button').addEventListener('click', () => {
+  if (document.getElementById('refresh-games-button').classList.contains('button-disabled')) {
+    return;
+  }
   load_files();
+});
+
+document.getElementById('create-new-game-button').addEventListener('click', () => {
+  if (document.getElementById('create-new-game-button').classList.contains('button-disabled')) {
+    return;
+  }
+  ipcRenderer.send('open-new-game-file');
 });
 
 let server = null;
@@ -199,6 +215,9 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
   let button = document.getElementById('toggle-server-button');
   if (!server_running) {
 
+    currentConnections = 0;
+    finished = 0;
+    totalConnections = 0;
     document.getElementById('server-log').value = '';
     document.getElementById('total-connections').innerHTML = 'Total Connections: 0';
     document.getElementById('current-connections').innerHTML = 'In Progress: 0';
@@ -231,6 +250,8 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
       write_log("server listening on " + networkInterfaces["Wi-Fi"][1]["address"] + ":" + port);
     }
     button.innerHTML = 'Stop Server';
+    document.getElementById('refresh-games-button').classList.add('button-disabled');
+    document.getElementById('create-new-game-button').classList.add('button-disabled');
   } else {
       server_running = false;
       for(let check of game_checks){
@@ -245,6 +266,8 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
     games_counters = [];
 
     button.innerHTML = 'Start Server';
+    document.getElementById('refresh-games-button').classList.remove('button-disabled');
+    document.getElementById('create-new-game-button').classList.remove('button-disabled');
     write_log("server stopped");
   }
 });

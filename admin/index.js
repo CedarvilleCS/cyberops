@@ -80,4 +80,8 @@ ipcMain.on('open-game-file', (event, filename) => {
   open_file(filename);
 });
 
-app.on('ready', create_editor_window);
+ipcMain.on('open-new-game-file', (event) => {
+	create_editor_window();
+});
+
+app.on('ready', create_server_window);

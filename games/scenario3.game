@@ -4,12 +4,30 @@
     {
       "type": "introduction",
       "messages": [
-        "Hello Soldier! You have just been hired as the Cyber Operations Officer in the Kingdom of Dardania. ",
-        "On your first day at work, your supervisor briefs you on the inner workings of the Kingdom’s Command and Control Center, including the current state of the Kingdom’s computer network. You also learn about the intelligence that has been gathered about the rival Kingdom of Illyria. \n",
-        "Although the two kingdoms are currently in peace, the Kingdom of Illyria has been a long-term rival. Kingdom of Illyria has approximately 700,000 active-duty troops and 100,000 in reserve, as opposed to Kingdom of Dardania, which has 1.2 million active military, and 300,000 in reserve. Kingdom of Illyria is richer and its economy stands at 1.2 trillion ducats, as opposed to 400 million ducats in Kingdom of Dardania.\n",
-        "During your intelligence briefing, you learn from your supervisor that the Kingdom of \nIllyria cyber soldiers are developing capabilities that could significantly undermine \nthe integrity of Dardania's systems. As part of your mission, you are tasked to infiltrate \nIllyria's Ministry of Defense and gather intelligence about their progress and plans. \nYou are asked to specifically target those enemy cyber soldiers working of offensive \ncapabilities, as well as learn more about their civilian counterparts.\n",
-        "Your supervisor stressed that it is of utmost importance that homeland IT systems \nremain safe and fully functioning.\n",
-        "During your mission, you must not be seen.\n"
+        {
+          "file": "",
+          "text": "Hello Soldier! You have just been hired as the Cyber Operations Officer in the Kingdom of Dardania."
+        },
+        {
+          "file": "",
+          "text": "On your first day at work, your supervisor briefs you on the inner workings of the Kingdom’s Command and Control Center, including the current state of the Kingdom’s computer network. You also learn about the intelligence that has been gathered about the rival Kingdom of Illyria."
+        },
+        {
+          "file": "",
+          "text": "Although the two kingdoms are currently in peace, the Kingdom of Illyria has been a long-term rival. Kingdom of Illyria has approximately 700,000 active-duty troops and 100,000 in reserve, as opposed to Kingdom of Dardania, which has 1.2 million active military, and 300,000 in reserve. Kingdom of Illyria is richer and its economy stands at 1.2 trillion ducats, as opposed to 400 million ducats in Kingdom of Dardania."
+        },
+        {
+          "file": "",
+          "text": "During your intelligence briefing, you learn from your supervisor that the Kingdom of Illyria cyber soldiers are developing capabilities that could significantly undermine the integrity of Dardania's systems. As part of your mission, you are tasked to infiltrate Illyria's Ministry of Defense and gather intelligence about their progress and plans. You are asked to specifically target those enemy cyber soldiers working of offensive capabilities, as well as learn more about their civilian counterparts."
+        },
+        {
+          "file": "",
+          "text": "Your supervisor stressed that it is of utmost importance that homeland IT systems remain safe and fully functioning."
+        },
+        {
+          "text": "During your mission, you must not be seen.",
+          "file": ""
+        }
       ],
       "actions": [],
       "is_expanded": true
@@ -17,7 +35,10 @@
     {
       "type": "reconnaissance",
       "messages": [
-        "Your first assignment is to launch a spear-phishing campaign to gain access into the \nMinistry of Defense of Kingdom of Illyria.\n"
+        {
+          "text": "Your first assignment is to launch a spear-phishing campaign to gain access into the Ministry of Defense of Kingdom of Illyria.",
+          "file": ""
+        }
       ],
       "actions": [
         {
@@ -30,8 +51,14 @@
     {
       "type": "reconnaissance",
       "messages": [
-        "You’re in! Your target opened your email, and clicked on the attachment.\n",
-        "Soldier, congratulations! You have just gained access into enemy networks. \nIt appears that your target has opened the Excel file you sent and the \ntrojan has been activated, and the backdoor installed. Welcome to the network of the \nMinistry of Defense of the Kingdom of Illyria.\n"
+        {
+          "text": "You’re in! Your target opened your email, and clicked on the attachment.",
+          "file": ""
+        },
+        {
+          "file": "",
+          "text": "Soldier, congratulations! You have just gained access into enemy networks. It appears that your target has opened the Excel file you sent and the trojan has been activated, and the backdoor installed. Welcome to the network of the Ministry of Defense of the Kingdom of Illyria."
+        }
       ],
       "actions": [],
       "is_expanded": true
@@ -39,8 +66,18 @@
     {
       "type": "delivery",
       "messages": [
-        "While you are doing this, you receive news.\n",
-        "HIGH ALERT: Dardania Cyber Command has suffered a series of inflitrations. Your server was targeted as a source of the spearphishing campaign you launched earlier. The attackers disrupted the campaign at its source, and the server has been disabled. Additionally, the attackers also shut off a number of servers run by 2nd Cyber Brigade of the Kingdom of Dardania.\n"
+        {
+          "text": "While you are doing this, you receive news.",
+          "file": ""
+        },
+        {
+          "text": "",
+          "file": "illyria.gif"
+        },
+        {
+          "text": "HIGH ALERT: Dardania Cyber Command has suffered a series of inflitrations. Your server was targeted as a source of the spearphishing campaign you launched earlier. The attackers disrupted the campaign at its source, and the server has been disabled. Additionally, the attackers also shut off a number of servers run by 2nd Cyber Brigade of the Kingdom of Dardania.",
+          "file": ""
+        }
       ],
       "actions": [
         {
@@ -62,6 +99,12 @@
     }
   ],
   "survey": [
+    {
+      "type": "message",
+      "question": "Please answer a few questions about yourself",
+      "answers": [],
+      "is_expanded": true
+    },
     {
       "type": "multiple_choice",
       "question": "What is your gender?",
@@ -91,6 +134,12 @@
         "I can write my own computer programs",
         "I make my living developing software"
       ],
+      "is_expanded": true
+    },
+    {
+      "type": "message",
+      "question": "Thank you for your participation",
+      "answers": [],
       "is_expanded": true
     }
   ]

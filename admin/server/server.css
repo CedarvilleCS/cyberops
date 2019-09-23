@@ -94,6 +94,18 @@ h1 {
   overflow-y: auto;
 }
 
+.button-disabled {
+  cursor: not-allowed;
+  background-color: #cccccc;
+  color: black;
+}
+
+.button-disabled:hover {
+  cursor: not-allowed;
+  background-color: #cccccc;
+  color: black;
+}
+
 textarea {
     background-color: #cccccc;
     border: 1px solid #000000;
