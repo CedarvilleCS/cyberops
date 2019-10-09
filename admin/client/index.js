@@ -150,9 +150,9 @@ const user_email_input =  {
   }
 };
 
-const stage_type_panel = () => {
+const stage_type_panel = (on) => {
   return div('flex-col stage-type-panel', ...Object.keys(type_to_title).map(type => {
-    if (curr_stage().type === type) {
+    if (on && curr_stage().type === type) {
       return h('img', { className: 'invert', src: `./${type}.svg` });
     } else {
       return img(`./${type}.svg`)
@@ -237,7 +237,7 @@ const app = () => {
                 div('logo-content',
                 img(`./dardania.svg`, "width", "50")),
                 div('panel-header', 'Stages'),
-                stage_type_panel())),
+                stage_type_panel(false))),
               div('message-bar-container panel-container',
                 div('panel-content',
                   div('panel-header', 'Messages'))),
@@ -263,7 +263,7 @@ const app = () => {
               div('logo-content',
               img(`./dardania.svg`, "width", "50")),
               div('panel-header', 'Stages'),
-              stage_type_panel())),
+              stage_type_panel(false))),
             div('message-bar-container panel-container',
               div('panel-content',
                 div('panel-header', 'Messages'))),
@@ -283,7 +283,7 @@ const app = () => {
               div('logo-content',
               img(`./dardania.svg`, "width", "50")),
               div('panel-header', 'Stages'),
-              stage_type_panel())),
+              stage_type_panel(true))),
             div('message-bar-container panel-container',
               div('panel-content',
                 div('panel-header', 'Messages'))),
@@ -302,7 +302,7 @@ const app = () => {
             div('logo-content',
             img(`./dardania.svg`, "width", "50")),
               div('panel-header', 'Stages'),
-              stage_type_panel())),
+              stage_type_panel(true))),
             div('message-bar-container panel-container',
               div('panel-content',
                 div('panel-header', 'Messages'),
