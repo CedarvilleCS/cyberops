@@ -145,13 +145,17 @@ load_files();
 
 document.getElementById('export-csv-button').addEventListener('click', () => {
   let results_filenames = fs.readdirSync('../results/');
-  if (results_filenames["length"] == 0) {
+  if (results_filenames["length"] == 1 && results_filenames[0] === ".gitignore") {
     write_log("no results found");
     return;
   }
   let game_rows = [['user', 'game_name', 'did_escalate']];
   let isSetup = false;
+  let game_rows_str = "";
   for (let file of results_filenames) {
+    if(file === ".gitignore"){
+      continue;
+    }
     let obj = JSON.parse(fs.readFileSync(`../results/${file}`));
     let game_escalated = false;
     obj.game.stages.forEach((stage, i) => {
@@ -178,8 +182,8 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
     }
     let game_stats = [obj.user, obj.name, game_escalated];
     for (let question of obj.game.survey){
-      if(question.type == "introduction" || question.type == "ending_message"){
-        game_stats.push("");
+      if(question.type == "message"){
+        game_stats.push("N/A");
       }
       if(question.type == "short_answer"){
         game_stats.push(question.answers[0]);
@@ -201,15 +205,22 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
     }
     game_rows.push(game_stats);
     console.log(game_rows)
-    let game_rows_str = game_rows.map(row => {
+    game_rows_str = game_rows.map(row => {
       console.log(row);
       return row.join()
     }).join('\n');
     //let stage_rows_str = stage_rows.map(row => row.join()).join('\n');
     //fs.writeFileSync('../stages.csv', stage_rows_str);
-    fs.writeFileSync('../games.csv', game_rows_str);
+
   }
-  write_log("exported csv file successfully");
+  try{
+    fs.writeFileSync('../games.csv', game_rows_str);
+    write_log("exported games.csv successfully");
+  }
+  catch(e){
+    write_log("file error");
+  }
+
 });
 
 document.getElementById('refresh-files-button').addEventListener('click', () => {
