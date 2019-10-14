@@ -13,6 +13,7 @@ let all_games = [];
 let valid_games = [];
 let all_games_objects = [];
 let valid_games_objects = [];
+
 let games_counters = [];
 let game_checks = [];
 let gameIndex = 0;
@@ -73,6 +74,7 @@ const update_files = () => {
   //let input = document.getElementById('gameselect');
   //input.click();
 	all_games = fs.readdirSync('../games');
+  all_surveys = fs.readdirSync('../surveys');
 };
 
 const clear_children = node => {
@@ -195,8 +197,8 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
   write_log("exported csv file successfully");
 });
 
-document.getElementById('refresh-games-button').addEventListener('click', () => {
-  if (document.getElementById('refresh-games-button').classList.contains('button-disabled')) {
+document.getElementById('refresh-files-button').addEventListener('click', () => {
+  if (document.getElementById('refresh-files-button').classList.contains('button-disabled')) {
     return;
   }
   load_files();
@@ -250,7 +252,7 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
       write_log("server listening on " + networkInterfaces["Wi-Fi"][1]["address"] + ":" + port);
     }
     button.innerHTML = 'Stop Server';
-    document.getElementById('refresh-games-button').classList.add('button-disabled');
+    document.getElementById('refresh-files-button').classList.add('button-disabled');
     document.getElementById('create-new-game-button').classList.add('button-disabled');
   } else {
       server_running = false;
@@ -266,7 +268,7 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
     games_counters = [];
 
     button.innerHTML = 'Start Server';
-    document.getElementById('refresh-games-button').classList.remove('button-disabled');
+    document.getElementById('refresh-files-button').classList.remove('button-disabled');
     document.getElementById('create-new-game-button').classList.remove('button-disabled');
     write_log("server stopped");
   }
