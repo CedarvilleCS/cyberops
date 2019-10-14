@@ -22,6 +22,7 @@ let totalConnections = 0;
 let currentConnections = 0;
 let finished = 0;
 
+
 app.use(express.static('client'));
 app.use(express.static('common'));
 app.use(express.json());
@@ -41,9 +42,9 @@ const updateCounters = () => {
   document.getElementById('completed-connections').innerHTML = 'Finished: ' + finished + ' ('+ (finished/totalConnections*100).toFixed(1) + '%)';
 }
 
-app.get('/api/request/:user_email', (req, res) => {
+app.get('/api/request/:time_stamp', (req, res) => {
     let contents = fs.readFileSync(`../games/${valid_games[gameIndex % valid_games.length]}`);
-    write_log(req.params.user_email + " connected; receiving " + JSON.parse(contents).name);
+    write_log("user: " + req.params.time_stamp + " connected; receiving " + JSON.parse(contents).name);
 
     res.setHeader('Content-Type', 'application/json');
     res.end(contents);
@@ -60,15 +61,30 @@ app.post('/api', (req, res) => {
   // This is insecure, but we are just writing to the file that is specified by
   // the request parameters. This could be injected to overwrite any file on
   // the user's system. There is certainly a better way.
-  let timestamp = Math.floor(new Date().getTime() / 1000);
   console.log(req.body);
-  fs.writeFileSync(`../results/${req.body.name}-${req.body.email}-${timestamp}.result`, JSON.stringify(req.body));
-  write_log(req.body.email + " finished: " + req.body.name);
+  fs.writeFileSync(`../results/${req.body.user}-${req.body.name}.result`, JSON.stringify(req.body));
+  write_log("user: " + req.body.user + " finished: " + req.body.name);
   res.send('ok');
   currentConnections--;
   finished++;
   updateCounters();
 });
+
+const getIPAddress = () => {
+  var interfaces = os.networkInterfaces();
+  var addresses = ""
+  for (var devName in interfaces) {
+    var iface = interfaces[devName];
+
+    for (var i = 0; i < iface.length; i++) {
+      var alias = iface[i];
+      if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal)
+        addresses += "\t" + devName + ": " + alias.address + ":" + port + "\n";
+    }
+  }
+  if (addresses === "") addresses = "localhost:3003";
+  return addresses;
+}
 
 const update_files = () => {
   //let input = document.getElementById('gameselect');
@@ -134,7 +150,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
     write_log("no results found");
     return;
   }
-  let game_rows = [['email', 'game_name', 'did_escalate']];
+  let game_rows = [['user', 'game_name', 'did_escalate']];
   let isSetup = false;
   for (let file of results_filenames) {
     let obj = JSON.parse(fs.readFileSync(`../results/${file}`));
@@ -161,7 +177,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
       }
       isSetup = true;
     }
-    let game_stats = [obj.email, obj.name, game_escalated];
+    let game_stats = [obj.user, obj.name, game_escalated];
     for (let question of obj.game.survey){
       if(question.type == "introduction" || question.type == "ending_message"){
         game_stats.push("");
@@ -245,12 +261,13 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
       obj.innerHTML = obj.innerHTML.replace(/:.+/g, '');
     }
 
-    if (networkInterfaces["Wi-Fi"] == null) {
+    /*if (networkInterfaces["Wi-Fi"] == null) {
       write_log("not connected to Wi-Fi; server listening on localhost:3003")
     }
     else {
       write_log("server listening on " + networkInterfaces["Wi-Fi"][1]["address"] + ":" + port);
-    }
+    }*/
+    write_log("server listening on:\n" + getIPAddress());
     button.innerHTML = 'Stop Server';
     document.getElementById('refresh-files-button').classList.add('button-disabled');
     document.getElementById('create-new-game-button').classList.add('button-disabled');

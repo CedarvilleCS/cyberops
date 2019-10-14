@@ -15,7 +15,7 @@ const post_request = (url, data) => {
 
 let stage_index = 0;
 let survey_index = 0;
-let user_email = null;
+let user_email = "test"
 let game = null;
 let game_name = null;
 let game_listing = null;
@@ -25,6 +25,8 @@ let patt = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}");
 let action_selected = false;
 let survey_selected = false;
 
+const capitalize_first_letter = s => s.charAt(0).toUpperCase() + s.slice(1);
+const snake_to_words = s => s.split('_').map(capitalize_first_letter).join(' ');
 
 const curr_stage = () => game.stages[stage_index] || game.stages[game.stages.length - 1];
 const curr_survey = () => game.survey[survey_index] || game.survey[game.survey.length - 1];
@@ -112,7 +114,7 @@ const increment_survey = () => {
   if (survey_index < game.survey.length) {
     survey_index++;
   }
-  if (survey_index == game.survey.length) {
+  if (survey_index == game.survey.length - 1) {
     console.log('done with survey');
     survey_done = true;
     document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
@@ -153,9 +155,9 @@ const user_email_input =  {
 const stage_type_panel = (on) => {
   return div('flex-col stage-type-panel', ...Object.keys(type_to_title).map(type => {
     if (on && curr_stage().type === type) {
-      return h('img', { className: 'invert', src: `./${type}.svg` });
+      return div('flex-col white-text',h('img', { className: 'invert', src: `./${type}.svg` }), snake_to_words(`${type}`));
     } else {
-      return img(`./${type}.svg`)
+      return div('flex-col',img(`./${type}.svg`), snake_to_words(`${type}`))
     }
   }))
 };
@@ -224,31 +226,16 @@ const app = () => {
       if(survey_done){
         continue_button = div('continue-button-disabled', 'Continue');
         post_request('/api/', {
-          email: user_email,
+          user: time_stamp,
           name: game_name,
           game: game
         });
-        return div('app',
-          game_result_div,
-          div('app-content flex-col',
-            div('main-content flex-row',
-            div('dashboard-container',
-              div('panel-content',
-                div('logo-content',
-                img(`./dardania.svg`, "width", "50")),
-                div('panel-header', 'Stages'),
-                stage_type_panel(false))),
-              div('message-bar-container panel-container',
-                div('panel-content',
-                  div('panel-header', 'Messages'))),
-              div('action-panel-container panel-container',
-                div('panel-content',
-                  div('panel-header', 'Actions')))),
-            continue_button));
       }
-      continue_button = with_click(div('continue-button-disabled', 'Continue'), dispatch(increment_survey));
-      if(curr_survey().answers.length == 0){
-        continue_button = with_click(div('continue-button', 'Continue'), dispatch(increment_survey));
+      else{
+        continue_button = with_click(div('continue-button-disabled', 'Continue'), dispatch(increment_survey));
+        if(curr_survey().answers.length == 0){
+          continue_button = with_click(div('continue-button', 'Continue'), dispatch(increment_survey));
+        }
       }
       game_survey_div = div('game-survey',
                           div('question-container', curr_survey().question),
@@ -328,4 +315,8 @@ const render = () => {
     current_vdom = new_vdom;
 	}
 };
+let time_stamp = Math.floor(new Date().getTime());
+let contents = get_request(`/api/request/${time_stamp}`);
+game = contents;
+game_name = game.name;
 render();

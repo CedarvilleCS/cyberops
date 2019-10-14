@@ -29,11 +29,12 @@ html, body {
 
 .message-bar-container {
 	min-width: 270px;
-	flex: 1 1 50%;
+	flex: 1 1 40%;
 }
 
 .action-panel-container {
-	width: 270px;
+	min-width: 270px;
+	flex: 1 2 30%;
 }
 
 .dashboard-container {
@@ -364,4 +365,8 @@ html, body {
   font-size: 30px;
   line-height: 300px;
   z-index: 1;
+}
+
+.white-text {
+	color: white;
 }

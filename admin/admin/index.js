@@ -212,7 +212,7 @@ const text = text => lens => div('', text);
 const message_item = column([
   remove_button,
   prop('text', text_input('text','message', 4)),
-  prop('file', text_input('file','file', 1))]);
+  prop('file', text_input('file','image file', 1))]);
 
 const default_action = { text: "", type: default_stage_type_id };
 const default_message = {text: "", file: ""};
@@ -274,6 +274,7 @@ const game = column([
 
 const default_game = {
   name: 'unnamed',
+  user: 0,
   stages: [],
   survey: []
 };
