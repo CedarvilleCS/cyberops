@@ -90,7 +90,6 @@ const update_files = () => {
   //let input = document.getElementById('gameselect');
   //input.click();
 	all_games = fs.readdirSync('../games');
-  all_surveys = fs.readdirSync('../surveys');
 };
 
 const clear_children = node => {
