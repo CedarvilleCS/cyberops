@@ -51,6 +51,7 @@ const options = item_types => lens => {
 
 const stage_type_selector = options([
   'pop_up',
+  'blank_action',
   'reconnaissance',
   'weaponization',
   'delivery',
@@ -203,7 +204,6 @@ const text_input = (type, hint, rows) => lens => {
 const action_item = column([
   remove_button,
   prop('type', stage_type_selector),
-  prop('is_escalatory', checkbox('Escalatory')),
   prop('text', input())
 ]);
 
@@ -212,16 +212,18 @@ const text = text => lens => div('', text);
 const message_item = column([
   remove_button,
   prop('text', text_input('text','message', 4)),
-  prop('file', text_input('file','image file', 1))]);
+  prop('file', text_input('file','image file', 1)),
+  prop('color', text_input('color', 'text color (use html color names)', 1))]);
 
 const default_action = { text: "", type: default_stage_type_id };
-const default_message = {text: "", file: ""};
+const default_message = {text: "", file: "", color: ""};
 const stage = lens => {
   const x = L.get(lens, store);
   let title = `Type: ${snake_to_words(x.type)}, Messages: ${x.messages.length}, Actions: ${x.actions.length}`;
   return collapsible(title,
     column([
         titled_prop('type', stage_type_selector),
+        titled_prop('title', input('text', 'title')),
       row([
         titled_prop('messages', list(default_message, message_item)),
         titled_prop('actions', list(default_action, action_item))
@@ -231,6 +233,7 @@ const stage = lens => {
 
 const default_stage = {
   type: default_stage_type_id,
+  title: '',
   messages: [],
   actions: []
 };

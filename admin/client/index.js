@@ -79,8 +79,18 @@ const action_box = (action) => {
   } else {
     classes += ' action-box-disabled';
   }
-  let content = div('action-content', img(`./${action.type}.svg`), div('', action.text));
-  let title = type_to_title[action.type];
+  let content = "";
+  let title = "";
+  if(action.type != 'blank_action'){
+    content = div('action-content', img(`./${action.type}.svg`), div('', action.text));
+    title = type_to_title[action.type];
+  }
+  else {
+    content = div('action-content', div('', action.text));
+    title = "Action";
+  }
+
+
   //action.is_selected = true;
   return with_click(
     div(classes,
@@ -155,7 +165,7 @@ const user_email_input =  {
 const stage_type_panel = (on) => {
   return div('flex-col stage-type-panel', ...Object.keys(type_to_title).map(type => {
     if (on && curr_stage().type === type) {
-      return div('flex-col white-text',h('img', { className: 'invert', src: `./${type}.svg` }), snake_to_words(`${type}`));
+      return div('flex-col white',h('img', { className: 'invert', src: `./${type}.svg` }), snake_to_words(`${type}`));
     } else {
       return div('flex-col',img(`./${type}.svg`), snake_to_words(`${type}`))
     }
@@ -213,6 +223,8 @@ const checkSelection = (answer_text, type) => {
   }
 };
 
+
+
 const app = () => {
   if (game) {
     let continue_button = with_click(div('continue-button', 'Continue'), dispatch(increment_stage));
@@ -260,7 +272,7 @@ const app = () => {
           continue_button));
     }
     if (curr_stage().type == "pop_up"){
-      game_intro_div = div("game-intro", ...curr_stage().messages.map((message, i) => div('message-container', (message.file != "") ? img(`./${message.file}` , "width", "50px"): "", message.text)));
+      game_intro_div = div("game-intro", div('title-container', curr_stage().title), ...curr_stage().messages.map((message, i) => div('message-container' + ' ' + message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));
       return div('app',
         game_intro_div,
         div('app-content flex-col',
@@ -293,7 +305,8 @@ const app = () => {
             div('message-bar-container panel-container',
               div('panel-content',
                 div('panel-header', 'Messages'),
-                ...curr_stage().messages.map((message, i) => div('message-container', (message.file != "") ? img(`./${message.file}` , "width", "50px"): "", message.text)))),
+                div('title-container', curr_stage().title),
+                ...curr_stage().messages.map((message, i) => div('message-container' + ' ' + message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)))),
             div('action-panel-container panel-container',
               div('panel-content',
                 div('panel-header', 'Actions'),
