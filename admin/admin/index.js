@@ -61,6 +61,17 @@ const stage_type_selector = options([
   'actions_on_objectives'
 ]);
 
+const action_type_selector = options([
+  'blank_action',
+  'reconnaissance',
+  'weaponization',
+  'delivery',
+  'exploitation',
+  'installation',
+  'command_and_control',
+  'actions_on_objectives'
+]);
+
 const remove_button = lens => {
   const remove_item = () => store_action(store => {
     console.log('removing');
@@ -203,7 +214,7 @@ const text_input = (type, hint, rows) => lens => {
 
 const action_item = column([
   remove_button,
-  prop('type', stage_type_selector),
+  prop('type', action_type_selector),
   prop('text', input())
 ]);
 
@@ -277,7 +288,6 @@ const game = column([
 
 const default_game = {
   name: 'unnamed',
-  user: 0,
   stages: [],
   survey: []
 };

@@ -1,1 +1,357 @@
-{"name":"Scenario 4","user":0,"stages":[{"type":"pop_up","title":"Greetings Commander!","messages":[{"text":"Welcome to your first day as the Commander for the Kingdom of Dardania's Cyber Command.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"Intelligence Briefing","messages":[{"text":"We have been building toward a major cyber campaign, which you will now command. We have prepared a short briefing for you to prepare you for your decision to commence operations and oversee the cyber campaign. This briefing is focused on our main rival, the Kingdom of Illyria. ","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"Intelligence Briefing","messages":[{"text":"Commander, this briefing also will explain the operational options at your disposal for countering cyber operations undertaken by Illyrian forces as well as our plans to persist against Illyria with an effort to gain the initiative (advantage) on them in cyberspace.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"Intelligence Briefing","messages":[{"text":" Cyberspace threats against our Kingdom are growing. We have been forced to protect against cyber attacks that seek personal information about our decision-makers, government officials, and our military personnel. We have confirmed Illyrian cyber attacks against other countries that have included operations against government research and development programs. Our intelligence and national security agencies are concerned about Illyrian activities on our networks that, beyond intelligence-gathering, could position them in a crisis or war to undermine our ability to make decisions as a government and fight a war. Finally, we suspect that Illyria was behind the cyber operations that led to the theft of confidential documents and their subsequent posting on the internet in an apparent effort to undermine our King's reputation and our peoples' confidence in core political and social institutions. These activities bear the hallmarks of Illyria and while we have internally attributed many of these attacks to them, we have not made an explicit external announcement to date.","file":"","color":""},{"text":"One of your mission sets is to reduce the impact of these attacks and begin to seize the initiative back from Illyrian cyber forces, who have been active against us and put them off-balance and more on-guard. We expect you to conduct cyber operations and design campaigns that will protect our systems and the Kingdom.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"Intelligence Briefing","messages":[{"text":"While we have been a target of state and non-state actors alike, our main focus is on the Kingdom of Illyria. Illirya has employed against us multiple spearphishing attacks, which are often part of their broader campaigns. Additionally, our assets have been targets of denial of service (DoS) and distributed denial of service (DDoS) attacks. We cannot confirm attribution to Illyria, but prepositioned malware in our critical infrastructure has been found. Overall, we are responding to a broad range of Illyrian hostile activities in cyberspace, including, but not limited to those listed above.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"Intelligence Briefing","messages":[{"text":"While we reserve the right to respond to Illyrian attacks by all means available, both cyber and conventional military, we aim to be proportional in our response. We have a diverse cyber tool-kit at our disposal, including capabilities such as zero day exploits. We have been successful in prepositioning malware in Illyrian infrastructure that provides reconnaisance, and the potential for disruption, degradation, or destruction of their critical infrastructure. However, overall our capabilities and number of expert personnel across mission sets remain limited, so we must prioritize the use of our forces to specific missions and operations at any given time.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"Intelligence Briefing","messages":[{"text":"Although the two kingdoms are currently at peace, the Kingdom of Illyria, as you know, has been a long-term rival.  While the Kingdom of Illyria is richer and its economy stands at 13 trillion ducats, as opposed to 1 trillion ducats in Kingdom of Dardania, we have protected ourselves by being proactive in our security. The King regards cyberspace as a strategic envrionment through which we can advance Dardania's national interests.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"Intelligence Briefing","messages":[{"text":"In terms of the cyber capabilities under your Command, we have the capacity to detect, deny, disrupt, degrade and deceive through cyber means all of the seven elements of typical cyber attacks, which include Reconnaisance (mapping networks); Weaponization (malware tailored to vulnerabilities); Delivery; Exploitation (leveraging a vulnerability to execute code) ; Installation (placing malware); Command and Control (remote manipulation); Actions on Objectives (through CC achieve mission).","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"Intelligence Briefing","messages":[{"text":"Our 2nd Cyber Brigade has engaged in a successful intelligence-gathering operation which has indicated that Illyria is developing significant cyber capabilities that may overmatch our own cyber forces, particularly our ability to protect our networks as well as engage in counter-cyber operations effectively. ","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"blank_action","title":"Operation Cyber Fortress","messages":[{"text":"The King has authorized you to commence a cyber campaign against Illyria with the objective of gaining significant intelligence about their cyber capabilities and use that intelligence to initiate cyber manipulation of their cyber capabilities to make them ineffective when Illyria actually seeks to deploy them against us. Your goal is to undermine covertly their malware research and development capacity.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"blank_action","title":"Operation Cyber Fortress","messages":[{"text":"During this mission, it is essential that your soldiers remain undetected and that our overall campaign remain covert. Simultaneous to this campaign, Dardanian Cyber Command must guarantee that our nation's critical networks remain safe and fully functioning.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"blank_action","title":"Operation Cyber Fortress","messages":[{"text":"The first step in our campaign is to gain access to key servers in Illyria. Preparations for this Operation has identified the Illyrian Ministry of Defense as a key node in their overall national network. From this point forward you are in charge of Operation Cyber Fortress. The King looks forward to your reports of success. You are now in full operational control.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"blank_action","title":"From Cyber Command Mission Force (CCMF) Leader","messages":[{"text":"Commander, we have prepared a comprehensive spear-phishing attack for which we have high confidence of success. Please use your attack menu to authorize this operation. ","file":"","color":""}],"actions":[{"text":"Launch Spear-Phishing Attack","type":"blank_action"}],"is_expanded":true},{"type":"blank_action","title":"From Cyber Command Mission Force (CCMF) Leader","messages":[{"text":"Commander, Dardania's In! Congratulations. The target opened the spearphishing email and clicked on the attachment. Dardania has just gained access into Illyria's networks. It appears that our target has opened the Excel file we sent and the trojan has been activated, and the backdoor installed. I am pleased to say that we now have access to the network of the Ministry of Defense of the Kingdom of Illyria and will begin our mapping activities in search of their malware development.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"From Cyber Command Mission Force (CCMF) Leader","messages":[{"text":"ALERT!","file":"","color":"red"},{"text":"Commander, members of the 1st Cyber Brigade, who are conducting our spear-phishing inflitration, have received the following message on their screens.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"pop_up","title":"Message:","messages":[{"text":"Hello Soldier, We are watching YOU","file":"","color":""},{"text":"","file":"illyria.gif","color":""},{"text":"Respectfully,\nKingdom of Illyria","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"blank_action","title":"From Cyber Command Mission Force (CCMF) Leader","messages":[{"text":"How do you wish to proceed? Under this contigency, we have planned two options for you to decide between. Please activate the option through your action box.","file":"","color":""}],"actions":[{"text":"Order CCMF to execute the rest of their mission under Operation Cyber Fortress.","type":"actions_on_objectives"},{"text":"Order CCMF to suspend Operation Cyber Fortress and divert resources to help defend/repair Cyber Command's systems.","type":"blank_action"}],"is_expanded":true},{"type":"pop_up","title":"Upon execution of the descision, a second alert pops up","messages":[{"text":"ALERT","file":"","color":"red"},{"text":"Commander, this is Officer Greyriver from Dardanian Cyber Command Mission Force. The Cyber Command of our Kingdom of Dardania has suffered a significant cyber attack. This significant attack has initially resulted in the destruction of all cyber capabilities stored on infected servers. Our initial damage assessment is that two of our five Cyber Brigades have suffered the loss of their capabilities from this attack. This attack was highly sophisticated. Servers have been completely wiped, including both primary and backup systems. We cannot at this time confirm that the malware that excuted on these servers is not present elsewhere in our network. The tactics, techniques and procedures (TTPs) as well as code is something we have not seen before. While we must assume it is likely Illyria, we cannot confirm that with certainity at this time. We can also not confirm that further loss of capability is not possible based on how we are currently deployed.","file":"","color":""}],"actions":[],"is_expanded":true},{"type":"blank_action","title":"From Cyber Command Mission Force (CCMF) Leader","messages":[{"text":"Commander, in light of both the 1st Cyber Brigade alert and destruction of some of our servers (wiping) used for Operation Cyber Fortress, we have prepared our cyber forces to execute on your command across the following options.  Please activate the option through your action box. \"Faith-Strength-Valor\"!","file":"","color":""}],"actions":[{"text":"Continue with the mission set of Operation Cyber Fortress.","type":"actions_on_objectives"},{"text":"Suspend Operation Cyber Fortress and redeploy our cyber force to locating the intrustions against our Cyber Brigades, containing damage, and preventing further infiltration of our systems.","type":"blank_action"},{"text":"Execute a DDoS attack against the Ministry of Defense of the Kingdom of Illyria that will seek to slow, disrupt, or degrade their ability to operate against us.","type":"blank_action"},{"text":"Activate our prepositioned wiper malware on the Illyrian Cyber Command network and destroy Illyrian malware databases.","type":"blank_action"},{"text":"Recommend to the King that this cyber attack on our Dardanian systems is an act of war and we should respond with a declaration of war and relatiatory strikes, both cyber and conventional, against the Kingdom of Illyria.","type":"blank_action"}],"is_expanded":true}],"survey":[{"type":"message","question":"Thank you for playing!","answers":[],"is_expanded":true}]}
+{
+  "name": "Scenario 4",
+  "stages": [
+    {
+      "type": "pop_up",
+      "title": "Greetings Commander!",
+      "messages": [
+        {
+          "text": "Welcome to your first day as the Commander for the Kingdom of Dardania's Cyber Command.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Intelligence Briefing",
+      "messages": [
+        {
+          "text": "We have been building toward a major cyber campaign, which you will now command. We have prepared a short briefing for you to prepare you for your decision to commence operations and oversee the cyber campaign. This briefing is focused on our main rival, the Kingdom of Illyria. ",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Intelligence Briefing",
+      "messages": [
+        {
+          "text": "Commander, this briefing also will explain the operational options at your disposal for countering cyber operations undertaken by Illyrian forces as well as our plans to persist against Illyria with an effort to gain the initiative (advantage) on them in cyberspace.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Intelligence Briefing",
+      "messages": [
+        {
+          "text": " Cyberspace threats against our Kingdom are growing. We have been forced to protect against cyber attacks that seek personal information about our decision-makers, government officials, and our military personnel. We have confirmed Illyrian cyber attacks against other countries that have included operations against government research and development programs. Our intelligence and national security agencies are concerned about Illyrian activities on our networks that, beyond intelligence-gathering, could position them in a crisis or war to undermine our ability to make decisions as a government and fight a war. Finally, we suspect that Illyria was behind the cyber operations that led to the theft of confidential documents and their subsequent posting on the internet in an apparent effort to undermine our King's reputation and our peoples' confidence in core political and social institutions. These activities bear the hallmarks of Illyria and while we have internally attributed many of these attacks to them, we have not made an explicit external announcement to date.",
+          "file": "",
+          "color": ""
+        },
+        {
+          "text": "One of your mission sets is to reduce the impact of these attacks and begin to seize the initiative back from Illyrian cyber forces, who have been active against us and put them off-balance and more on-guard. We expect you to conduct cyber operations and design campaigns that will protect our systems and the Kingdom.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Intelligence Briefing",
+      "messages": [
+        {
+          "text": "While we have been a target of state and non-state actors alike, our main focus is on the Kingdom of Illyria. Illirya has employed against us multiple spearphishing attacks, which are often part of their broader campaigns. Additionally, our assets have been targets of denial of service (DoS) and distributed denial of service (DDoS) attacks. We cannot confirm attribution to Illyria, but prepositioned malware in our critical infrastructure has been found. Overall, we are responding to a broad range of Illyrian hostile activities in cyberspace, including, but not limited to those listed above.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Intelligence Briefing",
+      "messages": [
+        {
+          "text": "While we reserve the right to respond to Illyrian attacks by all means available, both cyber and conventional military, we aim to be proportional in our response. We have a diverse cyber tool-kit at our disposal, including capabilities such as zero day exploits. We have been successful in prepositioning malware in Illyrian infrastructure that provides reconnaisance, and the potential for disruption, degradation, or destruction of their critical infrastructure. However, overall our capabilities and number of expert personnel across mission sets remain limited, so we must prioritize the use of our forces to specific missions and operations at any given time.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Intelligence Briefing",
+      "messages": [
+        {
+          "text": "Although the two kingdoms are currently at peace, the Kingdom of Illyria, as you know, has been a long-term rival.  While the Kingdom of Illyria is richer and its economy stands at 13 trillion ducats, as opposed to 1 trillion ducats in Kingdom of Dardania, we have protected ourselves by being proactive in our security. The King regards cyberspace as a strategic envrionment through which we can advance Dardania's national interests.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Intelligence Briefing",
+      "messages": [
+        {
+          "text": "In terms of the cyber capabilities under your Command, we have the capacity to detect, deny, disrupt, degrade and deceive through cyber means all of the seven elements of typical cyber attacks, which include Reconnaisance (mapping networks); Weaponization (malware tailored to vulnerabilities); Delivery; Exploitation (leveraging a vulnerability to execute code) ; Installation (placing malware); Command and Control (remote manipulation); Actions on Objectives (through CC achieve mission).",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Intelligence Briefing",
+      "messages": [
+        {
+          "text": "Our 2nd Cyber Brigade has engaged in a successful intelligence-gathering operation which has indicated that Illyria is developing significant cyber capabilities that may overmatch our own cyber forces, particularly our ability to protect our networks as well as engage in counter-cyber operations effectively. ",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "blank_action",
+      "title": "Operation Cyber Fortress",
+      "messages": [
+        {
+          "text": "The King has authorized you to commence a cyber campaign against Illyria with the objective of gaining significant intelligence about their cyber capabilities and use that intelligence to initiate cyber manipulation of their cyber capabilities to make them ineffective when Illyria actually seeks to deploy them against us. Your goal is to undermine covertly their malware research and development capacity.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "blank_action",
+      "title": "Operation Cyber Fortress",
+      "messages": [
+        {
+          "text": "During this mission, it is essential that your soldiers remain undetected and that our overall campaign remain covert. Simultaneous to this campaign, Dardanian Cyber Command must guarantee that our nation's critical networks remain safe and fully functioning.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "blank_action",
+      "title": "Operation Cyber Fortress",
+      "messages": [
+        {
+          "text": "The first step in our campaign is to gain access to key servers in Illyria. Preparations for this Operation has identified the Illyrian Ministry of Defense as a key node in their overall national network. From this point forward you are in charge of Operation Cyber Fortress. The King looks forward to your reports of success. You are now in full operational control.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "blank_action",
+      "title": "From Cyber Command Mission Force (CCMF) Leader",
+      "messages": [
+        {
+          "text": "Commander, we have prepared a comprehensive spear-phishing attack for which we have high confidence of success. Please use your attack menu to authorize this operation. ",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [
+        {
+          "text": "Launch Spear-Phishing Attack",
+          "type": "blank_action"
+        }
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "blank_action",
+      "title": "From Cyber Command Mission Force (CCMF) Leader",
+      "messages": [
+        {
+          "text": "Commander, Dardania's In! Congratulations. The target opened the spearphishing email and clicked on the attachment. Dardania has just gained access into Illyria's networks. It appears that our target has opened the Excel file we sent and the trojan has been activated, and the backdoor installed. I am pleased to say that we now have access to the network of the Ministry of Defense of the Kingdom of Illyria and will begin our mapping activities in search of their malware development.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "From Cyber Command Mission Force (CCMF) Leader",
+      "messages": [
+        {
+          "text": "ALERT!",
+          "file": "",
+          "color": "red"
+        },
+        {
+          "text": "Commander, members of the 1st Cyber Brigade, who are conducting our spear-phishing inflitration, have received the following message on their screens.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Message:",
+      "messages": [
+        {
+          "text": "Hello Soldier, We are watching YOU",
+          "file": "",
+          "color": ""
+        },
+        {
+          "text": "",
+          "file": "illyria.gif",
+          "color": ""
+        },
+        {
+          "text": "Respectfully,\nKingdom of Illyria",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "blank_action",
+      "title": "From Cyber Command Mission Force (CCMF) Leader",
+      "messages": [
+        {
+          "text": "How do you wish to proceed? Under this contigency, we have planned two options for you to decide between. Please activate the option through your action box.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [
+        {
+          "text": "Order CCMF to execute the rest of their mission under Operation Cyber Fortress.",
+          "type": "actions_on_objectives"
+        },
+        {
+          "text": "Order CCMF to suspend Operation Cyber Fortress and divert resources to help defend/repair Cyber Command's systems.",
+          "type": "blank_action"
+        }
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "pop_up",
+      "title": "Upon execution of the descision, a second alert pops up",
+      "messages": [
+        {
+          "text": "ALERT",
+          "file": "",
+          "color": "red"
+        },
+        {
+          "text": "Commander, this is Officer Greyriver from Dardanian Cyber Command Mission Force. The Cyber Command of our Kingdom of Dardania has suffered a significant cyber attack. This significant attack has initially resulted in the destruction of all cyber capabilities stored on infected servers. Our initial damage assessment is that two of our five Cyber Brigades have suffered the loss of their capabilities from this attack. This attack was highly sophisticated. Servers have been completely wiped, including both primary and backup systems. We cannot at this time confirm that the malware that excuted on these servers is not present elsewhere in our network. The tactics, techniques and procedures (TTPs) as well as code is something we have not seen before. While we must assume it is likely Illyria, we cannot confirm that with certainity at this time. We can also not confirm that further loss of capability is not possible based on how we are currently deployed.",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [],
+      "is_expanded": true
+    },
+    {
+      "type": "blank_action",
+      "title": "From Cyber Command Mission Force (CCMF) Leader",
+      "messages": [
+        {
+          "text": "Commander, in light of both the 1st Cyber Brigade alert and destruction of some of our servers (wiping) used for Operation Cyber Fortress, we have prepared our cyber forces to execute on your command across the following options.  Please activate the option through your action box. \"Faith-Strength-Valor\"!",
+          "file": "",
+          "color": ""
+        }
+      ],
+      "actions": [
+        {
+          "text": "Continue with the mission set of Operation Cyber Fortress.",
+          "type": "actions_on_objectives"
+        },
+        {
+          "text": "Suspend Operation Cyber Fortress and redeploy our cyber force to locating the intrustions against our Cyber Brigades, containing damage, and preventing further infiltration of our systems.",
+          "type": "blank_action"
+        },
+        {
+          "text": "Execute a DDoS attack against the Ministry of Defense of the Kingdom of Illyria that will seek to slow, disrupt, or degrade their ability to operate against us.",
+          "type": "blank_action"
+        },
+        {
+          "text": "Activate our prepositioned wiper malware on the Illyrian Cyber Command network and destroy Illyrian malware databases.",
+          "type": "blank_action"
+        },
+        {
+          "text": "Recommend to the King that this cyber attack on our Dardanian systems is an act of war and we should respond with a declaration of war and relatiatory strikes, both cyber and conventional, against the Kingdom of Illyria.",
+          "type": "blank_action"
+        }
+      ],
+      "is_expanded": true
+    }
+  ],
+  "survey": [
+    {
+      "type": "message",
+      "question": "Please answer a few questions about yourself",
+      "answers": [],
+      "is_expanded": true
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What is your gender?",
+      "answers": [
+        "Male",
+        "Female"
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What year are you in school?",
+      "answers": [
+        "Freshman",
+        "Sophomore",
+        "Junior",
+        "Senior"
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What is your level of technical aptitude?",
+      "answers": [
+        "Basic proficiency with computers",
+        "I play around with advanced software tools",
+        "I can write my own computer programs",
+        "I make my living developing software"
+      ],
+      "is_expanded": true
+    },
+    {
+      "type": "message",
+      "question": "Thank you for your participation",
+      "answers": [],
+      "is_expanded": true
+    }
+  ]
+}

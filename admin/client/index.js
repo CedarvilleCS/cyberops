@@ -235,7 +235,7 @@ const app = () => {
       game_over = true;
     }
     if (game_over) {
-      if(survey_done){
+      if(survey_done || game.survey.length == 1){
         continue_button = div('continue-button-disabled', 'Continue');
         post_request('/api/', {
           user: time_stamp,

@@ -149,7 +149,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
     write_log("no results found");
     return;
   }
-  let game_rows = [['user', 'game_name', 'did_escalate']];
+  let stage_rows = [['User', 'Date','Type', 'Scenario Name', 'Index', 'Text', 'Choice']];
   let isSetup = false;
   let game_rows_str = "";
   for (let file of results_filenames) {
@@ -157,64 +157,37 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
       continue;
     }
     let obj = JSON.parse(fs.readFileSync(`../results/${file}`));
-    let game_escalated = false;
     obj.game.stages.forEach((stage, i) => {
-      let did_escalate = false;
-      for (let action of stage.actions) {
-        if (action.is_escalatory && action.is_selected) {
-          //did_escalate = true;
-          game_escalated = true;
-        }
-      }
-      /*stage_rows.push([
-        obj.email,
+      stage_rows.push([
+        obj.user,
+        Date(obj.user),
+        "stage",
         obj.name,
         i,
-        stage.type,
-        did_escalate
-      ]);*/
+        stage.messages.map(e => e.text).join("~").replace(/,/g,";").replace(/\n/g, ""),
+        (stage.actions.length != 0) ? stage.actions[stage.actions.map(e => e.is_selected).indexOf(true)].text.replace(/,/g,";").replace(/\n/g, "") : ""
+      ]);
     });
-    if(!isSetup){
-      for (let question of obj.game.survey){
-        game_rows[0].push(question.question);
-      }
-      isSetup = true;
-    }
-    let game_stats = [obj.user, obj.name, game_escalated];
-    for (let question of obj.game.survey){
-      if(question.type == "message"){
-        game_stats.push("N/A");
-      }
-      if(question.type == "short_answer"){
-        game_stats.push(question.answers[0]);
-      }
-      else if (question.type == "multiple_choice") {
-        for (let selection of question.selection){
-            game_stats.push(question.answers[selection]);
-            break;
-        }
-      }
-      else if (question.type == "select_all") {
-        let answer = ""
-        for (let selection of question.selection){
-          answer += question.answers[selection] + '; ';
-        }
-        answer = answer.substr(0, answer.length - 2);
-        game_stats.push(answer);
-      }
-    }
-    game_rows.push(game_stats);
-    console.log(game_rows)
-    game_rows_str = game_rows.map(row => {
+    obj.game.survey.forEach((survey, i) => {
+      stage_rows.push([
+        obj.user,
+        Date(obj.user),
+        "survey: " + survey.type,
+        obj.name,
+        i,
+        survey.question,
+        (survey.selection != undefined) ? survey.selection.map(e => survey.answers[e]).join(";") : ""
+      ]);
+    });
+    console.log(stage_rows)
+    stage_rows_str = stage_rows.map(row => {
       console.log(row);
       return row.join()
     }).join('\n');
-    //let stage_rows_str = stage_rows.map(row => row.join()).join('\n');
-    //fs.writeFileSync('../stages.csv', stage_rows_str);
 
   }
   try{
-    fs.writeFileSync('../games.csv', game_rows_str);
+    fs.writeFileSync('../games.csv', stage_rows_str);
     write_log("exported games.csv successfully");
   }
   catch(e){
