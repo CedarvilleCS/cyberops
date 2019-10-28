@@ -307,7 +307,7 @@ ipcRenderer.on('save_as', () => {
 });
 
 ipcRenderer.on('save', () => {
-  console.log('saving!!!!!!!!!!!!!!!!');
+  console.log('saving!!!');
   if (!filename) {
     filename = electron.remote.dialog.showSaveDialog();
   }

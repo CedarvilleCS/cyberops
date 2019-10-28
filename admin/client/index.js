@@ -24,6 +24,7 @@ let survey_done = false;
 let patt = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}");
 let action_selected = false;
 let survey_selected = false;
+let actionNum = 1;
 
 const capitalize_first_letter = s => s.charAt(0).toUpperCase() + s.slice(1);
 const snake_to_words = s => s.split('_').map(capitalize_first_letter).join(' ');
@@ -45,6 +46,7 @@ const toggle_action_selection = (action) => {
   if (action.is_selected) {
     if (action_selected){
       document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
+      document.getElementsByClassName('continue-button-disabled')[0].innerHTML = "Choose an Action";
     }
     action_selected = false;
     delete action.is_selected;
@@ -54,6 +56,7 @@ const toggle_action_selection = (action) => {
     }
     if (!action_selected) {
       document.getElementsByClassName('continue-button-disabled')[0].setAttribute("class", "continue-button");
+      document.getElementsByClassName('continue-button')[0].innerHTML = "Continue"
     }
     action_selected = true;
     action.is_selected = true;
@@ -80,18 +83,17 @@ const action_box = (action) => {
     classes += ' action-box-disabled';
   }
   let content = "";
-  let title = "";
+  let title = "Option " + actionNum++;
   if(action.type != 'blank_action'){
-    content = div('action-content', img(`./${action.type}.svg`), div('', action.text));
-    title = type_to_title[action.type];
+    content = div('action-content', div( "", action.text), img(`./${action.type}.svg`), div('black action-type', type_to_title[action.type]));
+    //title = type_to_title[action.type];
   }
   else {
-    content = div('action-content', div('', action.text));
-    title = "Action";
+    content = div('action-content', action.text);
+    //title = "Action";
   }
 
 
-  //action.is_selected = true;
   return with_click(
     div(classes,
       div('action-title', title),
@@ -112,6 +114,7 @@ const increment_stage = () => {
     game_over = true;
   } else if (curr_stage().actions.length != 0){
     document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
+    document.getElementsByClassName('continue-button-disabled')[0].innerHTML = "Choose an Action";
   }
 
 };
@@ -128,8 +131,9 @@ const increment_survey = () => {
     console.log('done with survey');
     survey_done = true;
     document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
-  } else if (curr_survey().type != 'short_answer' || curr_survey().type != 'message'){
+  } else if (curr_survey().type != "short_answer" && curr_survey().type != 'message'){
     document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
+    document.getElementsByClassName('continue-button-disabled')[0].innerHTML = "Answer the Question";
   }
   if(document.getElementsByClassName('content-container').length != 0){
     for (var i = 0; i < document.getElementsByClassName('content-container')[0].children.length; i++) {
@@ -161,6 +165,19 @@ const user_email_input =  {
     }
   }
 };
+let answer = "";
+const user_input =  {
+  type: 'textarea',
+  props: {
+    type: 'text',
+    style: 'font-size: 20px',
+    value: answer,
+    rows: 9,
+    placeholder: 'answer',
+    autofocus: true
+  },
+  children: []
+};
 
 const stage_type_panel = (on) => {
   return div('flex-col stage-type-panel', ...Object.keys(type_to_title).map(type => {
@@ -188,6 +205,7 @@ const checkSelection = (answer_text, type) => {
       answer.className = 'answer-container-checked';
       if(document.getElementsByClassName('continue-button-disabled').length !=0){
         document.getElementsByClassName('continue-button-disabled')[0].setAttribute("class", "continue-button");
+        document.getElementsByClassName('continue-button')[0].innerHTML = "Continue";
       }
       if(document.getElementsByClassName('content-container').length != 0){
         for (var i = 0; i < document.getElementsByClassName('content-container')[0].children.length; i++) {
@@ -204,12 +222,14 @@ const checkSelection = (answer_text, type) => {
       answer.className = 'answer-container';
       if(document.getElementsByClassName('answer-container-checked').length == 0){
         document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
+        document.getElementsByClassName('continue-button-disabled')[0].innerHTML = "Answer the Question";
       }
 
     } else {
       answer.className = 'answer-container-checked';
       if(document.getElementsByClassName('continue-button').length == 0){
         document.getElementsByClassName('continue-button-disabled')[0].setAttribute("class", "continue-button");
+        document.getElementsByClassName('continue-button')[0].innerHTML = "Continue";
       }
     }
   }
@@ -236,7 +256,7 @@ const app = () => {
     }
     if (game_over) {
       if(survey_done || game.survey.length == 1){
-        continue_button = div('continue-button-disabled', 'Continue');
+        continue_button = div('continue-button-disabled', 'Game Complete');
         post_request('/api/', {
           user: time_stamp,
           name: game_name,
@@ -244,32 +264,22 @@ const app = () => {
         });
       }
       else{
-        continue_button = with_click(div('continue-button-disabled', 'Continue'), dispatch(increment_survey));
+        continue_button = with_click(div('continue-button-disabled', 'Answer the Question'), dispatch(increment_survey));
         if(curr_survey().answers.length == 0){
           continue_button = with_click(div('continue-button', 'Continue'), dispatch(increment_survey));
         }
       }
+      if(curr_survey().type == 'short_answer'){
+        game_survey_div = div('game-survey',
+                            div('question-container', curr_survey().question), div('short-answer', user_input));
+
+      } else{
       game_survey_div = div('game-survey',
                           div('question-container', curr_survey().question),
-                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))));
-
+                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))));}
       return div('app',
         game_survey_div,
-        div('app-content flex-col',
-          div('main-content flex-row',
-          div('dashboard-container',
-            div('panel-content',
-              div('logo-content',
-              img(`./dardania.svg`, "width", "50")),
-              div('panel-header', 'Stages'),
-              stage_type_panel(false))),
-            div('message-bar-container panel-container',
-              div('panel-content',
-                div('panel-header', 'Messages'))),
-            div('action-panel-container panel-container',
-              div('panel-content',
-                div('panel-header', 'Actions')))),
-          continue_button));
+        continue_button);
     }
     if (curr_stage().type == "pop_up"){
       game_intro_div = div("game-intro", div('title-container', curr_stage().title), ...curr_stage().messages.map((message, i) => div('message-container' + ' ' + message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));
@@ -288,10 +298,11 @@ const app = () => {
                 div('panel-header', 'Messages'))),
             div('action-panel-container panel-container',
               div('panel-content',
-                div('panel-header', 'Actions')))),
+                div('panel-header', 'Action Menu')))),
           continue_button));
     }
     else {
+      actionNum = 1;
       return div('app',
         game_result_div,
         div('app-content flex-col',
@@ -309,7 +320,7 @@ const app = () => {
                 ...curr_stage().messages.map((message, i) => div('message-container' + ' ' + message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)))),
             div('action-panel-container panel-container',
               div('panel-content',
-                div('panel-header', 'Actions'),
+                div('panel-header', 'Action Menu'),
                 ...curr_stage().actions.map(action =>
                   action_box(action))))),
           continue_button));

@@ -164,8 +164,8 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
         "stage",
         obj.name,
         i,
-        stage.messages.map(e => e.text).join("~").replace(/,/g,";").replace(/\n/g, ""),
-        (stage.actions.length != 0) ? stage.actions[stage.actions.map(e => e.is_selected).indexOf(true)].text.replace(/,/g,";").replace(/\n/g, "") : ""
+        "\"" + stage.messages.map(e => e.text).join(";")+ "\"",
+        "\"" + ((stage.actions.length != 0) ? stage.actions[stage.actions.map(e => e.is_selected).indexOf(true)].text.replace(/\"/g, /\'/) : "") + "\""
       ]);
     });
     obj.game.survey.forEach((survey, i) => {
@@ -175,8 +175,8 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
         "survey: " + survey.type,
         obj.name,
         i,
-        survey.question,
-        (survey.selection != undefined) ? survey.selection.map(e => survey.answers[e]).join(";") : ""
+        "\""+ survey.question + "\"",
+        "\"" + ((survey.selection != undefined) ? survey.selection.map(e => survey.answers[e]).join(";") : "").replace(/\"/g, /\'/) + "\""
       ]);
     });
     console.log(stage_rows)
@@ -244,12 +244,6 @@ document.getElementById('toggle-server-button').addEventListener('click', () => 
       obj.innerHTML = obj.innerHTML.replace(/:.+/g, '');
     }
 
-    /*if (networkInterfaces["Wi-Fi"] == null) {
-      write_log("not connected to Wi-Fi; server listening on localhost:3003")
-    }
-    else {
-      write_log("server listening on " + networkInterfaces["Wi-Fi"][1]["address"] + ":" + port);
-    }*/
     write_log("server listening on:\n" + getIPAddress());
     button.innerHTML = 'Stop Server';
     document.getElementById('refresh-files-button').classList.add('button-disabled');

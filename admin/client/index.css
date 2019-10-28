@@ -8,7 +8,7 @@ html, body {
 	right: 0;
 	bottom: 0;
   text-align: center;
-  background-color: #ffffff;
+  background-color: dimgray;
 }
 
 .app-content {
@@ -170,14 +170,18 @@ html, body {
 }
 
 .continue-button {
-	height: 50px;
+	position: fixed;
+	bottom: 0px;
+	height: 60px;
 	background-color: #bbbbbb;
-	width: 100%;
 	text-align: center;
 	margin: auto;
 	line-height: 50px;
+	width: 100%;
   cursor: pointer;
-	font-size: 25px
+	font-size: 25px;
+	border: 5px solid forestgreen;
+	box-sizing: border-box;
 }
 
 .continue-button:hover {
@@ -185,14 +189,18 @@ html, body {
 }
 
 .continue-button-disabled {
-	height: 50px;
+	position: fixed;
+	bottom: 0px;
+	height: 60px;
 	background-color: #cccccc;
-	width: 100%;
 	text-align: center;
 	margin: auto;
+	width: 100%;
 	line-height: 50px;
   cursor: not-allowed;
 	font-size: 25px;
+	border: 5px solid firebrick;
+	box-sizing: border-box;
 }
 
 .panel-content {
@@ -204,6 +212,7 @@ html, body {
 	text-align: center;
 	font-size: 25pt;
 	margin: 5px;
+	text-decoration: underline;
 }
 
 .message-container {
@@ -263,6 +272,15 @@ html, body {
   width: 50px;
 }
 
+.action-type{
+	font-size: 16px;
+}
+
+textarea {
+	width: 95%;
+	resize: none;
+}
+
 .invert {
   filter: invert(100%);
 }
@@ -284,7 +302,7 @@ html, body {
   bottom: 0;
   left: 0;
   right: 0;
-  width: 80%;
+  width: 70%;
   height: 300px;
   background-color: #cccccc;
   text-align: center;
@@ -338,7 +356,7 @@ html, body {
   bottom: 0;
   left: 0;
   right: 0;
-  width: 80%;
+  width: 70%;
   height: 60%;
   background-color: #cccccc;
   text-align: center;
