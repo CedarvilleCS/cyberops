@@ -176,7 +176,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
         obj.name,
         i,
         "\""+ survey.question + "\"",
-        "\"" + ((survey.selection != undefined) ? survey.selection.map(e => survey.answers[e]).join(";") : "").replace(/\"/g, /\'/) + "\""
+        "\"" + (((survey.type == "short_answer") ? survey.selection : (survey.selection != undefined) ? survey.selection.map(e => survey.answers[e]).join(";") : "")).replace(/\"/g, /\'/) + "\""
       ]);
     });
     console.log(stage_rows)

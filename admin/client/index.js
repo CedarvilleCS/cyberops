@@ -124,6 +124,9 @@ const increment_survey = () => {
   if(document.getElementsByClassName('continue-button').length == 0){
     return;
   }
+  if(curr_survey().type == "short_answer"){
+      curr_survey().selection = document.getElementById('mytext').value;
+  }
   if (survey_index < game.survey.length) {
     survey_index++;
   }
@@ -172,7 +175,8 @@ const user_input =  {
     type: 'text',
     style: 'font-size: 20px',
     value: answer,
-    rows: 9,
+    id: "mytext",
+    rows: 7,
     placeholder: 'answer',
     autofocus: true
   },
@@ -271,15 +275,14 @@ const app = () => {
       }
       if(curr_survey().type == 'short_answer'){
         game_survey_div = div('game-survey',
-                            div('question-container', curr_survey().question), div('short-answer', user_input));
+                            div('question-container', curr_survey().question), div('short-answer', user_input), continue_button);
 
       } else{
       game_survey_div = div('game-survey',
                           div('question-container', curr_survey().question),
-                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))));}
+                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))), continue_button);}
       return div('app',
-        game_survey_div,
-        continue_button);
+        game_survey_div);
     }
     if (curr_stage().type == "pop_up"){
       game_intro_div = div("game-intro", div('title-container', curr_stage().title), ...curr_stage().messages.map((message, i) => div('message-container' + ' ' + message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));

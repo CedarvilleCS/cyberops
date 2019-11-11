@@ -170,7 +170,7 @@ html, body {
 }
 
 .continue-button {
-	position: fixed;
+	position: absolute;
 	bottom: 0px;
 	height: 60px;
 	background-color: #bbbbbb;
@@ -178,7 +178,7 @@ html, body {
 	margin: auto;
 	line-height: 50px;
 	width: 100%;
-  cursor: pointer;
+  	cursor: pointer;
 	font-size: 25px;
 	border: 5px solid forestgreen;
 	box-sizing: border-box;
@@ -189,7 +189,7 @@ html, body {
 }
 
 .continue-button-disabled {
-	position: fixed;
+	position: absolute;
 	bottom: 0px;
 	height: 60px;
 	background-color: #cccccc;
@@ -197,7 +197,7 @@ html, body {
 	margin: auto;
 	width: 100%;
 	line-height: 50px;
-  cursor: not-allowed;
+  	cursor: not-allowed;
 	font-size: 25px;
 	border: 5px solid firebrick;
 	box-sizing: border-box;
