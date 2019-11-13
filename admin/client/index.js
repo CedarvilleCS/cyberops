@@ -275,12 +275,12 @@ const app = () => {
       }
       if(curr_survey().type == 'short_answer'){
         game_survey_div = div('game-survey',
-                            div('question-container', curr_survey().question), div('content-container', user_input), continue_button);
+                            div('question-container', curr_survey().question), div('content-container', user_input), div('continue-survey', continue_button));
 
       } else{
       game_survey_div = div('game-survey',
                           div('question-container', curr_survey().question),
-                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))), continue_button);}
+                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))), div('continue-survey', continue_button));}
       return div('app',
         game_survey_div);
     }

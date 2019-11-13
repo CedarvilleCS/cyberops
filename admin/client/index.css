@@ -184,9 +184,11 @@ html, body {
 	box-sizing: border-box;
 }
 
+
 .continue-button:hover {
   background-color: #aaaaaa;
 }
+
 
 .continue-button-disabled {
 	/*position: absolute;*/
@@ -202,6 +204,7 @@ html, body {
 	border: 5px solid firebrick;
 	box-sizing: border-box;
 }
+
 
 .panel-content {
 	width: 100%;
