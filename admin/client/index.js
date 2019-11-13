@@ -176,7 +176,7 @@ const user_input =  {
     style: 'font-size: 20px',
     value: answer,
     id: "mytext",
-    rows: 7,
+    rows: 12,
     placeholder: 'answer',
     autofocus: true
   },
@@ -275,7 +275,7 @@ const app = () => {
       }
       if(curr_survey().type == 'short_answer'){
         game_survey_div = div('game-survey',
-                            div('question-container', curr_survey().question), div('short-answer', user_input), continue_button);
+                            div('question-container', curr_survey().question), div('content-container', user_input), continue_button);
 
       } else{
       game_survey_div = div('game-survey',
