@@ -170,8 +170,7 @@ html, body {
 }
 
 .continue-button {
-	/*position: absolute;*/
-	bottom: 0px;
+	flex: none;
 	height: 60px;
 	background-color: #bbbbbb;
 	text-align: center;
@@ -191,8 +190,7 @@ html, body {
 
 
 .continue-button-disabled {
-	/*position: absolute;*/
-	bottom: 0px;
+	flex: none;
 	height: 60px;
 	background-color: #cccccc;
 	text-align: center;
@@ -281,6 +279,7 @@ html, body {
 
 textarea {
 	width: 95%;
+	height: 95%;
 	resize: none;
 }
 
@@ -316,12 +315,13 @@ textarea {
 	margin: 10px;
 	font-size: 25px;
 	width: auto;
-	height: auto;
 }
 
 .content-container {
+	height: 100%;
+	margin: auto;
+	width: 100%;
 	overflow-y: auto;
-	height: 75%;
 }
 
 .answer-container {

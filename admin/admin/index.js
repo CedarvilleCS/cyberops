@@ -228,6 +228,7 @@ const message_item = column([
 
 const default_action = { text: "", type: default_stage_type_id };
 const default_message = {text: "", file: "", color: ""};
+const default_title = {text: "", color: ""};
 const stage = lens => {
   const x = L.get(lens, store);
   let title = `Type: ${snake_to_words(x.type)}, Messages: ${x.messages.length}, Actions: ${x.actions.length}`;
@@ -235,6 +236,7 @@ const stage = lens => {
     column([
         titled_prop('type', stage_type_selector),
         titled_prop('title', input('text', 'title')),
+        labeled_prop('title_color', input('text', 'color')),
       row([
         titled_prop('messages', list(default_message, message_item)),
         titled_prop('actions', list(default_action, action_item))
@@ -245,6 +247,7 @@ const stage = lens => {
 const default_stage = {
   type: default_stage_type_id,
   title: '',
+  title_color: '',
   messages: [],
   actions: []
 };

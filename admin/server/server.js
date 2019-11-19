@@ -157,10 +157,11 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
       continue;
     }
     let obj = JSON.parse(fs.readFileSync(`../results/${file}`));
+    let date = (new Date(obj.user)).toString();
     obj.game.stages.forEach((stage, i) => {
       stage_rows.push([
         obj.user,
-        Date(obj.user),
+        date,
         "stage",
         obj.name,
         i,
@@ -171,7 +172,7 @@ document.getElementById('export-csv-button').addEventListener('click', () => {
     obj.game.survey.forEach((survey, i) => {
       stage_rows.push([
         obj.user,
-        Date(obj.user),
+        date,
         "survey: " + survey.type,
         obj.name,
         i,

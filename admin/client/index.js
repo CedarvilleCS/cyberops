@@ -176,7 +176,6 @@ const user_input =  {
     style: 'font-size: 20px',
     value: answer,
     id: "mytext",
-    rows: 12,
     placeholder: 'answer',
     autofocus: true
   },
@@ -248,7 +247,6 @@ const checkSelection = (answer_text, type) => {
 };
 
 
-
 const app = () => {
   if (game) {
     let continue_button = with_click(div('continue-button', 'Continue'), dispatch(increment_stage));
@@ -274,18 +272,18 @@ const app = () => {
         }
       }
       if(curr_survey().type == 'short_answer'){
-        game_survey_div = div('game-survey',
-                            div('question-container', curr_survey().question), div('content-container', user_input), div('continue-survey', continue_button));
+        game_survey_div = div('game-survey flex-col',
+                            div('question-container', curr_survey().question), div('content-container', user_input), continue_button);
 
       } else{
-      game_survey_div = div('game-survey',
+      game_survey_div = div('game-survey flex-col',
                           div('question-container', curr_survey().question),
-                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))), div('continue-survey', continue_button));}
+                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))), continue_button);}
       return div('app',
         game_survey_div);
     }
     if (curr_stage().type == "pop_up"){
-      game_intro_div = div("game-intro", div('title-container', curr_stage().title), ...curr_stage().messages.map((message, i) => div('message-container' + ' ' + message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));
+      game_intro_div = div("game-intro", div('title-container ' + curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => div('message-container' + ' ' + message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));
       return div('app',
         game_intro_div,
         div('app-content flex-col',
@@ -319,8 +317,8 @@ const app = () => {
             div('message-bar-container panel-container',
               div('panel-content',
                 div('panel-header', 'Messages'),
-                div('title-container', curr_stage().title),
-                ...curr_stage().messages.map((message, i) => div('message-container' + ' ' + message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)))),
+                div('title-container ' + curr_stage().title_color, curr_stage().title),
+                ...curr_stage().messages.map((message, i) => div('message-container ' + message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)))),
             div('action-panel-container panel-container',
               div('panel-content',
                 div('panel-header', 'Action Menu'),
