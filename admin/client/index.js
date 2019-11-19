@@ -126,6 +126,7 @@ const increment_survey = () => {
   }
   if(curr_survey().type == "short_answer"){
       curr_survey().selection = document.getElementById('mytext').value;
+      document.getElementById('mytext').value = '';
   }
   if (survey_index < game.survey.length) {
     survey_index++;
