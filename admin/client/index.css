@@ -200,6 +200,9 @@ html, body {
 	box-sizing: border-box;
 }
 
+.survey{
+	line-height: 5vh;
+}
 
 .panel-content {
 	width: 100%;
