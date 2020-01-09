@@ -19,7 +19,6 @@ html, body {
 
 .main-content {
 	width: 100%;
-	flex: 1 1 50%;
 }
 
 .panel-container {
@@ -171,11 +170,10 @@ html, body {
 
 .continue-button {
 	flex: none;
-	height: 60px;
+	height: 10%;
 	background-color: #bbbbbb;
 	text-align: center;
-	margin: auto;
-	line-height: 50px;
+	line-height: 8.5vh;
 	width: 100%;
   	cursor: pointer;
 	font-size: 25px;
@@ -191,12 +189,11 @@ html, body {
 
 .continue-button-disabled {
 	flex: none;
-	height: 60px;
+	height: 10%;
 	background-color: #cccccc;
 	text-align: center;
-	margin: auto;
 	width: 100%;
-	line-height: 50px;
+	line-height: 8.5vh;
   	cursor: not-allowed;
 	font-size: 25px;
 	border: 5px solid firebrick;

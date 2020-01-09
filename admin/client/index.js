@@ -75,7 +75,7 @@ const type_to_title = {
   actions_on_objectives: 'Actions On Objectives'
 };
 
-const action_box = (action) => {
+const action_box = (action, isMultiple) => {
   let classes = 'flex-col action-box';
   if (action.is_selected) {
     classes += ' action-box-selected';
@@ -93,12 +93,19 @@ const action_box = (action) => {
     //title = "Action";
   }
 
-
-  return with_click(
-    div(classes,
-      div('action-title', title),
-      content),
-    dispatch(() => toggle_action_selection(action)));
+  if (isMultiple){
+      return with_click(
+        div(classes,
+          div('action-title', title),
+          content),
+        dispatch(() => toggle_action_selection(action)));
+  }
+    else{
+        return with_click(
+          div(classes,
+            content),
+          dispatch(() => toggle_action_selection(action)));
+    }
 };
 
 const increment_stage = () => {
@@ -259,7 +266,7 @@ const app = () => {
     }
     if (game_over) {
       if(survey_done || game.survey.length == 1){
-        continue_button = div('continue-button-disabled', 'Game Complete');
+        continue_button = with_click(div('continue-button', 'Game Complete'), window.close());
         post_request('/api/', {
           user: time_stamp,
           name: game_name,
@@ -323,8 +330,7 @@ const app = () => {
             div('action-panel-container panel-container',
               div('panel-content',
                 div('panel-header', 'Action Menu'),
-                ...curr_stage().actions.map(action =>
-                  action_box(action))))),
+                ...curr_stage().actions.map(action => action_box(action, curr_stage().actions.length != 1))))),
           continue_button));
         }
   } else {
