@@ -28,6 +28,7 @@ app.use(express.static('common'));
 app.use(express.json());
 
 const write_log = message => {
+    console.log(__dirname);
   let log = document.getElementById('server-log');
   let atBottom = log.scrollHeight < log.offsetHeight + log.scrollTop;
   log.value += '> ' + message + '\n';
