@@ -1,113 +1,113 @@
 html {
-  height: 80%;
-  width: 100%;
+    height: 80%;
+    width: 100%;
 }
 body {
-  height: 100%;
-  overflow-y: hidden;
+    height: 100%;
+    overflow-y: hidden;
 }
 
 .header {
-  width: 40%;
-  height: 55%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
+    width: 40%;
+    height: 55%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .server {
-  width: 80%;
-  margin: auto;
-  height: 45%;
+    width: 80%;
+    margin: auto;
+    height: 45%;
 }
 
 h1 {
-  text-align: center;
+    text-align: center;
 }
 
 #games-list div{
-  text-align: center;
-  margin: 5px;
-  padding: 5px;
-  background-color: #cccccc;
+    text-align: center;
+    margin: 5px;
+    padding: 5px;
+    background-color: #cccccc;
 }
 
 #games-list div:hover {
-  background-color: #555555;
-  color: white;
-  cursor: pointer;
+    background-color: #555555;
+    color: white;
+    cursor: pointer;
 }
 
 .button {
-  text-align: center;
-  margin: 5px;
-  padding: 7px;
-  background-color: #555555;
-  color: white;
+    text-align: center;
+    margin: 5px;
+    padding: 7px;
+    background-color: #555555;
+    color: white;
 }
 
 .button:hover {
-  background-color: #cccccc;
-  color: black;
-  cursor: pointer;
+    background-color: #cccccc;
+    color: black;
+    cursor: pointer;
 }
 
 .button-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  min-height: 62px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 62px;
 }
 
 .status-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  background-color: #cccccc;
-  width: 100%;
-  border: 1px solid #000000;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #cccccc;
+    width: 100%;
+    border: 1px solid #000000;
 }
 
 .status {
-  padding: 2%;
-  width: 50%;
-  text-align: center;
+    padding: 2%;
+    width: 50%;
+    text-align: center;
 }
 
 .games {
-  display: grid;
+    display: grid;
 }
 
 .check-box {
-  text-align: center;
-  margin: auto;
-  padding: auto;
+    text-align: center;
+    margin: auto;
+    padding: auto;
 }
 
 .check-box:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .game-name {
-  grid-column-start: 2;
-  grid-column-end: 15;
+    grid-column-start: 2;
+    grid-column-end: 15;
 }
 
 .games-container {
-  height: 70%;
-  overflow-y: auto;
+    height: 70%;
+    overflow-y: auto;
 }
 
 .button-disabled {
-  cursor: not-allowed;
-  background-color: #cccccc;
-  color: black;
+    cursor: not-allowed;
+    background-color: #cccccc;
+    color: black;
 }
 
 .button-disabled:hover {
-  cursor: not-allowed;
-  background-color: #cccccc;
-  color: black;
+    cursor: not-allowed;
+    background-color: #cccccc;
+    color: black;
 }
 
 textarea {

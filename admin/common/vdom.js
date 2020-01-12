@@ -19,123 +19,123 @@
 // ================================================================================
 
 const h = (type, props, ...children) => {
-  return {
-    type: type,
-    children: children,
-    props: props || {},
-    handlers: {},
-    force_update: false
-  };
+    return {
+        type: type,
+        children: children,
+        props: props || {},
+        handlers: {},
+        force_update: false
+    };
 };
 
 const setProp = (node, k, v) => {
-  if (k === 'className') {
-    node.setAttributeNS(null, 'class', v)
-  } else if (k === 'value') {
-    node.value = v;
-  } else {
-    node.setAttributeNS(null, k, v);
-  }
+    if (k === 'className') {
+        node.setAttributeNS(null, 'class', v)
+    } else if (k === 'value') {
+        node.value = v;
+    } else {
+        node.setAttributeNS(null, k, v);
+    }
 };
 
 const removeProp = (node, k) => {
-  if (k === 'className') {
-    node.removeAttribute('class')
-  } else {
-    node.removeAttribute(k);
-  }
+    if (k === 'className') {
+        node.removeAttribute('class')
+    } else {
+        node.removeAttribute(k);
+    }
 };
 
 const createElement = (node, child_of_svg) => {
-  if (typeof node === 'string') {
-    return document.createTextNode(node);
-  } else {
-    if (node.type === 'svg' || child_of_svg) {
-      let xmlns = 'http://www.w3.org/2000/svg';
-      let e = document.createElementNS(xmlns, node.type);
-      for (let key in node.props) {
-        setProp(e, key, node.props[key]);
-      }
-      for (let evt in node.handlers) {
-        e.addEventListener(evt, node.handlers[evt]);
-      }
-      for (let child of node.children.map(c => createElement(c, true))) {
-        e.appendChild(child);
-      }
-      return e;
+    if (typeof node === 'string') {
+        return document.createTextNode(node);
     } else {
-      let e = document.createElement(node.type);
-      for (let key in node.props) {
-        setProp(e, key, node.props[key]);
-      }
-      for (let evt in node.handlers) {
-        e.addEventListener(evt, node.handlers[evt]);
-      }
-      for (let child of node.children.map(c => createElement(c))) {
-        e.appendChild(child);
-      }
-      return e;
+        if (node.type === 'svg' || child_of_svg) {
+            let xmlns = 'http://www.w3.org/2000/svg';
+            let e = document.createElementNS(xmlns, node.type);
+            for (let key in node.props) {
+                setProp(e, key, node.props[key]);
+            }
+            for (let evt in node.handlers) {
+                e.addEventListener(evt, node.handlers[evt]);
+            }
+            for (let child of node.children.map(c => createElement(c, true))) {
+                e.appendChild(child);
+            }
+            return e;
+        } else {
+            let e = document.createElement(node.type);
+            for (let key in node.props) {
+                setProp(e, key, node.props[key]);
+            }
+            for (let evt in node.handlers) {
+                e.addEventListener(evt, node.handlers[evt]);
+            }
+            for (let child of node.children.map(c => createElement(c))) {
+                e.appendChild(child);
+            }
+            return e;
+        }
     }
-  }
 };
 
 const changed = (l, r) => {
-  //if (l.type === 'input' && r.type === 'input') console.log(t_vdom(l), t_vdom(r))
-  return typeof l !== typeof r ||
-    typeof l === 'string' && l !== r ||
-    l.type !== r.type ||
-    l.force_update;
+    //if (l.type === 'input' && r.type === 'input') console.log(t_vdom(l), t_vdom(r))
+    return typeof l !== typeof r ||
+        typeof l === 'string' && l !== r ||
+        l.type !== r.type ||
+        l.force_update;
 };
 
 const updateProps = (target, newProps, oldProps) => {
-  const props = Object.assign({}, newProps, oldProps);
-  for (let key in props) {
-    let newVal = newProps[key];
-    let oldVal = oldProps[key];
-    if (!newProps.hasOwnProperty(key)) {
-      removeProp(target, key);
-    } else if (!oldProps.hasOwnProperty(key) || newVal !== oldVal) {
-      setProp(target, key, newVal);
+    const props = Object.assign({}, newProps, oldProps);
+    for (let key in props) {
+        let newVal = newProps[key];
+        let oldVal = oldProps[key];
+        if (!newProps.hasOwnProperty(key)) {
+            removeProp(target, key);
+        } else if (!oldProps.hasOwnProperty(key) || newVal !== oldVal) {
+            setProp(target, key, newVal);
+        }
     }
-  }
 };
 
 const updateHandlers = (target, newHandlers, oldHandlers) => {
-  for (let key in oldHandlers) {
-    target.removeEventListener(key, oldHandlers[key]);
-  }
-  for (let key in newHandlers) {
-    target.addEventListener(key, newHandlers[key]);
-  }
+    for (let key in oldHandlers) {
+        target.removeEventListener(key, oldHandlers[key]);
+    }
+    for (let key in newHandlers) {
+        target.addEventListener(key, newHandlers[key]);
+    }
 };
 
 const updateElement = (parent, newNode, oldNode, currentChild) => {
-  if (!oldNode) {
-    parent.appendChild(createElement(newNode));
-  } else if (!newNode) {
-    parent.removeChild(currentChild);
-  } else if (changed(newNode, oldNode)) {
-    parent.replaceChild(createElement(newNode), currentChild);
-  } else if (newNode.type) {
-    updateProps(currentChild, newNode.props, oldNode.props);
-    updateHandlers(currentChild, newNode.handlers, oldNode.handlers);
-    const loopIters = Math.max(newNode.children.length, oldNode.children.length);
-    const childNodes = Array.from(currentChild.childNodes);
-    for (let i = 0; i < loopIters; i++) {
-      updateElement(currentChild, newNode.children[i], oldNode.children[i], childNodes[i]);
+    if (!oldNode) {
+        parent.appendChild(createElement(newNode));
+    } else if (!newNode) {
+        parent.removeChild(currentChild);
+    } else if (changed(newNode, oldNode)) {
+        parent.replaceChild(createElement(newNode), currentChild);
+    } else if (newNode.type) {
+        updateProps(currentChild, newNode.props, oldNode.props);
+        updateHandlers(currentChild, newNode.handlers, oldNode.handlers);
+        const loopIters = Math.max(newNode.children.length, oldNode.children.length);
+        const childNodes = Array.from(currentChild.childNodes);
+        for (let i = 0; i < loopIters; i++) {
+            updateElement(currentChild, newNode.children[i], oldNode.children[i], childNodes[i]);
+        }
     }
-  }
 };
 
 // ================================================================================
 // ================================================================================
 
 const trace_vdom = node => {
-  if (typeof node === 'string') {
-    return node;
-  } else {
-    return [node.type, node.children.map(trace_vdom)];
-  }
+    if (typeof node === 'string') {
+        return node;
+    } else {
+        return [node.type, node.children.map(trace_vdom)];
+    }
 };
 
 // Call this function and print its output to see the structure of a certain
@@ -145,14 +145,15 @@ const t_vdom = node => JSON.stringify(trace_vdom(node));
 // Below are convenience functions for quickly creating dom trees.
 const c = (type, classes, ...children) => h(type, { className: classes }, ...children);
 const div = (classes, ...children) => c('div', classes, ...children);
+const divc = (classes, color, ...children) => (color != "") ? h('div', { className: classes, style: "color:" + color }, ...children) : div(classes, ...children);
 const img = src => h('img', { src });
 const svg = (w, height, ...children) => h('svg', {viewBox:`0 0 ${w} ${height}`}, ...children);
 const rect = (x, y, width, height, ...children) => h('rect', {x, y, width, height, style:'fill:rgb(255,255,255);stroke-width:3;stroke:rgb(0,0,0)' }, ...children);
 const g = (...children) => h('g', {}, ...children);
 
 const with_click = (node, f) => {
-  node.handlers.click = f;
-  return node;
+    node.handlers.click = f;
+    return node;
 };
 
 /*const with_keypress = (node, f) => {

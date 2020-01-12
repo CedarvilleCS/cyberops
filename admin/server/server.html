@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="server.css">
-  </head>
-  <body>
-    <div class="header">
-      <div class="button-container">
-        <div class="button" id="toggle-server-button">Start Server</div>
-        <div class="button" id="create-new-game-button">Create Game</div>
-        <div class="button" id="refresh-files-button">Refresh Files</div>
-        <div class="button" id="export-csv-button">Export CSV</div>
-      </div>
-      <div class="button" id="toggle-select-button">Clear Selection</div>
-      <div class="games-container" id='asdf'>
-        <div class="games" id="games-list"></div>
-      </div>
-    </div>
-    <hr />
-    <div class="server">
-      <div class="status-container">
-        <div class="status" id="total-connections">Total Connections: 0</div>
-        <div class="status" id="current-connections">In Progress: 0</div>
-        <div class="status" id="completed-connections">Finished: 0</div>
-      </div>
-      <textarea id="server-log" disabled ></textarea>
-    </div>
-  </body>
-  <script src="server.js"></script>
+    <head>
+        <link rel="stylesheet" href="server.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="button-container">
+                <div class="button" id="toggle-server-button">Start Server</div>
+                <div class="button" id="create-new-game-button">Create Game</div>
+                <div class="button" id="refresh-files-button">Refresh Files</div>
+                <div class="button" id="export-csv-button">Export CSV</div>
+            </div>
+            <div class="button" id="toggle-select-button">Clear Selection</div>
+            <div class="games-container" id='asdf'>
+                <div class="games" id="games-list"></div>
+            </div>
+        </div>
+        <hr />
+        <div class="server">
+            <div class="status-container">
+                <div class="status" id="total-connections">Total Connections: 0</div>
+                <div class="status" id="current-connections">In Progress: 0</div>
+                <div class="status" id="completed-connections">Finished: 0</div>
+            </div>
+            <textarea id="server-log" disabled ></textarea>
+        </div>
+    </body>
+    <script src="server.js"></script>
 </html>

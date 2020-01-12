@@ -1,267 +1,267 @@
 html, body {
-	height: 90%;
+    height: 90%;
 }
 .app {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-  text-align: center;
-  background-color: dimgray;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    background-color: dimgray;
 }
 
 .app-content {
-	position: static;
-	width: 100%;
-	height: 100%;
+    position: static;
+    width: 100%;
+    height: 100%;
 }
 
 .main-content {
-	width: 100%;
+    width: 100%;
 }
 
 .panel-container {
-	background-color: #dddddd;
-	overflow-y: scroll;
+    background-color: #dddddd;
+    overflow-y: scroll;
 }
 
 .message-bar-container {
-	min-width: 270px;
-	flex: 1 1 40%;
+    min-width: 270px;
+    flex: 1 1 40%;
 }
 
 .action-panel-container {
-	min-width: 270px;
-	flex: 1 2 30%;
+    min-width: 270px;
+    flex: 1 2 30%;
 }
 
 .dashboard-container {
-	width: 270px;
-	background-color: #777777;
-	overflow-y: scroll;
+    width: 270px;
+    background-color: #777777;
+    overflow-y: scroll;
 }
 
 .dashboard {
-	height: 100%;
-	overflow-y: scroll;
-	flex: 1 1 30%;
+    height: 100%;
+    overflow-y: scroll;
+    flex: 1 1 30%;
 }
 
 .player-graphs {
-	flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .action-box {
-	background-color: #777777;
-  color: white;
-  margin: 5px;
-	padding: 4px;
-  cursor: pointer;
-	font-size: 20px;
-	border: 4px hidden;
+    background-color: #777777;
+    color: white;
+    margin: 5px;
+    padding: 4px;
+    cursor: pointer;
+    font-size: 20px;
+    border: 4px hidden;
 }
 
 .action-box:active {
-  border: 4px dashed black;
-	padding: 0px;
+    border: 4px dashed black;
+    padding: 0px;
 }
 
 .action-box-disabled:active {
-  border: 4px dashed red;
-	padding: 0px;
+    border: 4px dashed red;
+    padding: 0px;
 }
 
 .action-box-selected {
-  border: 4px solid red;
-	padding: 0px;
+    border: 4px solid red;
+    padding: 0px;
 }
 
 .action-title {
-  padding: 5px;
-  background-color: #888888;
-	font-size: 20px;
+    padding: 5px;
+    background-color: #888888;
+    font-size: 20px;
 }
 
 .service-update-row > :nth-child(1) {
-  flex: 1 1 20%;
-  margin: auto;
+    flex: 1 1 20%;
+    margin: auto;
 }
 
 .service-update-row > :nth-child(2) {
-  flex: 1 1 80%;
+    flex: 1 1 80%;
 }
 
 .flex-80 {
-  flex: 1 1 80%;
+    flex: 1 1 80%;
 }
 
 .action-title:hover {
-  background-color: #999999;
+    background-color: #999999;
 }
 
 .action-footer {
-  padding: 5px;
-  background-color: #888888;
+    padding: 5px;
+    background-color: #888888;
 }
 
 .service {
-  color: white;
-	background-color: #555555;
-	padding: 5px;
-	display: flex;
-	flex-direction: row;
+    color: white;
+    background-color: #555555;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
 }
 
 .service-name {
-  font-style: italic;
-	flex: 1 1 80%;
+    font-style: italic;
+    flex: 1 1 80%;
 }
 
 .service-version {
-  font-weight: bold;
-	flex: 1 1 20%;
+    font-weight: bold;
+    flex: 1 1 20%;
 }
 
 .graph {
-	background-color: #444444;
-	margin: 10px;
-	color: white;
-	flex: 1 1 30%;
-	min-width: 200px;
-	height: auto;
+    background-color: #444444;
+    margin: 10px;
+    color: white;
+    flex: 1 1 30%;
+    min-width: 200px;
+    height: auto;
 }
 
 .node-inspector {
-	background-color: #666666;
-	color: white;
-	margin: 5px;
+    background-color: #666666;
+    color: white;
+    margin: 5px;
 }
 
 .flex-col {
-	display: flex;
-	flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .flex-row {
-	display: flex;
-	flex-direction: row;
-	height: 90%;
+    display: flex;
+    flex-direction: row;
+    height: 90%;
 }
 
 .graph-inspector {
-	background-color: #444444;
-	color: black;
-	width: 100%;
+    background-color: #444444;
+    color: black;
+    width: 100%;
 }
 
 .graph-container {
-	background-color: #353535;
-	padding: 5px;
-	color: white;
+    background-color: #353535;
+    padding: 5px;
+    color: white;
 }
 
 .graph-title {
-	color: white;
-	background-color: #555555;
-	padding: 10px;
-	text-align: left;
+    color: white;
+    background-color: #555555;
+    padding: 10px;
+    text-align: left;
 }
 
 .continue-button {
-	flex: none;
-	height: 10%;
-	background-color: #bbbbbb;
-	text-align: center;
-	line-height: 8.5vh;
-	width: 100%;
-  	cursor: pointer;
-	font-size: 25px;
-	border: 5px solid forestgreen;
-	box-sizing: border-box;
+    flex: none;
+    height: 10%;
+    background-color: #bbbbbb;
+    text-align: center;
+    line-height: 8.5vh;
+    width: 100%;
+        cursor: pointer;
+    font-size: 25px;
+    border: 5px solid forestgreen;
+    box-sizing: border-box;
 }
 
 
 .continue-button:hover {
-  background-color: #aaaaaa;
+    background-color: #aaaaaa;
 }
 
 
 .continue-button-disabled {
-	flex: none;
-	height: 10%;
-	background-color: #cccccc;
-	text-align: center;
-	width: 100%;
-	line-height: 8.5vh;
-  	cursor: not-allowed;
-	font-size: 25px;
-	border: 5px solid firebrick;
-	box-sizing: border-box;
+    flex: none;
+    height: 10%;
+    background-color: #cccccc;
+    text-align: center;
+    width: 100%;
+    line-height: 8.5vh;
+        cursor: not-allowed;
+    font-size: 25px;
+    border: 5px solid firebrick;
+    box-sizing: border-box;
 }
 
 .survey{
-	line-height: 5vh;
+    line-height: 5vh;
 }
 
 .panel-content {
-	width: 100%;
+    width: 100%;
 }
 
 .panel-header {
-	width: auto;
-	text-align: center;
-	font-size: 25pt;
-	margin: 5px;
-	text-decoration: underline;
+    width: auto;
+    text-align: center;
+    font-size: 25pt;
+    margin: 5px;
+    text-decoration: underline;
 }
 
 .message-container {
-	background-color: #aaaaaa;
-	width: auto;
-	padding: 10px;
-	margin: 5px;
-	font-size: 20px;
+    background-color: #aaaaaa;
+    width: auto;
+    padding: 10px;
+    margin: 5px;
+    font-size: 20px;
 }
 
 .message-container img{
-	width: 200px;
+    width: 200px;
 }
 
 .node-label {
-	flex: 1 1 80%;
-	color: white;
-	padding: 5px;
+    flex: 1 1 80%;
+    color: white;
+    padding: 5px;
 }
 
 .node-type {
-	padding: 5px;
-	flex: 1 1 20%;
-	color: white;
+    padding: 5px;
+    flex: 1 1 20%;
+    color: white;
 }
 
 .start-screen {
-  text-align: center;
-  margin: 40px 40px;
+    text-align: center;
+    margin: 40px 40px;
 }
 
 .email-input-continue {
-  padding: 20px 0;
-  margin: 40px 0;
-  width: 100%;
-  background-color: #dddddd;
+    padding: 20px 0;
+    margin: 40px 0;
+    width: 100%;
+    background-color: #dddddd;
 }
 
 .start-header {
-	width: 100%;
-	text-align: center;
-	font-size: 20pt;
-	padding: 20px 0;
+    width: 100%;
+    text-align: center;
+    font-size: 20pt;
+    padding: 20px 0;
 }
 
 .email-input-continue:hover {
-  background-color: #aaaaaa;
-  cursor: pointer;
+    background-color: #aaaaaa;
+    cursor: pointer;
 }
 
 .stage-type-panel {
@@ -269,556 +269,127 @@ html, body {
 
 
 .action-content > img {
-  max-width: 100px;
-  width: 50px;
+    max-width: 100px;
+    width: 50px;
 }
 
 .action-type{
-	font-size: 16px;
+    font-size: 16px;
+    color:
 }
 
 textarea {
-	width: 95%;
-	height: 95%;
-	resize: none;
+    width: 95%;
+    height: 95%;
+    resize: none;
 }
 
 .invert {
-  filter: invert(100%);
+    filter: invert(100%);
 }
 
 .stage-type-panel img {
-  max-width: 100px;
-  width: 50px;
-	margin: 5px auto;
+    max-width: 100px;
+    width: 50px;
+    margin: 5px auto;
 }
 
 .stage-type-panel img:hover {
-  cursor: crosshair;
+    cursor: crosshair;
 }
 
 .game-survey {
-  position: absolute;
-  margin: auto auto;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 70%;
-  height: 60%;
-  background-color: #cccccc;
-  text-align: center;
-  z-index: 1;
+    position: absolute;
+    margin: auto auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 70%;
+    height: 60%;
+    background-color: #cccccc;
+    text-align: center;
+    z-index: 1;
 }
 
 .question-container {
-	margin: 10px;
-	font-size: 25px;
-	width: auto;
+    margin: 10px;
+    font-size: 25px;
+    width: auto;
 }
 
 .content-container {
-	height: 100%;
-	margin: auto;
-	width: 100%;
-	overflow-y: auto;
+    height: 100%;
+    margin: auto;
+    width: 100%;
+    overflow-y: auto;
 }
 
 .answer-container {
-	background-color: #aaaaaa;
-	width: auto;
-	padding: 10px;
-	margin: 5px;
-	font-size: 20px;
+    background-color: #aaaaaa;
+    width: auto;
+    padding: 10px;
+    margin: 5px;
+    font-size: 20px;
 }
 
 .answer-container-checked {
-	background-color: #aaaaaa;
-	width: auto;
-	padding: 5px;
-	margin: 5px;
-	border: 5px solid red;
-	font-size: 20px;
+    background-color: #aaaaaa;
+    width: auto;
+    padding: 5px;
+    margin: 5px;
+    border: 5px solid red;
+    font-size: 20px;
 }
 
 .answer-container:hover {
-  background-color: #555555;
-  color: black;
-  cursor: pointer;
+    background-color: #555555;
+    color: black;
+    cursor: pointer;
 }
 
 .answer-container-checked:hover {
-  background-color: #555555;
-  color: black;
-  cursor: pointer;
+    background-color: #555555;
+    color: black;
+    cursor: pointer;
 }
 
 .game-intro {
-  position: absolute;
-  margin: auto auto;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 70%;
-  height: 60%;
-  background-color: #cccccc;
-  text-align: center;
-  z-index: 1;
-	overflow-y: auto;
+    position: absolute;
+    margin: auto auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 70%;
+    height: 60%;
+    background-color: #cccccc;
+    text-align: center;
+    z-index: 1;
+    overflow-y: auto;
 }
 
 .logo-content img{
-	margin: auto;
-	height: 200px;
+    margin: auto;
+    height: 200px;
 }
 
 .game-result {
-  position: absolute;
-  margin: auto auto;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 80%;
-  height: 300px;
-  background-color: #cccccc;
-  text-align: center;
-  font-size: 30px;
-  line-height: 300px;
-  z-index: 1;
+    position: absolute;
+    margin: auto auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 80%;
+    height: 300px;
+    background-color: #cccccc;
+    text-align: center;
+    font-size: 30px;
+    line-height: 300px;
+    z-index: 1;
 }
 
 .title-container {
-	font-size: 20pt;
-}
-
-.indianred {
-	color: indianred;
-}
-.lightcoral {
-	color: lightcoral;
-}
-.salmon {
-	color: salmon;
-}
-.darksalmon {
-	color: darksalmon;
-}
-.lightsalmon {
-	color: lightsalmon;
-}
-.crimson {
-	color: crimson;
-}
-.red {
-	color: red;
-}
-.firebrick {
-	color: firebrick;
-}
-.darkred {
-	color: darkred;
-}
-.pink {
-	color: pink;
-}
-.lightpink {
-	color: lightpink;
-}
-.hotpink {
-	color: hotpink;
-}
-.deeppink {
-	color: deeppink;
-}
-.mediumvioletred {
-	color: mediumvioletred;
-}
-.palevioletred {
-	color: palevioletred;
-}
-.lightsalmon {
-	color: lightsalmon;
-}
-.coral {
-	color: coral;
-}
-.tomato {
-	color: tomato;
-}
-.orangered {
-	color: orangered;
-}
-.darkorange {
-	color: darkorange;
-}
-.orange {
-	color: orange;
-}
-.gold {
-	color: gold;
-}
-.yellow {
-	color: yellow;
-}
-.lightyellow {
-	color: lightyellow;
-}
-.lemonchiffon {
-	color: lemonchiffon;
-}
-.lightgoldenrodyellow {
-	color: lightgoldenrodyellow;
-}
-.papayawhip {
-	color: papayawhip;
-}
-.moccasin {
-	color: moccasin;
-}
-.peachpuff {
-	color: peachpuff;
-}
-.palegoldenrod {
-	color: palegoldenrod;
-}
-.khaki {
-	color: khaki;
-}
-.darkkhaki {
-	color: darkkhaki;
-}
-.lavender {
-	color: lavender;
-}
-.thistle {
-	color: thistle;
-}
-.plum {
-	color: plum;
-}
-.violet {
-	color: violet;
-}
-.orchid {
-	color: orchid;
-}
-.fuchsia {
-	color: fuchsia;
-}
-.magenta {
-	color: magenta;
-}
-.mediumorchid {
-	color: mediumorchid;
-}
-.mediumpurple {
-	color: mediumpurple;
-}
-.rebeccapurple {
-	color: rebeccapurple;
-}
-.blueviolet {
-	color: blueviolet;
-}
-.darkviolet {
-	color: darkviolet;
-}
-.darkorchid {
-	color: darkorchid;
-}
-.darkmagenta {
-	color: darkmagenta;
-}
-.purple {
-	color: purple;
-}
-.indigo {
-	color: indigo;
-}
-.slateblue {
-	color: slateblue;
-}
-.darkslateblue {
-	color: darkslateblue;
-}
-.mediumslateblue {
-	color: mediumslateblue;
-}
-.greenyellow {
-	color: greenyellow;
-}
-.chartreuse {
-	color: chartreuse;
-}
-.lawngreen {
-	color: lawngreen;
-}
-.lime {
-	color: lime;
-}
-.limegreen {
-	color: limegreen;
-}
-.palegreen {
-	color: palegreen;
-}
-.lightgreen {
-	color: lightgreen;
-}
-.mediumspringgreen {
-	color: mediumspringgreen;
-}
-.springgreen {
-	color: springgreen;
-}
-.mediumseagreen {
-	color: mediumseagreen;
-}
-.seagreen {
-	color: seagreen;
-}
-.forestgreen {
-	color: forestgreen;
-}
-.green {
-	color: green;
-}
-.darkgreen {
-	color: darkgreen;
-}
-.yellowgreen {
-	color: yellowgreen;
-}
-.olivedrab {
-	color: olivedrab;
-}
-.olive {
-	color: olive;
-}
-.darkolivegreen {
-	color: darkolivegreen;
-}
-.mediumaquamarine {
-	color: mediumaquamarine;
-}
-.darkseagreen {
-	color: darkseagreen;
-}
-.lightseagreen {
-	color: lightseagreen;
-}
-.darkcyan {
-	color: darkcyan;
-}
-.teal {
-	color: teal;
-}
-.aqua {
-	color: aqua;
-}
-.cyan {
-	color: cyan;
-}
-.lightcyan {
-	color: lightcyan;
-}
-.paleturquoise {
-	color: paleturquoise;
-}
-.aquamarine {
-	color: aquamarine;
-}
-.turquoise {
-	color: turquoise;
-}
-.mediumturquoise {
-	color: mediumturquoise;
-}
-.darkturquoise {
-	color: darkturquoise;
-}
-.cadetblue {
-	color: cadetblue;
-}
-.steelblue {
-	color: steelblue;
-}
-.lightsteelblue {
-	color: lightsteelblue;
-}
-.powderblue {
-	color: powderblue;
-}
-.lightblue {
-	color: lightblue;
-}
-.skyblue {
-	color: skyblue;
-}
-.lightskyblue {
-	color: lightskyblue;
-}
-.deepskyblue {
-	color: deepskyblue;
-}
-.dodgerblue {
-	color: dodgerblue;
-}
-.cornflowerblue {
-	color: cornflowerblue;
-}
-.mediumslateblue {
-	color: mediumslateblue;
-}
-.royalblue {
-	color: royalblue;
-}
-.blue {
-	color: blue;
-}
-.mediumblue {
-	color: mediumblue;
-}
-.darkblue {
-	color: darkblue;
-}
-.navy {
-	color: navy;
-}
-.midnightblue {
-	color: midnightblue;
-}
-.cornsilk {
-	color: cornsilk;
-}
-.blanchedalmond {
-	color: blanchedalmond;
-}
-.bisque {
-	color: bisque;
-}
-.navajowhite {
-	color: navajowhite;
-}
-.wheat {
-	color: wheat;
-}
-.burlywood {
-	color: burlywood;
-}
-.tan {
-	color: tan;
-}
-.rosybrown {
-	color: rosybrown;
-}
-.sandybrown {
-	color: sandybrown;
-}
-.goldenrod {
-	color: goldenrod;
-}
-.darkgoldenrod {
-	color: darkgoldenrod;
-}
-.peru {
-	color: peru;
-}
-.chocolate {
-	color: chocolate;
-}
-.saddlebrown {
-	color: saddlebrown;
-}
-.sienna {
-	color: sienna;
-}
-.brown {
-	color: brown;
-}
-.maroon {
-	color: maroon;
-}
-.white {
-	color: white;
-}
-.snow {
-	color: snow;
-}
-.honeydew {
-	color: honeydew;
-}
-.mintcream {
-	color: mintcream;
-}
-.azure {
-	color: azure;
-}
-.aliceblue {
-	color: aliceblue;
-}
-.ghostwhite {
-	color: ghostwhite;
-}
-.whitesmoke {
-	color: whitesmoke;
-}
-.seashell {
-	color: seashell;
-}
-.beige {
-	color: beige;
-}
-.oldlace {
-	color: oldlace;
-}
-.floralwhite {
-	color: floralwhite;
-}
-.ivory {
-	color: ivory;
-}
-.antiquewhite {
-	color: antiquewhite;
-}
-.linen {
-	color: linen;
-}
-.lavenderblush {
-	color: lavenderblush;
-}
-.mistyrose {
-	color: mistyrose;
-}
-.gainsboro {
-	color: gainsboro;
-}
-.lightgray {
-	color: lightgray;
-}
-.silver {
-	color: silver;
-}
-.darkgray {
-	color: darkgray;
-}
-.gray {
-	color: gray;
-}
-.dimgray {
-	color: dimgray;
-}
-.lightslategray {
-	color: lightslategray;
-}
-.slategray {
-	color: slategray;
-}
-.darkslategray {
-	color: darkslategray;
-}
-.black {
-	color: black;
+    font-size: 20pt;
 }
