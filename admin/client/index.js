@@ -158,7 +158,7 @@ const user_input =  {
         placeholder: 'answer',
         autofocus: true
     },
-    children: []	
+    children: []
 };
 
 const stage_type_panel = (on) => {
@@ -236,7 +236,7 @@ const app = () => {
     }
     if (game_over) {
         if(survey_done || game.survey.length == 1){
-            continue_button = with_click(div('continue-button-disabled survey', 'Game Complete'), window.close());
+            continue_button = div('continue-button-disabled survey', 'Game Complete');
             post_request('/api/', {
                 user: time_stamp,
                 name: game_name,
