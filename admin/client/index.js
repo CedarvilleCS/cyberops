@@ -147,6 +147,19 @@ const increment_survey = () => {
     }
 };
 
+let answer = "";
+const user_input =  {
+    type: 'textarea',
+    props: {
+        type: 'text',
+        style: 'font-size: 20px',
+        value: answer,
+        id: "mytext",
+        placeholder: 'answer',
+        autofocus: true
+    },
+    children: []	
+};
 
 const stage_type_panel = (on) => {
     return div('flex-col stage-type-panel', ...Object.keys(type_to_title).map(type => {
