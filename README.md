@@ -1,29 +1,15 @@
-# The Saga Begins
+# Description
 
-Never has such a great embarkment been embarked upon than that which you find
-before you. Although you think documentation is mundane, yet it is the stuff of
-legend. To produce explanation is to tread the path that few dare to follow. A
-documentation well written ought to engulf you, the reader, in the ocean of
-knowledge, and spit you out before you realize you were submerged. Shall I
-attain this lofty task? It is left to you, O reader, the noble office of
-deciding.
-
-We begin at the roots, where the city hides its foundation. JavaScript runs in
-the browser, as all knights know, but only the enlightened know of
 [NodeJS](https://nodejs.org/en/), a JavaScript interpreter that provides access
-to the filesystem and can allow running a web server. Such power has not given
-to mortals since Linus Torvalds wrote the Linux kernel. The city was build on
+to the filesystem and can allow running a web server. This software is built on
 *NodeJS 10.15.3 LTS*, downloadable at the provided link. Node comes with a tool
 called "NPM", which handles package management some other things.
 
-The second layer of brick's is [Electron](https://electronjs.org/), a project
+Also used is [Electron](https://electronjs.org/), a project
 that allows NodeJS to run inside the browser. You do not need to install this
 because it is installed automatically by NPM.
 
-## The City's Precincts
-
-Every member of the King's guard must know where to find things. At the project
-root, only the `admin` directory contains any code. The rest of the files and
+At the project root, only the `admin` directory contains any code. The rest of the files and
 folders are just output and input for the tools; thus, from here on any file
 named will assumed to be inside the `admin` directory. The `package.json` file
 holds settings, commands, and dependencies related to the project. The
@@ -59,8 +45,8 @@ pattern. We used [this library](https://github.com/calmm-js/partial.lenses),
 the README of which has excessive documentation. Recommended reading also
 includes [this
 article](https://medium.com/javascript-inside/an-introduction-into-lenses-in-javascript-e494948d1ea5).
-I apologize for using this pattern if you find it to esoteric to be productive.
-I found it to be pretty helpful, and it allowed me to make a lot of
+We apologize for using this pattern if you find it to esoteric to be productive.
+We found it to be pretty helpful, and it allowed us to make a lot of
 modifications quite easily. When working at such a high-level of abstraction,
 you don't often see code break in odd ways, which is always a pleasant feeling.
 
@@ -68,18 +54,3 @@ If you find these coding styles annoying, you will be refreshed by the server
 window code, which uses normal HTML for the UI, since nothing needs to be
 dynamic.
 
-## Distributing the application
-
-To distribute the app, run the command `npm dist`, which should provide a
-package for Windows in a `dist` folder. You can zip this folder up and provide
-it to whoever wants to run the server. Because the client spits out files in
-parent directories, you may want to wrap the unzipped directory inside some
-other directory and provide `games` and `results` folders in that parent
-directory. Take a look at the server code for details (and perhaps modify it to
-use a better system).
-
-## Conclusion
-
-Feel free to shoot me more questions. I could write a ton more documentation,
-but I'm not sure how to anticipate more questions. I can update this document
-with answers once questions are asked.
