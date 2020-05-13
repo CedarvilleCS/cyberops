@@ -113,9 +113,12 @@ const increment_stage = () => {
     if (stage_index === game.stages.length) {
         console.log('game over');
         game_over = true;
+    } else if (curr_stage().actions.length == 1){
+        document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
+        document.getElementsByClassName('continue-button-disabled')[0].innerHTML = "Select the Action to Proceed";
     } else if (curr_stage().actions.length != 0){
         document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled");
-        document.getElementsByClassName('continue-button-disabled')[0].innerHTML = "Choose an Action";
+        document.getElementsByClassName('continue-button-disabled')[0].innerHTML = "Select an Action to Proceed";
     }
 };
 
@@ -271,7 +274,7 @@ const app = () => {
                         div('panel-content',
                             div('logo-content',
                                 img(`./dardania.svg`, "width", "50")),
-                            div('panel-header', 'Stages'),
+                            div('panel-header', 'Cyber Kill Chain\r\n(scroll down)'),
                             stage_type_panel(true))),
                     div('message-bar-container panel-container',
                         div('panel-content',
@@ -291,7 +294,7 @@ const app = () => {
                         div('panel-content',
                             div('logo-content',
                                 img(`./dardania.svg`, "width", "50")),
-                            div('panel-header', 'Stages'),
+                            div('panel-header', 'Cyber Kill Chain\r\n(scroll down)'),
                             stage_type_panel(true))),
                     div('message-bar-container panel-container',
                         div('panel-content',
