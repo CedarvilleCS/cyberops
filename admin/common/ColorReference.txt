@@ -1,0 +1,8 @@
+#A53737 Red
+#595035 Dark Gold
+#4A566C Nice Grey
+#818181 Flat Grey
+#55B748 Pleasent Green
+#B7A46A Light Gold
+#6699ff Medium Blue
+#E2E2E2 ScrollBar Gray
