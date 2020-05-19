@@ -238,7 +238,7 @@ const app = () => {
         game_over = true;
     }
     if (game_over) {
-        /*if(survey_done || game.survey.length == 1){
+        if(survey_done || game.survey.length == 1){
             continue_button = div('continue-button-disabled survey', 'Game Complete');
             post_request('/api/', {
                 user: time_stamp,
@@ -262,10 +262,10 @@ const app = () => {
                             div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))), continue_button);
         }
         return div('app',
-            game_survey_div);*/
+            game_survey_div);
         }
     if (curr_stage().type == "pop_up"){
-        /*game_intro_div = div("game-intro", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));
+        game_intro_div = div("game-intro", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));
         return div('app',
             game_intro_div,
             div('app-content flex-col',
@@ -282,32 +282,32 @@ const app = () => {
                     div('action-panel-container panel-container',
                         div('panel-content',
                             div('panel-header', 'Action Menu')))),
-                continue_button));*/
+                continue_button));
     }
     else {
         actionNum = 1;
         return div('app',
-                div('topRow',
-                    div('title',
-                        div('logo',
-                            img(`./dardania.svg`, "width", "50")),
-                        div('welcome',
-                            div('loggedIn', 'LOGGED IN:'),
-                            div('name', 'Commander'))),
-                    div('killChain',
-                            img(`./Cyber-Kill-Chain-icons-group.png`, "width", "50"))),
-                div('bottomRow',
-                    div('lowerLeft', 'lowerLeft'),
-                    div('lowerRight',
-                        div('messagesDiv',
-                            div('messageLabel',
-                                div('label', 'Intelligence Briefing'),
-                                div('labelSpacer', ' ')),
-                            div('messageContent',
-                                ...curr_stage().messages.map((message, i) => divc('message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)))),
-                        continue_button)));
+            game_result_div,
+            div('app-content flex-col',
+                div('main-content flex-row',
+                    div('dashboard-container',
+                        div('panel-content',
+                            div('logo-content',
+                                img(`./dardania.svg`, "width", "50")),
+                            div('panel-header', 'Cyber Kill Chain\r\n(scroll down)'),
+                            stage_type_panel(true))),
+                    div('message-bar-container panel-container',
+                        div('panel-content',
+                            div('panel-header', 'Messages'),
+                            divc('title-container', curr_stage().title_color, curr_stage().title),
+                            ...curr_stage().messages.map((message, i) => divc('message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)))),
+                    div('action-panel-container panel-container',
+                        div('panel-content',
+                            div('panel-header', 'Action Menu'),
+                            ...curr_stage().actions.map(action => action_box(action, curr_stage().actions.length != 1))))),
+                continue_button));
+        }
     }
-}
 
 let current_vdom = null;
 const render = () => {
