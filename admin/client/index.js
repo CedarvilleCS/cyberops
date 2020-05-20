@@ -274,28 +274,109 @@ const app = () => {
             game_survey_div);*/
         }
     if (curr_stage().type == "pop_up"){
-        /*game_intro_div = div("game-intro", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));
+        game_intro_div = div("game-intro", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));
         return div('app',
-            game_intro_div,
-            div('app-content flex-col',
-                div('main-content flex-row',
-                    div('dashboard-container',
-                        div('panel-content',
-                            div('logo-content',
-                                img(`./dardania.svg`, "width", "50")),
-                            div('panel-header', 'Cyber Kill Chain\r\n(scroll down)'),
-                            stage_type_panel(true))),
-                    div('message-bar-container panel-container',
-                        div('panel-content',
-                            div('panel-header', 'Messages'))),
-                    div('action-panel-container panel-container',
-                        div('panel-content',
-                            div('panel-header', 'Action Menu')))),
-                continue_button));*/
+                game_intro_div,
+                div('topRow',
+                    div('title',
+                        div('logo',
+                            img(`./dardania.svg`, "width", "50")),
+                        div('welcome',
+                            div('loggedIn', 'LOGGED IN:'),
+                            div('name', 'Commander'))),
+                    div('killChain',
+                            img(`./Cyber-Kill-Chain-icons-group.png`, "width", "50"))),
+                div('bottomRow',
+                    div('lowerLeft',
+                        div('tab',
+                            rulesTab,
+                            actionTab),
+                        div('undertab'),
+                        div('content-area',
+                            divId('tabcontent', 'Rules',
+                                ':::\
+                                   \n:::   Kingdom of Dardania | Rules of Engagement\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      We view our current cyber operations and acceptable cyber\
+                                   \n:::         competition; we believe Illyria finds this level of activity\
+                                   \n:::         as a competitive contest;\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      We view defensive action, when necessary, (including\
+                                   \n:::         containing and preventing damage) as appropriate;\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      There is a scale of further cyber operations that may be approved\
+                                   \n:::         by the Commander each of which represents increased intensification\
+                                   \n:::         in the following order: disrupt, degrade, and destroy;\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      We view the highest level intensification of operations to be a\
+                                   \n:::         declaration of war and cross domain-attacks.'),
+                            divId('tabcontent', 'Actions'))),
+                    div('lowerRight',
+                        div('messagesDiv',
+                            div('messageLabel',
+                                divg('label', curr_stage().title_color, curr_stage().title),
+                                div('labelSpacer', ' ')),
+                            div('messageContent')),
+                        continue_button)));
+    }
+    else if (curr_stage().type == "pop_up_evil"){
+        game_intro_div = div("game-intro", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), continue_button);
+        return div('app',
+                game_intro_div,
+                div('topRow',
+                    div('title',
+                        div('logo',
+                            img(`./dardania.svg`, "width", "50")),
+                        div('welcome',
+                            div('loggedIn', 'LOGGED IN:'),
+                            div('name', 'Commander'))),
+                    div('killChain',
+                            img(`./Cyber-Kill-Chain-icons-group.png`, "width", "50"))),
+                div('bottomRow',
+                    div('lowerLeft',
+                        div('tab',
+                            rulesTab,
+                            actionTab),
+                        div('undertab'),
+                        div('content-area',
+                            divId('tabcontent', 'Rules',
+                                ':::\
+                                   \n:::   Kingdom of Dardania | Rules of Engagement\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      We view our current cyber operations and acceptable cyber\
+                                   \n:::         competition; we believe Illyria finds this level of activity\
+                                   \n:::         as a competitive contest;\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      We view defensive action, when necessary, (including\
+                                   \n:::         containing and preventing damage) as appropriate;\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      There is a scale of further cyber operations that may be approved\
+                                   \n:::         by the Commander each of which represents increased intensification\
+                                   \n:::         in the following order: disrupt, degrade, and destroy;\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      We view the highest level intensification of operations to be a\
+                                   \n:::         declaration of war and cross domain-attacks.'),
+                            divId('tabcontent', 'Actions'))),
+                    div('lowerRight',
+                        div('messagesDiv',
+                            div('messageLabel',
+                                divg('label', curr_stage().title_color, curr_stage().title),
+                                div('labelSpacer', ' ')),
+                            div('messageContent')),
+                        continue_button)));
     }
     else {
         actionNum = 1;
         return div('app',
+                game_result_div,
                 div('topRow',
                     div('title',
                         div('logo',
