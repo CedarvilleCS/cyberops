@@ -324,7 +324,27 @@ const app = () => {
                             actionTab),
                         div('undertab'),
                         div('content-area',
-                            divId('tabcontent', 'Rules', 'Rules', brk(), 'test'),
+                            divId('tabcontent', 'Rules',
+                                pre(':::\
+                                   \n:::   Kingdom of Dardania | Rules of Engagement\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      We view our current cyber operations and acceptable cyber\
+                                   \n:::         competition; we believe Illyria finds this level of activity\
+                                   \n:::         as a competitive contest;\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      We view defensive action, when necessary, (including\
+                                   \n:::         containing and preventing damage) as appropriate;\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      There is a scale of further cyber operations that may be approved\
+                                   \n:::         by the Commander each of which represents increased intensification\
+                                   \n:::         in the following order: disrupt, degrade, and destroy;\
+                                   \n:::\
+                                   \n:::\
+                                   \n:::[X]      We view the highest level intensification of operations to be a\
+                                   \n:::         declaration of war and cross domain-attacks.')),
                             divId('tabcontent', 'Actions', 'Actions'))),
                     div('lowerRight',
                         div('messagesDiv',

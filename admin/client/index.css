@@ -117,6 +117,7 @@
 
 .tabcontent {
     display: none;
+    white-space: pre;
 }
 
 #Rules {
