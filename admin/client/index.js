@@ -35,6 +35,25 @@ const dispatch = f => () => {
     render();
 };
 
+openTab = (evt, tabName) => {
+    var i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    if(document.getElementById(tabName) != null) {
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+}
+
 const dispatch_survey = (f, ans, type) => () => {
     f(ans, type);
     render();
@@ -231,6 +250,8 @@ const checkSelection = (answer_text, type) => {
 
 const app = () => {
     let continue_button = with_click(div('continue-button', 'Continue'), dispatch(increment_stage));
+    let rulesTab = with_click(button('tablinks', 'rulesButton', 'REVIEW RULES OF ENGAGEMENT'), dispatch(() => openTab(event, 'Rules')));
+    let actionTab = with_click(button('tablinks', 'rulesButton', 'ACTION MENU'), dispatch(() => openTab(event, 'Actions')));
     let game_result_div = h('div', {style: 'display:none'});
     let game_intro_div = h('div', {style: 'display:none'});
     let game_survey_div = h('div', {style: 'display:none'});
@@ -297,11 +318,17 @@ const app = () => {
                     div('killChain',
                             img(`./Cyber-Kill-Chain-icons-group.png`, "width", "50"))),
                 div('bottomRow',
-                    div('lowerLeft', 'lowerLeft'),
+                    div('lowerLeft',
+                        div('tab',
+                            rulesTab,
+                            actionTab),
+                        div('undertab'),
+                        div('content-area',
+                            divId('tabcontent', 'Rules', 'Rules', brk(), 'test'),
+                            divId('tabcontent', 'Actions', 'Actions'))),
                     div('lowerRight',
                         div('messagesDiv',
                             div('messageLabel',
-                                //div('label', 'Intelligence Briefing'),
                                 divg('label', curr_stage().title_color, curr_stage().title),
                                 div('labelSpacer', ' ')),
                             div('messageContent',
@@ -324,3 +351,4 @@ let contents = get_request(`/api/request/${time_stamp}`);
 game = contents;
 game_name = game.name;
 render();
+document.getElementById("rulesButton").click();

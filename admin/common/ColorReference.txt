@@ -6,3 +6,6 @@
 #B7A46A Light Gold
 #6699ff Medium Blue
 #E2E2E2 ScrollBar Gray
+#4B566C ontab Gray
+#3B4255 offtab Gray
+#ff8f2e text orange

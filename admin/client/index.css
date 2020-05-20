@@ -74,6 +74,72 @@
 .lowerLeft {
     flex: 1;
     margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tab {
+    flex: 3;
+    background: #3B4255;
+}
+
+.tab button {
+    color: white;
+    background: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    height: 100%;
+    font-size: 20px;
+    border: 1px solid #4B566C;
+    border-radius: 2px;
+}
+
+.tab button:hover {
+    background: rgb(56, 62, 77);
+}
+
+.tab button.active {
+    background: #4B566C;
+}
+
+.undertab {
+    flex: 2;
+    background: #4B566C;
+}
+
+.content-area {
+    flex: 40;
+    display: flex;
+}
+
+.tabcontent {
+    display: none;
+}
+
+#Rules {
+    flex: 1;
+    color: #ff8f2e;
+    background: #202733;
+    background-size: 50%;
+    background-image: url(DARDANIA-code-o25.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 30px 20px;
+    font-size: 20px;
+}
+
+#Actions {
+    flex: 1;
+    background: #202733;
+    background-size: 50%;
+    background-image: url(DARDANIA-code-o25.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 30px 20px;
+    font-size: 20px;
 }
 
 .lowerRight {
@@ -103,7 +169,6 @@
     flex: 2;
     margin-top: 30px;
     margin-bottom: 30px;
-    /*background-image: linear-gradient(to right, #A53737, white);*/
     font-weight: bold;
     font-size: 30px;
     padding-left: 20px;

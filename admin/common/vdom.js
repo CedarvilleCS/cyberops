@@ -144,9 +144,12 @@ const t_vdom = node => JSON.stringify(trace_vdom(node));
 
 // Below are convenience functions for quickly creating dom trees.
 const c = (type, classes, ...children) => h(type, { className: classes }, ...children);
+const button = (classes, id, ...children) => h('button', { className: classes, id: id}, ...children);
 const div = (classes, ...children) => c('div', classes, ...children);
 const divc = (classes, color, ...children) => (color != "") ? h('div', { className: classes, style: "color:" + color }, ...children) : div(classes, ...children);
 const divg = (classes, color, ...children) => (color != "") ? h('div', { className: classes, style: "background-image: linear-gradient(to right, " + color + ", white)" }, ...children) : div(classes, ...children);
+const divId = (classes, id, ...children) => h('div', { className: classes, id: id}, ...children);
+const brk = () => h('br');
 const img = src => h('img', { src });
 const svg = (w, height, ...children) => h('svg', {viewBox:`0 0 ${w} ${height}`}, ...children);
 const rect = (x, y, width, height, ...children) => h('rect', {x, y, width, height, style:'fill:rgb(255,255,255);stroke-width:3;stroke:rgb(0,0,0)' }, ...children);
