@@ -95,6 +95,8 @@
     font-size: 20px;
     border: 1px solid #4B566C;
     border-radius: 2px;
+    padding: 0px 20px;
+    box-shadow: 2px 2px 20px #292b30 inset;
 }
 
 .tab button:hover {
@@ -103,6 +105,7 @@
 
 .tab button.active {
     background: #4B566C;
+    box-shadow: none;
 }
 
 .undertab {
@@ -141,6 +144,22 @@
     background-position: center;
     padding: 30px 20px;
     font-size: 20px;
+}
+
+.actionDiv-disabled {
+    color: #55B748;
+    display: flex;
+    flex-direction: row;
+    white-space: pre;
+    margin-bottom: 25px;
+}
+
+.actionDiv-selected {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    white-space: pre;
+    margin-bottom: 25px;
 }
 
 .lowerRight {

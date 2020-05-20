@@ -91,34 +91,22 @@ const type_to_title = {
 };
 
 const action_box = (action, isMultiple) => {
-    let classes = 'flex-col action-box';
-    if (action.is_selected) {
-        classes += ' action-box-selected';
-    } else {
-        classes += ' action-box-disabled';
-    }
-    let content = "";
-    let title = "Option " + actionNum++;
-    if(action.type != 'blank_action'){
-        content = div('action-content', div( "", action.text), img(`./${action.type}.svg`), div('action-type', type_to_title[action.type]));
+    let actionDiv = "";
+    let classes = 'actionDiv-';
+    if(action.is_selected) {
+        classes += 'selected';
     }
     else {
-        content = div('action-content', action.text);
+        classes += 'disabled';
     }
 
-    if (isMultiple){
-        return with_click(
-            div(classes,
-                div('action-title', title),
-                content),
-                dispatch(() => toggle_action_selection(action)));
-    }
-    else{
-        return with_click(
-            div(classes,
-                content),
-                dispatch(() => toggle_action_selection(action)));
-    }
+    let content = div('action-content', action.text);
+    let title = ":::[Opt " + actionNum++ + "]   ";
+    return with_click(
+        div(classes,
+            div('action-title', title),
+            content),
+            dispatch(() => toggle_action_selection(action)));
 };
 
 const increment_stage = () => {
@@ -325,7 +313,7 @@ const app = () => {
                         div('undertab'),
                         div('content-area',
                             divId('tabcontent', 'Rules',
-                                pre(':::\
+                                ':::\
                                    \n:::   Kingdom of Dardania | Rules of Engagement\
                                    \n:::\
                                    \n:::\
@@ -344,8 +332,9 @@ const app = () => {
                                    \n:::\
                                    \n:::\
                                    \n:::[X]      We view the highest level intensification of operations to be a\
-                                   \n:::         declaration of war and cross domain-attacks.')),
-                            divId('tabcontent', 'Actions', 'Actions'))),
+                                   \n:::         declaration of war and cross domain-attacks.'),
+                            divId('tabcontent', 'Actions',
+                                ...curr_stage().actions.map(action => action_box(action, curr_stage().actions.length != 1))))),
                     div('lowerRight',
                         div('messagesDiv',
                             div('messageLabel',

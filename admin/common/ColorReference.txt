@@ -9,3 +9,4 @@
 #4B566C ontab Gray
 #3B4255 offtab Gray
 #ff8f2e text orange
+#202733 terminal back
