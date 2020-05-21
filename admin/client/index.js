@@ -132,7 +132,7 @@ const increment_stage = () => {
 };
 
 const increment_survey = () => {
-    if(document.getElementsByClassName('continue-button').length == 0){
+    if(document.getElementsByClassName('survey-button').length == 0){
         return;
     }
     if(curr_survey().type == "short_answer"){
@@ -145,10 +145,10 @@ const increment_survey = () => {
     if (survey_index == game.survey.length - 1) {
         console.log('done with survey');
         survey_done = true;
-        document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled survey");
+        document.getElementsByClassName('survey-button')[0].setAttribute("class", "survey-button-disabled");
     } else if (curr_survey().type != "short_answer" && curr_survey().type != 'message'){
-        document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled survey");
-        document.getElementsByClassName('continue-button-disabled')[0].innerHTML = "Answer the Question";
+        document.getElementsByClassName('survey-button')[0].setAttribute("class", "survey-button-disabled");
+        document.getElementsByClassName('survey-button-disabled')[0].innerHTML = "Answer the Question";
     }
     if(document.getElementsByClassName('content-container').length != 0){
         for (var i = 0; i < document.getElementsByClassName('content-container')[0].children.length; i++) {
@@ -197,9 +197,9 @@ const checkSelection = (answer_text, type) => {
                 ans.className = 'answer-container';
             }
             answer.className = 'answer-container-checked';
-            if(document.getElementsByClassName('continue-button-disabled').length !=0){
-                document.getElementsByClassName('continue-button-disabled')[0].setAttribute("class", "continue-button survey");
-                document.getElementsByClassName('continue-button')[0].innerHTML = "Continue";
+            if(document.getElementsByClassName('survey-button-disabled').length !=0){
+                document.getElementsByClassName('survey-button-disabled')[0].setAttribute("class", "survey-button");
+                document.getElementsByClassName('survey-button')[0].innerHTML = "NEXT";
             }
             if(document.getElementsByClassName('content-container').length != 0){
                 for (var i = 0; i < document.getElementsByClassName('content-container')[0].children.length; i++) {
@@ -215,15 +215,15 @@ const checkSelection = (answer_text, type) => {
         if (answer.className == 'answer-container-checked'){
             answer.className = 'answer-container';
             if(document.getElementsByClassName('answer-container-checked').length == 0){
-                document.getElementsByClassName('continue-button')[0].setAttribute("class", "continue-button-disabled survey");
-                document.getElementsByClassName('continue-button-disabled')[0].innerHTML = "Answer the Question";
+                document.getElementsByClassName('survey-button')[0].setAttribute("class", "survey-button-disabled");
+                document.getElementsByClassName('survey-button-disabled')[0].innerHTML = "Answer the Question";
             }
 
         } else {
             answer.className = 'answer-container-checked';
-            if(document.getElementsByClassName('continue-button').length == 0){
-                document.getElementsByClassName('continue-button-disabled')[0].setAttribute("class", "continue-button survey");
-                document.getElementsByClassName('continue-button')[0].innerHTML = "Continue";
+            if(document.getElementsByClassName('survey-button').length == 0){
+                document.getElementsByClassName('survey-button-disabled')[0].setAttribute("class", "survey-button");
+                document.getElementsByClassName('survey-button')[0].innerHTML = "Continue";
             }
         }
     }
@@ -250,7 +250,7 @@ const app = () => {
     }
     if (game_over) {
         if(survey_done || game.survey.length == 1){
-            continue_button = div('continue-button-disabled survey', 'Game Complete');
+            continue_button = div('survey-button-disabled', 'Game Complete');
             post_request('/api/', {
                 user: time_stamp,
                 name: game_name,
@@ -258,23 +258,29 @@ const app = () => {
             });
         }
         else{
-            continue_button = with_click(div('continue-button-disabled survey', 'Answer the Question'), dispatch(increment_survey));
+            continue_button = with_click(div('survey-button-disabled', 'ANSWER THE QUESTION'), dispatch(increment_survey));
             if(curr_survey().answers.length == 0){
-                continue_button = with_click(div('continue-button survey', 'Continue'), dispatch(increment_survey));
+                continue_button = with_click(div('survey-button', 'NEXT'), dispatch(increment_survey));
             }
         }
-        if(curr_survey().type == 'short_answer'){
-            game_survey_div = div('game-survey flex-col',
-                                div('question-container', curr_survey().question), div('content-container', user_input), continue_button);
-
-        } else{
-            game_survey_div = div('game-survey flex-col',
-                            div('question-container', curr_survey().question),
-                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))), continue_button);
+        if(curr_survey().type == 'short_answer') {
+            game_survey_div = div('survey-div',
+                                    div('question-div',
+                                        div('question-number', survey_index + "."),
+                                        div('inner-question-div', div('bold-div', 'Short Answer:'), curr_survey().question, brk(), brk(), div('content-container', user_input))),
+                                    continue_button);
         }
-        return div('app',
+        else {
+            game_survey_div = div('survey-div',
+                                    div('question-div',
+                                        div('question-number', survey_index + "."),
+                                        div('inner-question-div', curr_survey().question, brk(), brk(),
+                                            div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))))),
+                                    continue_button);
+        }
+        return div('app-survey',
             game_survey_div);
-        }
+    }
     if (curr_stage().type == "pop_up"){
         game_intro_div = div("game-intro", ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
         return div('app',

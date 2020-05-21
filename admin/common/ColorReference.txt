@@ -10,3 +10,7 @@
 #3B4255 offtab Gray
 #ff8f2e text orange
 #202733 terminal back
+
+#d98a88 selected survey Red
+#bf3c38 servey Red
+#f3f5f5 servey gray
