@@ -23,6 +23,8 @@ let survey_done = false;
 let action_selected = false;
 let survey_selected = false;
 let actionNum = 1;
+let classText = 'continue-button';
+let buttonText = 'Continue';
 
 const capitalize_first_letter = s => s.charAt(0).toUpperCase() + s.slice(1);
 const snake_to_words = s => s.split('_').map(capitalize_first_letter).join(' ');
@@ -34,6 +36,10 @@ const dispatch = f => () => {
     f();
     render();
 };
+
+clickContinue = () => {
+    document.getElementsByClassName('continue-button').click();
+}
 
 openTab = (evt, tabName) => {
     var i, tabcontent, tablinks;
@@ -49,7 +55,7 @@ openTab = (evt, tabName) => {
     }
 
     if(document.getElementById(tabName) != null) {
-        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).style.display = "flex";
         evt.currentTarget.className += " active";
     }
 }
@@ -247,7 +253,7 @@ const app = () => {
         game_over = true;
     }
     if (game_over) {
-        /*if(survey_done || game.survey.length == 1){
+        if(survey_done || game.survey.length == 1){
             continue_button = div('continue-button-disabled survey', 'Game Complete');
             post_request('/api/', {
                 user: time_stamp,
@@ -271,10 +277,10 @@ const app = () => {
                             div('content-container', ...curr_survey().answers.map((answer, i) => with_click(div('answer-container', answer), dispatch_survey(checkSelection, answer, curr_survey().type)))), continue_button);
         }
         return div('app',
-            game_survey_div);*/
+            game_survey_div);
         }
     if (curr_stage().type == "pop_up"){
-        game_intro_div = div("game-intro", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)));
+        game_intro_div = div("game-intro", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
         return div('app',
                 game_intro_div,
                 div('topRow',
@@ -321,10 +327,10 @@ const app = () => {
                                 divg('label', curr_stage().title_color, curr_stage().title),
                                 div('labelSpacer', ' ')),
                             div('messageContent')),
-                        continue_button)));
+                            continue_button)));
     }
     else if (curr_stage().type == "pop_up_evil"){
-        game_intro_div = div("game-intro", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), continue_button);
+        game_intro_div = div("game-intro-evil", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
         return div('app',
                 game_intro_div,
                 div('topRow',
