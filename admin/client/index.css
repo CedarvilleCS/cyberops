@@ -220,6 +220,8 @@
 .code-line {
     display: flex;
     flex-direction: row;
+    /*margin-top: 15px;
+    margin-bottom: 15px;*/
 }
 
 .code-title {
