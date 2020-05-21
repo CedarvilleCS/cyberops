@@ -280,7 +280,7 @@ const app = () => {
             game_survey_div);
         }
     if (curr_stage().type == "pop_up"){
-        game_intro_div = div("game-intro", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
+        game_intro_div = div("game-intro", ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
         return div('app',
                 game_intro_div,
                 div('topRow',
