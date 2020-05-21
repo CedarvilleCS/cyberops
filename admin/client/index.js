@@ -37,10 +37,6 @@ const dispatch = f => () => {
     render();
 };
 
-clickContinue = () => {
-    document.getElementsByClassName('continue-button').click();
-}
-
 openTab = (evt, tabName) => {
     var i, tabcontent, tablinks;
 
@@ -290,6 +286,7 @@ const app = () => {
                         div('welcome',
                             div('loggedIn', 'LOGGED IN:'),
                             div('name', 'Commander'))),
+                    img(`./divider.png`, "width", "50"),
                     div('killChain',
                             img(`./Cyber-Kill-Chain-icons-group.png`, "width", "50"))),
                 div('bottomRow',
@@ -299,27 +296,20 @@ const app = () => {
                             actionTab),
                         div('undertab'),
                         div('content-area',
-                            divId('tabcontent', 'Rules',
-                                ':::\
-                                   \n:::   Kingdom of Dardania | Rules of Engagement\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      We view our current cyber operations and acceptable cyber\
-                                   \n:::         competition; we believe Illyria finds this level of activity\
-                                   \n:::         as a competitive contest;\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      We view defensive action, when necessary, (including\
-                                   \n:::         containing and preventing damage) as appropriate;\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      There is a scale of further cyber operations that may be approved\
-                                   \n:::         by the Commander each of which represents increased intensification\
-                                   \n:::         in the following order: disrupt, degrade, and destroy;\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      We view the highest level intensification of operations to be a\
-                                   \n:::         declaration of war and cross domain-attacks.'),
+                            divId('tabcontent', 'Rules',div('code-line', ':::'),
+                            div('code-line', div('line-space', ':::'), div('code-title', 'Kingdom of Dardania | Rules of Engagement:')),
+                            div('code-line', ':::'),
+                            brk(),
+                            div('code-line', div('line-space', ':::[X]'), div('code-content', 'We view our current cyber operations as acceptable cyber competition; we believe Illyria finds this level of activity as a competitive contest;')),
+                            brk(),
+                            brk(),
+                            div('code-line', div('line-space', ':::[X]'), div('code-content', 'We view defensive action, when necessary, (including containing and preventing damage) as appropreiate;')),
+                            brk(),
+                            brk(),
+                            div('code-line', div('line-space', ':::[X]'), div('code-content', 'There is a scale of further cyber operations that may be approved by the Commander each of which represents increased intensification in the following order: disrupt, degrade, and destroy;')),
+                            brk(),
+                            brk(),
+                            div('code-line', div('line-space', ':::[X]'), div('code-content', 'We view the highest level intensification of operations to be a declaration of war and cross domain-attacks.'))),
                             divId('tabcontent', 'Actions'))),
                     div('lowerRight',
                         div('messagesDiv',
@@ -340,6 +330,7 @@ const app = () => {
                         div('welcome',
                             div('loggedIn', 'LOGGED IN:'),
                             div('name', 'Commander'))),
+                    img(`./divider.png`, "width", "50"),
                     div('killChain',
                             img(`./Cyber-Kill-Chain-icons-group.png`, "width", "50"))),
                 div('bottomRow',
@@ -349,27 +340,20 @@ const app = () => {
                             actionTab),
                         div('undertab'),
                         div('content-area',
-                            divId('tabcontent', 'Rules',
-                                ':::\
-                                   \n:::   Kingdom of Dardania | Rules of Engagement\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      We view our current cyber operations and acceptable cyber\
-                                   \n:::         competition; we believe Illyria finds this level of activity\
-                                   \n:::         as a competitive contest;\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      We view defensive action, when necessary, (including\
-                                   \n:::         containing and preventing damage) as appropriate;\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      There is a scale of further cyber operations that may be approved\
-                                   \n:::         by the Commander each of which represents increased intensification\
-                                   \n:::         in the following order: disrupt, degrade, and destroy;\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      We view the highest level intensification of operations to be a\
-                                   \n:::         declaration of war and cross domain-attacks.'),
+                            divId('tabcontent', 'Rules',div('code-line', ':::'),
+                            div('code-line', div('line-space', ':::'), div('code-title', 'Kingdom of Dardania | Rules of Engagement:')),
+                            div('code-line', ':::'),
+                            brk(),
+                            div('code-line', div('line-space', ':::[X]'), div('code-content', 'We view our current cyber operations as acceptable cyber competition; we believe Illyria finds this level of activity as a competitive contest;')),
+                            brk(),
+                            brk(),
+                            div('code-line', div('line-space', ':::[X]'), div('code-content', 'We view defensive action, when necessary, (including containing and preventing damage) as appropreiate;')),
+                            brk(),
+                            brk(),
+                            div('code-line', div('line-space', ':::[X]'), div('code-content', 'There is a scale of further cyber operations that may be approved by the Commander each of which represents increased intensification in the following order: disrupt, degrade, and destroy;')),
+                            brk(),
+                            brk(),
+                            div('code-line', div('line-space', ':::[X]'), div('code-content', 'We view the highest level intensification of operations to be a declaration of war and cross domain-attacks.'))),
                             divId('tabcontent', 'Actions'))),
                     div('lowerRight',
                         div('messagesDiv',
@@ -390,6 +374,7 @@ const app = () => {
                         div('welcome',
                             div('loggedIn', 'LOGGED IN:'),
                             div('name', 'Commander'))),
+                    img(`./divider.png`, "width", "50"),
                     div('killChain',
                             img(`./Cyber-Kill-Chain-icons-group.png`, "width", "50"))),
                 div('bottomRow',
@@ -400,26 +385,20 @@ const app = () => {
                         div('undertab'),
                         div('content-area',
                             divId('tabcontent', 'Rules',
-                                ':::\
-                                   \n:::   Kingdom of Dardania | Rules of Engagement\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      We view our current cyber operations and acceptable cyber\
-                                   \n:::         competition; we believe Illyria finds this level of activity\
-                                   \n:::         as a competitive contest;\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      We view defensive action, when necessary, (including\
-                                   \n:::         containing and preventing damage) as appropriate;\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      There is a scale of further cyber operations that may be approved\
-                                   \n:::         by the Commander each of which represents increased intensification\
-                                   \n:::         in the following order: disrupt, degrade, and destroy;\
-                                   \n:::\
-                                   \n:::\
-                                   \n:::[X]      We view the highest level intensification of operations to be a\
-                                   \n:::         declaration of war and cross domain-attacks.'),
+                                div('code-line', ':::'),
+                                div('code-line', div('line-space', ':::'), div('code-title', 'Kingdom of Dardania | Rules of Engagement:')),
+                                div('code-line', ':::'),
+                                brk(),
+                                div('code-line', div('line-space', ':::[X]'), div('code-content', 'We view our current cyber operations as acceptable cyber competition; we believe Illyria finds this level of activity as a competitive contest;')),
+                                brk(),
+                                brk(),
+                                div('code-line', div('line-space', ':::[X]'), div('code-content', 'We view defensive action, when necessary, (including containing and preventing damage) as appropreiate;')),
+                                brk(),
+                                brk(),
+                                div('code-line', div('line-space', ':::[X]'), div('code-content', 'There is a scale of further cyber operations that may be approved by the Commander each of which represents increased intensification in the following order: disrupt, degrade, and destroy;')),
+                                brk(),
+                                brk(),
+                                div('code-line', div('line-space', ':::[X]'), div('code-content', 'We view the highest level intensification of operations to be a declaration of war and cross domain-attacks.'))),
                             divId('tabcontent', 'Actions',
                                 ...curr_stage().actions.map(action => action_box(action, curr_stage().actions.length != 1))))),
                     div('lowerRight',

@@ -8,6 +8,7 @@
     flex-direction: column;
     background-image: linear-gradient(to right, #B7A46A, white);
     font-family: latoregular, Helvetica, sans-serif;
+    overflow-y: auto;
 }
 
 .game-intro {
@@ -18,7 +19,7 @@
     left: 0;
     right: 0;
     width: 40%;
-    height: 45%;
+    height: 60%;
     background-color: #202733;
     text-align: center;
     z-index: 1;
@@ -27,7 +28,7 @@
     font-size: 20px;
     display: flex;
     flex-direction: column;
-    font-family: menlo, Courier, monospace;
+    font-family: 'Menlo Regular', Courier, monospace;
 }
 
 .game-intro-evil {
@@ -53,7 +54,7 @@
     flex-direction: column;
     padding-top: 35px;
     box-shadow: 0px 0px 70px 50px #A53737;
-    font-family: menlo, Courier, monospace;
+    font-family: 'Menlo Regular', Courier, monospace;
 }
 
 .game-intro div {
@@ -77,16 +78,15 @@
     display: flex;
     flex-direction: row;
     border-width: 3px;
-    border-style: solid;
-    border-color: transparent #595035 transparent transparent;
 }
 
 .logo {
     flex: 1;
+    margin-right: 25px;
 }
 
 .welcome {
-    flex: 6;
+    flex: 3;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -110,16 +110,21 @@
 }
 
 .logo img{
-    height: 200px;
+    /*height: 200px;*/
     margin: 5px 10px;
+    max-width: 100%;
+    height: auto;
 }
 
 .killChain {
     flex: 3;
+    margin-right: 100px;
+    margin-left: 100px;
 }
 
 .killChain img {
-    height: 200px;
+    max-width: 100%;
+    height: auto;
 }
 
 .bottomRow {
@@ -173,12 +178,16 @@
 .content-area {
     flex: 40;
     display: flex;
-    font-family: menlo, Courier, monospace;
+    font-family: 'Menlo Regular', Courier, monospace;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .tabcontent {
     display: none;
     flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #Rules {
@@ -191,7 +200,29 @@
     background-position: center;
     padding: 30px 20px;
     font-size: 20px;
-    white-space: pre;
+}
+
+.code-line {
+    display: flex;
+    flex-direction: row;
+}
+
+.code-title {
+    margin-left: 25px;
+}
+
+.code-content {
+    margin-left: 50px;
+}
+
+.space-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.line-space {
+    /*flex: 1;*/
+    white-space: nowrap;
 }
 
 #Actions {
@@ -210,6 +241,7 @@
     display: flex;
     flex-direction: row;
     margin-bottom: 25px;
+    cursor: pointer;
 }
 
 .actionDiv-selected {
@@ -217,6 +249,7 @@
     display: flex;
     flex-direction: row;
     margin-bottom: 25px;
+    cursor: pointer;
 }
 
 .action-title {
