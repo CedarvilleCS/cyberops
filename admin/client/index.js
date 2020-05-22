@@ -111,6 +111,11 @@ const action_box = (action, isMultiple) => {
             dispatch(() => toggle_action_selection(action)));
 };
 
+const increment_stage_popup = () => {
+    document.getElementsByClassName('continue-button-disabled')[0].setAttribute("class", "continue-button");
+    increment_stage();
+}
+
 const increment_stage = () => {
     if(!(curr_stage().actions.length == 0 || action_selected)){
         return;
@@ -168,6 +173,8 @@ const user_input =  {
         value: answer,
         id: "mytext",
         placeholder: 'answer',
+        rows:  15,
+        cols: 100,
         autofocus: true
     },
     children: []
@@ -241,7 +248,7 @@ const checkSelection = (answer_text, type) => {
 const app = () => {
     let continue_button = with_click(div('continue-button', 'Continue'), dispatch(increment_stage));
     let rulesTab = with_click(button('tablinks', 'rulesButton', 'REVIEW RULES OF ENGAGEMENT'), dispatch(() => openTab(event, 'Rules')));
-    let actionTab = with_click(button('tablinks', 'rulesButton', 'ACTION MENU'), dispatch(() => openTab(event, 'Actions')));
+    let actionTab = with_click(button('tablinks', 'actionsButton', 'ACTION MENU'), dispatch(() => openTab(event, 'Actions')));
     let game_result_div = h('div', {style: 'display:none'});
     let game_intro_div = h('div', {style: 'display:none'});
     let game_survey_div = h('div', {style: 'display:none'});
@@ -282,10 +289,10 @@ const app = () => {
             game_survey_div);
     }
     if (curr_stage().type == "pop_up"){
-        game_intro_div = div("game-intro", ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
+        game_intro_div = div("game-intro", ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), div('spacer-div'), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
         return div('app',
                 game_intro_div,
-                div('topRow',
+                div('topRow grayscale',
                     div('title',
                         div('logo',
                             img(`./dardania.svg`, "width", "50")),
@@ -295,7 +302,7 @@ const app = () => {
                     img(`./divider.png`, "width", "50"),
                     div('killChain',
                             img(`./Cyber-Kill-Chain-icons-group.png`, "width", "50"))),
-                div('bottomRow',
+                div('bottomRow grayscale',
                     div('lowerLeft',
                         div('tab',
                             rulesTab,
@@ -326,10 +333,10 @@ const app = () => {
                             continue_button)));
     }
     else if (curr_stage().type == "pop_up_evil"){
-        game_intro_div = div("game-intro-evil", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
+        game_intro_div = div("game-intro-evil", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), div('spacer-div'), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
         return div('app',
                 game_intro_div,
-                div('topRow',
+                div('topRow grayscale',
                     div('title',
                         div('logo',
                             img(`./dardania.svg`, "width", "50")),
@@ -339,7 +346,7 @@ const app = () => {
                     img(`./divider.png`, "width", "50"),
                     div('killChain',
                             img(`./Cyber-Kill-Chain-icons-group.png`, "width", "50"))),
-                div('bottomRow',
+                div('bottomRow grayscale',
                     div('lowerLeft',
                         div('tab',
                             rulesTab,
@@ -431,4 +438,4 @@ let contents = get_request(`/api/request/${time_stamp}`);
 game = contents;
 game_name = game.name;
 render();
-document.getElementById("rulesButton").click();
+document.getElementById("actionsButton").click();

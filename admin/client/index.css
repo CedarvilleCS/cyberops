@@ -11,6 +11,16 @@
     overflow-y: auto;
 }
 
+.grayscale { 
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+    background-image: linear-gradient(to right, #818181, white);
+  }
+
 .app-survey {
     position: absolute;
     top: 0;
@@ -31,7 +41,7 @@
     left: 0;
     right: 0;
     width: 40%;
-    height: 60%;
+    height: 70%;
     background-color: #202733;
     text-align: center;
     z-index: 1;
@@ -346,8 +356,13 @@
     user-select: none; /* Standard syntax */
 }
 
-.continue-button-fake {
+.spacer-div {
     flex: 1;
+}
+
+.continue-button-fake {
+    /*flex: 2;*/
+    flex: 0 0 80px;
     background: #55B748;
     color: white;
     font-size: 40px;
