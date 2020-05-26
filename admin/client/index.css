@@ -45,7 +45,7 @@
     background-color: #202733;
     text-align: center;
     z-index: 1;
-    overflow-y: auto;
+    overflow: hidden;
     color: white;
     font-size: 20px;
     display: flex;
@@ -69,30 +69,48 @@
     background-position: center;
     text-align: center;
     z-index: 1;
-    overflow-y: auto;
+    overflow: hidden;
     color: white;
     font-size: 30px;
     display: flex;
     flex-direction: column;
-    padding-top: 35px;
+    /*padding-top: 35px;*/
     box-shadow: 0px 0px 70px 50px #A53737;
     font-family: 'Menlo Regular', Courier, monospace;
 }
 
+.game-intro-evil div {
+    margin-top: 2%;
+}
+
+.popup-message-container {
+    flex: auto;
+    overflow: hidden;
+    min-height: 33px;
+}
+
 .game-intro div {
-    margin-top: 20px;
+    margin-top: 2%;
+    overflow-y: auto;
 }
 
 .popup-message-container img{
-    width: 330px;
-    margin-top: 40px;
-    margin-bottom: 30px;
+    width: auto;
+    height: 100%;
+    /*margin-top: 40px;
+    margin-bottom: 30px;*/
 }
 
 .topRow {
     flex: 1;
     display: flex;
     flex-direction: row;
+    overflow: hidden;
+}
+
+.topRow img {
+    height: 100%;
+    width: auto;
 }
 
 .title {
@@ -122,7 +140,8 @@
     border-width: 1px;
     border-color: #4A566C;
     padding: 5px 10px 5px 10px;
-    width: 100px;
+    width: 30%;
+    max-width: 100px;
 }
 
 .name {
@@ -135,29 +154,32 @@
     /*height: 200px;*/
     margin: 5px 10px;
     max-width: 100%;
+    max-height: 100%;
     height: auto;
 }
 
 .killChain {
     flex: 3;
-    margin-right: 100px;
-    margin-left: 100px;
+    margin-right: 4%;
+    margin-left: 4%;
 }
 
 .killChain img {
     max-width: 100%;
+    max-height: 100%;
     height: auto;
 }
 
 .bottomRow {
     flex: 4;
+    overflow: hidden;
     display: flex;
     flex-direction: row;
 }
 
 .lowerLeft {
     flex: 1;
-    margin-right: 15px;
+    margin-right: 1%;
     display: flex;
     flex-direction: column;
 }
@@ -165,6 +187,8 @@
 .tab {
     flex: 3;
     background: #3B4255;
+    display: flex;
+    flex-direction: row;
 }
 
 .tab button {
@@ -179,7 +203,7 @@
     font-size: 20px;
     border: 1px solid #4B566C;
     border-radius: 2px;
-    padding: 0px 20px;
+    padding: 0px 2%;
     box-shadow: 2px 2px 20px #292b30 inset;
 }
 
@@ -293,17 +317,19 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    margin-left: 15px;
+    margin-left: 1%;
 }
 
 .messagesDiv {
     flex: 6;
     background: white;
     box-shadow: 20px 20px 50px 15px grey;
-    margin-bottom: 20px;
-    padding: 30px;
+    margin-bottom: 3%;
+    padding: 3%;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .messageLabel {
@@ -314,11 +340,13 @@
 
 .label {
     flex: 2;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 3%;
+    margin-bottom: 3%;
     font-weight: bold;
     font-size: 30px;
     padding-left: 20px;
+    padding-top: 1%;
+    padding-bottom: 1%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -393,7 +421,7 @@
 }
 
 .survey-div {
-    padding: 120px;
+    padding: 5%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -404,6 +432,7 @@
     flex: 8;
     display: flex;
     flex-direction: row;
+    height: 100%;
 }
 
 .question-number {
@@ -438,9 +467,9 @@
 .answer-container {
     font-size: 25px;
     background: #F3F5F5;
-    padding: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding: 2%;
+    margin-top: 1%;
+    margin-bottom: 1%;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10+ and Edge */
     user-select: none; /* Standard syntax */
@@ -450,9 +479,9 @@
     font-size: 25px;
     color: white;
     background: #d98a88;
-    padding: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding: 2%;
+    margin-top: 1%;
+    margin-bottom: 1%;
     box-shadow: 0px 0px 10px 4px grey;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10+ and Edge */
@@ -511,4 +540,86 @@
   background: #4A566C; 
   border-radius: 8px;
   width: 11px;
+}
+
+@media (max-width: 1080px) {
+    .tab {
+        flex-direction: column;
+    }
+    .tab button {
+        font-size: 15px;
+    }
+    
+    .undertab {
+        display: none;
+    }
+}
+
+@media (max-width: 1151px) {
+    .loggedIn {
+        font-size: 11px;
+        overflow-x: visible;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 890px) {
+    .name {
+        font-size: 29px;
+    }
+}
+
+@media (max-height: 620px) {
+    .label {
+        font-size: 25px;
+    }
+}
+
+@media /*(max-width: 1030px), */(max-height: 650px) {
+    .message-container {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 1080px) {
+    .continue-button {
+        font-size: 25px;
+    }
+
+    .continue-button-disabled {
+        font-size: 25px;
+    }
+    
+    .continue-button-fake {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 1250px) {
+    #Rules {
+        font-size: 12px;
+    }
+
+    #Actions {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 1755px) {
+    .popup-message-container {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .inner-question-div {
+        font-size: 20px;
+    }
+
+    .answer-container {
+        font-size: 12px;
+    }
+    .answer-container-checked {
+        font-size: 12px;
+    }
 }

@@ -173,8 +173,8 @@ const user_input =  {
         value: answer,
         id: "mytext",
         placeholder: 'answer',
-        rows:  15,
-        cols: 100,
+        rows:  9,
+        cols: 50,
         autofocus: true
     },
     children: []
@@ -327,13 +327,13 @@ const app = () => {
                     div('lowerRight',
                         div('messagesDiv',
                             div('messageLabel',
-                                divg('label', curr_stage().title_color, curr_stage().title),
-                                div('labelSpacer', ' ')),
+                                divg('label', curr_stage().title_color, curr_stage().title)/*,
+                                div('labelSpacer', ' ')*/),
                             div('messageContent')),
                             continue_button)));
     }
     else if (curr_stage().type == "pop_up_evil"){
-        game_intro_div = div("game-intro-evil", divc('title-container', curr_stage().title_color, curr_stage().title), ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), div('spacer-div'), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
+        game_intro_div = div("game-intro-evil",  ...curr_stage().messages.map((message, i) => divc('popup-message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)), div('spacer-div'), with_click(div('continue-button-fake', 'Continue'), dispatch(increment_stage)));
         return div('app',
                 game_intro_div,
                 div('topRow grayscale',
@@ -371,8 +371,8 @@ const app = () => {
                     div('lowerRight',
                         div('messagesDiv',
                             div('messageLabel',
-                                divg('label', curr_stage().title_color, curr_stage().title),
-                                div('labelSpacer', ' ')),
+                                divg('label', curr_stage().title_color, curr_stage().title)/*,
+                                div('labelSpacer', ' ')*/),
                             div('messageContent')),
                         continue_button)));
     }
@@ -416,8 +416,8 @@ const app = () => {
                     div('lowerRight',
                         div('messagesDiv',
                             div('messageLabel',
-                                divg('label', curr_stage().title_color, curr_stage().title),
-                                div('labelSpacer', ' ')),
+                                divg('label', curr_stage().title_color, curr_stage().title)/*,
+                                div('labelSpacer', ' ')*/),
                             div('messageContent',
                                 ...curr_stage().messages.map((message, i) => divc('message-container', message.color, (message.file != "") ? img(`./${message.file}`): "", message.text)))),
                         continue_button)));
